@@ -1,0 +1,28 @@
+# Daftar File Markdown
+
+- `AGENTS.md`
+- `docs/00-ringkasan-produk.md`
+- `docs/01-role-permission.md`
+- `docs/02-daftar-fitur-scope.md`
+- `docs/03-daftar-halaman.md`
+- `docs/04-tampilan-frontend.md`
+- `docs/05-komponen-ui.md`
+- `docs/06-alur-pengguna.md`
+- `docs/07-alur-database.md`
+- `docs/08-skema-database-supabase.md`
+- `docs/09-rls-dan-keamanan-data.md`
+- `docs/10-backend.md`
+- `docs/11-api-contract.md`
+- `docs/12-auth-session.md`
+- `docs/13-payment-midtrans-setup.md`
+- `docs/14-storage-upload.md`
+- `docs/15-konten-publik-sekolah.md`
+- `docs/16-lms-akademik.md`
+- `docs/17-notifikasi-pengumuman.md`
+- `docs/18-seed-data.md`
+- `docs/19-testing-acceptance-criteria.md`
+- `docs/20-env-deployment.md`
+- `docs/21-standar-kode.md`
+- `docs/22-roadmap.md`
+- `docs/99-agent-instructions.md`
+- `docs/README.md`
