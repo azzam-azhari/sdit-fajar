@@ -1,4 +1,4 @@
-Rencana fitur baru:
+<!-- Rencana fitur baru:
 - fitur pendaftaran murid baru
 - fitur pembayaran SPP dan daftar ulang via Midtrans
 - fitur chat real-time
@@ -59,4 +59,4 @@ admin bisa mengelola konten pada public sekolah, termasuk mengubah alamat kontak
 
 benarkan nama semua role dengan ini:
 | Murid | `murid` |
-| Wali Murid | `wali_murid` |
+| Wali Murid | `wali_murid` | -->
