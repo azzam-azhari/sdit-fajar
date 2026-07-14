@@ -20,12 +20,14 @@
 | `/berita` | Daftar Berita | wajib |
 | `/berita/[slug]` | Detail Berita | wajib |
 | `/kontak` | Kontak | wajib |
+| `/pendaftaran` | Pendaftaran murid baru | wajib |
+| `/marketplace` | Marketplace konten pembelajaran | wajib |
 
 ## Auth Pages
 
 | Route | Halaman | Akses |
 |---|---|---|
-| `/login` | Login | guest only |
+| `/login` | Login dengan identifier/NIS | guest only |
 | `/forgot-password` | Lupa Password | optional |
 | `/reset-password` | Reset Password | optional |
 
@@ -38,8 +40,8 @@
 | `kepala_sekolah` | `/dashboard/kepala-sekolah` |
 | `guru` | `/dashboard/guru` |
 | `wali_kelas` | `/dashboard/wali-kelas` |
-| `siswa` | `/dashboard/siswa` |
-| `orang_tua` | `/dashboard/orang-tua` |
+| `murid` | `/dashboard/siswa` |
+| `wali_murid` | `/dashboard/wali-murid` |
 
 ## Super Admin Pages
 
@@ -50,6 +52,10 @@
 | `/dashboard/super-admin/roles` | Role dan permission |
 | `/dashboard/super-admin/settings` | Pengaturan aplikasi |
 | `/dashboard/super-admin/audit-logs` | Audit log |
+| `/dashboard/super-admin/import` | Import data CSV |
+| `/dashboard/super-admin/import/template` | Download template CSV |
+| `/dashboard/super-admin/pengumuman` | Pengumuman seluruh user/role |
+| `/dashboard/super-admin/payment` | Aktivasi global payment Midtrans |
 
 ## Admin Sekolah Pages
 
@@ -58,7 +64,7 @@
 | `/dashboard/admin` | Ringkasan administrasi |
 | `/dashboard/admin/users` | User sekolah |
 | `/dashboard/admin/siswa` | Data siswa |
-| `/dashboard/admin/orang-tua` | Data orang tua |
+| `/dashboard/admin/wali-murid` | Data wali murid |
 | `/dashboard/admin/guru` | Data guru |
 | `/dashboard/admin/kelas` | Data kelas |
 | `/dashboard/admin/rombel` | Rombongan belajar |
@@ -69,6 +75,11 @@
 | `/dashboard/admin/payment/settings` | Setup Midtrans |
 | `/dashboard/admin/payment/spp` | Setup tagihan SPP |
 | `/dashboard/admin/payment/daftar-ulang` | Setup daftar ulang |
+| `/dashboard/admin/management-user` | Manajemen user |
+| `/dashboard/admin/konten-publik` | Konten publik operasional |
+| `/dashboard/admin/absensi` | Rekap absensi sekolah |
+| `/dashboard/admin/payment/invoices` | Kelola semua invoice |
+| `/dashboard/admin/payment/modules` | Aktif/nonaktif modul payment |
 
 ## Kepala Sekolah Pages
 
@@ -79,6 +90,9 @@
 | `/dashboard/kepala-sekolah/guru` | Aktivitas guru |
 | `/dashboard/kepala-sekolah/kelas` | Monitoring kelas |
 | `/dashboard/kepala-sekolah/pengumuman` | Pengumuman |
+| `/dashboard/kepala-sekolah/absensi-guru` | Rekap absensi guru |
+| `/dashboard/kepala-sekolah/absensi-siswa` | Rekap absensi siswa |
+| `/dashboard/kepala-sekolah/pengaturan-absensi` | Pengaturan akhir pekan |
 
 ## Guru Pages
 
@@ -97,6 +111,7 @@
 | `/dashboard/guru/tugas/[assignmentId]/pengumpulan` | Pengumpulan siswa |
 | `/dashboard/guru/nilai` | Input dan rekap nilai |
 | `/dashboard/guru/pengumuman` | Pengumuman kelas/mapel |
+| `/dashboard/guru/absensi` | Absensi mengajar |
 
 ## Wali Kelas Pages
 
@@ -108,6 +123,7 @@
 | `/dashboard/wali-kelas/tugas` | Monitoring tugas kelas |
 | `/dashboard/wali-kelas/nilai` | Rekap nilai kelas |
 | `/dashboard/wali-kelas/pengumuman` | Pengumuman kelas |
+| `/dashboard/wali-kelas/absensi` | Absensi kelas binaan |
 
 ## Siswa Pages
 
@@ -121,18 +137,30 @@
 | `/dashboard/siswa/tugas/[assignmentId]` | Detail dan kumpulkan tugas |
 | `/dashboard/siswa/nilai` | Nilai saya |
 | `/dashboard/siswa/pengumuman` | Pengumuman |
+| `/dashboard/siswa/absensi` | Riwayat absensi |
 
-## Orang Tua Pages
+## Wali Murid Pages
 
 | Route | Halaman |
 |---|---|
-| `/dashboard/orang-tua` | Dashboard orang tua |
-| `/dashboard/orang-tua/anak` | Data anak |
-| `/dashboard/orang-tua/anak/[studentId]` | Detail anak |
-| `/dashboard/orang-tua/tugas` | Tugas anak |
-| `/dashboard/orang-tua/nilai` | Nilai anak |
-| `/dashboard/orang-tua/pengumuman` | Pengumuman |
-| `/dashboard/orang-tua/payment` | Status pembayaran anak |
+| `/dashboard/wali-murid` | Dashboard wali murid |
+| `/dashboard/wali-murid/anak` | Data anak |
+| `/dashboard/wali-murid/anak/[studentId]` | Detail anak |
+| `/dashboard/wali-murid/tugas` | Tugas anak |
+| `/dashboard/wali-murid/nilai` | Nilai anak |
+| `/dashboard/wali-murid/pengumuman` | Pengumuman |
+| `/dashboard/wali-murid/absensi` | Absensi anak |
+| `/dashboard/wali-murid/payment` | Riwayat pembayaran anak |
+| `/dashboard/wali-murid/payment/[invoiceId]` | Detail invoice dan bayar |
+| `/dashboard/wali-murid/payment/[invoiceId]/receipt` | Bukti pembayaran |
+| `/dashboard/wali-murid/marketplace` | Pembelian konten |
+
+## Shared Internal Pages
+
+| Route | Halaman | Akses |
+|---|---|---|
+| `/dashboard/chat` | Chat real-time internal | user yang diizinkan |
+| `/dashboard/chat/[threadId]` | Detail thread chat | anggota thread |
 
 ## Standar Page State
 Setiap halaman data wajib memiliki:
@@ -142,3 +170,4 @@ Setiap halaman data wajib memiliki:
 - success toast untuk mutasi;
 - breadcrumb di dashboard;
 - guard akses role.
+- Untuk bukti pembayaran, halaman receipt dapat dibuka melalui tab baru dan hanya dapat diakses oleh `wali_murid` yang memiliki relasi dengan siswa/invoice.

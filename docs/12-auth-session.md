@@ -4,7 +4,10 @@
 Gunakan Supabase Auth.
 
 ## Login
-- User login memakai email dan password.
+- Murid login memakai NIS sebagai `login_identifier` dan password awal `tempatddmmyyyy` berdasarkan biodata yang dibuat super admin.
+- Password awal tidak disimpan plaintext dan wajib diganti pada login pertama.
+- Wali murid login memakai identifier akun wali murid yang dibuat super admin; tidak memakai NIS anak sebagai kredensial bersama.
+- Role lain memakai identifier resmi yang terdaftar dan password masing-masing.
 - Setelah login, sistem mengambil data `profiles`.
 - Redirect berdasarkan role database.
 
@@ -36,8 +39,8 @@ export const ROLE_DASHBOARD_PATH: Record<UserRole, string> = {
   kepala_sekolah: '/dashboard/kepala-sekolah',
   guru: '/dashboard/guru',
   wali_kelas: '/dashboard/wali-kelas',
-  siswa: '/dashboard/siswa',
-  orang_tua: '/dashboard/orang-tua',
+  murid: '/dashboard/siswa',
+  wali_murid: '/dashboard/wali-murid',
 }
 ```
 
@@ -56,6 +59,7 @@ Jangan simpan:
 - Midtrans server key;
 - password;
 - token sensitif yang tidak perlu.
+- `must_change_password` hanya digunakan sebagai state redirect, bukan menyimpan password.
 
 ## Role Guard
 Buat helper:
@@ -85,3 +89,11 @@ Jika `profiles.is_active = false`:
 - user tidak boleh mengakses dashboard;
 - tampilkan pesan hubungi admin;
 - opsional force logout.
+
+## Public vs Internal
+- Route public seperti `/`, `/profil`, `/berita`, `/pendaftaran`, dan `/marketplace` dapat diakses guest.
+- Semua `/dashboard/*`, chat, payment, receipt, import, dan data pendaftaran internal wajib login.
+- Middleware menjaga authentication; Server Action/API dan RLS menjaga authorization.
+
+## Multi-peran untuk Orang yang Sama
+Database tetap memakai satu role per profile. Jika staf juga wali murid, super admin membuat akun `wali_murid` terpisah dengan relasi anak; tidak ada role baru dan tidak ada impersonasi otomatis.

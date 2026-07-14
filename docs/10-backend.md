@@ -81,6 +81,10 @@ Gunakan Server Action untuk:
 - update role;
 - submit tugas;
 - nilai tugas.
+- approve pendaftaran dan import CSV;
+- mencatat absensi;
+- membuat thread/pesan chat;
+- membuat invoice dan memulai pembayaran setelah guard.
 
 ## Kapan Pakai Route Handler
 Gunakan Route Handler untuk:
@@ -112,29 +116,31 @@ export const assignmentSchema = z.object({
 - Untuk validasi, tampilkan error per field.
 
 ## Realtime
-Realtime opsional, bukan MVP wajib.
+Realtime dipakai untuk chat internal dan boleh dipakai untuk notifikasi.
 
 Boleh digunakan untuk:
 - pengumuman terbaru;
 - status submission;
 - notifikasi dashboard.
 
+Untuk chat, subscription harus difilter berdasarkan thread membership dan tetap tunduk pada RLS.
+
 Jangan gunakan realtime untuk:
 - payment callback utama;
 - logic security;
 - sinkronisasi nilai penting tanpa fallback query.
 
-## Backend Payment
-Untuk saat ini backend payment hanya setup.
+## Backend Payment Aktif Terkontrol
+- Super admin menyimpan konfigurasi non-secret dan mengaktifkan global payment.
+- Admin sekolah mengelola invoice dan modul yang telah diizinkan.
+- Hanya wali murid yang dapat meminta Snap transaction.
+- Server memeriksa `PAYMENT_ENABLED`, setting database, flag modul, role, dan relasi siswa.
+- Webhook memverifikasi signature, idempotency, nominal, order ID, dan status transition.
+- Receipt dibuat server-side dari data transaksi tervalidasi; URL logo/file disimpan di tabel.
+- Server key hanya dibaca di server environment.
 
-Yang boleh dibuat:
-- tabel payment settings;
-- form setup sandbox;
-- route webhook skeleton;
-- utility client Midtrans yang belum dipakai transaksi aktif;
-- feature flag `PAYMENT_ENABLED=false`.
-
-Yang belum boleh dibuat aktif:
-- charge Snap production;
-- tombol bayar aktif;
-- perubahan status paid tanpa callback valid.
+## Import CSV
+- Template CSV didefinisikan per entitas dan tersedia melalui route protected super admin.
+- Parser server memvalidasi encoding, header, ukuran, tipe, duplikasi, dan relasi.
+- Commit memakai transaksi; error per baris disimpan di `import_batches`.
+- File CSV sumber disimpan sebagai URL/path private untuk audit.

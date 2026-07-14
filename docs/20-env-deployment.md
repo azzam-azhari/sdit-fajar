@@ -25,7 +25,8 @@ NEXT_PUBLIC_MIDTRANS_CLIENT_KEY=
 - Secret tidak boleh memakai prefix `NEXT_PUBLIC_`.
 - `SUPABASE_SERVICE_ROLE_KEY` hanya untuk server.
 - `MIDTRANS_SERVER_KEY` hanya untuk server.
-- Gunakan sandbox Midtrans untuk development.
+- Gunakan sandbox Midtrans untuk development; production hanya diaktifkan super admin setelah checklist go-live.
+- Password awal murid dibentuk server dari `tempat` + `ddmmyyyy`; jangan simpan password plaintext atau prefix rahasia di client.
 
 ## Setup Local
 1. Install dependency.
@@ -61,6 +62,8 @@ npm run build
 - Login tiap role dites.
 - Upload file dites.
 - Public website dites.
+- Pendaftaran, import CSV, absensi, chat, marketplace, dan receipt dites.
+- RLS diuji untuk setiap role dan relasi anak/kelas/thread/invoice.
 
 ## Smoke Test Production
 - Buka `/`.

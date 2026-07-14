@@ -79,6 +79,7 @@ Dashboard wajib punya:
 - card ringkasan;
 - konten utama;
 - responsive mobile menu.
+- Semua halaman internal wajib meminta login; halaman publik tidak boleh memaksa login.
 
 ## Layout Public Website
 Website publik wajib punya:
@@ -88,7 +89,8 @@ Website publik wajib punya:
 - dropdown profil;
 - active link;
 - efek blur/shadow saat scroll;
-- tombol “Daftar” ke Google Form;
+- tombol “Daftar” menuju halaman `/pendaftaran`;
+- tautan Marketplace publik;
 - footer lengkap;
 - floating WhatsApp button.
 
@@ -103,17 +105,24 @@ Website publik wajib punya:
 - Badge status.
 - Avatar user.
 - File upload dropzone.
+- CSV import dropzone dengan link download template.
+- Chat thread dan message composer.
+- Payment receipt preview dengan tombol buka tab baru/unduh.
+- Attendance session indicator untuk masuk, pulang, dan jadwal pelajaran.
 - Confirmation dialog.
 - Toast notification.
 
 ## Bahasa UI
 Gunakan Bahasa Indonesia yang sopan dan sederhana.
 
+Konten publik tertentu boleh menyediakan switch Bahasa Indonesia/Bahasa Inggris. Bahasa Indonesia tetap menjadi default untuk dashboard, form, notifikasi, dan error.
+
 Contoh microcopy:
 - “Belum ada tugas untuk saat ini.”
 - “Tugas berhasil dikumpulkan.”
 - “Nilai belum tersedia.”
 - “Materi berhasil diterbitkan.”
+- “Pembayaran berhasil diverifikasi.”
 - “Silakan hubungi admin sekolah jika data tidak sesuai.”
 
 ## Aksesibilitas
@@ -128,3 +137,5 @@ Contoh microcopy:
 - Jangan membuat desain terlalu gelap untuk halaman siswa SD.
 - Jangan memakai animasi berlebihan.
 - Jangan membuat halaman dashboard tanpa empty/loading/error state.
+- Jangan menampilkan tombol bayar kepada role selain `wali_murid`.
+- Jangan menampilkan data chat, invoice, atau receipt di luar relasi user.

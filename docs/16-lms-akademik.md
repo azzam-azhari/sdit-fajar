@@ -30,7 +30,7 @@
 ### Rules
 - Materi draft hanya terlihat oleh pembuat dan admin.
 - Materi published terlihat oleh siswa kelas terkait.
-- Orang tua bisa melihat materi anak.
+- Wali murid bisa melihat materi anak.
 - Materi bisa berupa teks, file, link, atau kombinasi.
 
 ## Tugas
@@ -71,7 +71,7 @@
 - Submission bisa diupdate sebelum deadline jika diizinkan.
 - Guru bisa melihat seluruh submission tugas miliknya.
 - Siswa hanya melihat submission miliknya.
-- Orang tua hanya melihat submission anak.
+- Wali murid hanya melihat submission anak.
 
 ## Nilai
 
@@ -98,7 +98,7 @@ Field:
 
 Rules:
 - Siswa melihat jadwal kelasnya.
-- Orang tua melihat jadwal anaknya.
+- Wali murid melihat jadwal anaknya.
 - Guru melihat jadwal mengajarnya.
 
 ## Dashboard Siswa
@@ -135,13 +135,28 @@ Menampilkan:
 - rata-rata penyelesaian tugas;
 - laporan per kelas.
 
-## Dashboard Orang Tua
+## Dashboard Wali Murid
 Menampilkan:
 - daftar anak;
 - tugas anak;
 - nilai terbaru;
 - pengumuman;
 - status pembayaran jika aktif.
+
+## Absensi Guru
+- Sesi masuk pukul 07.30 dan pulang pukul 14.30 pada Senin-Jumat.
+- Sabtu-Minggu hanya aktif jika kepala sekolah mengizinkan pada periode aktif.
+- Waktu server menjadi sumber kebenaran.
+
+## Absensi Siswa
+- Dicatat pada setiap jadwal pelajaran aktif.
+- Guru atau wali kelas mencatat sesuai relasi kelas/mapel.
+- Sabtu-Minggu tidak menghasilkan absensi pembelajaran.
+- Siswa dan wali murid melihat riwayat sesuai relasi.
+
+## Chat dan Marketplace
+- Chat menggunakan thread internal dan Supabase Realtime dengan RLS membership.
+- Marketplace berisi buku/konten pembelajaran sekolah; akses file memakai signed URL setelah pembayaran wali murid tervalidasi.
 
 ## Status Standar
 Assignment:

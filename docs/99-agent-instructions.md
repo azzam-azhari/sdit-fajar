@@ -22,8 +22,8 @@ Jangan membuat role selain:
 - `kepala_sekolah`
 - `guru`
 - `wali_kelas`
-- `siswa`
-- `orang_tua`
+- `murid`
+- `wali_murid`
 
 Label UI boleh manusiawi, tetapi value database wajib sama seperti daftar di atas.
 
@@ -75,30 +75,26 @@ Jika belum ada:
 - Aktifkan RLS untuk tabel internal.
 
 ## Aturan Payment
-Payment SPP dan daftar ulang dengan Midtrans saat ini hanya setup.
+- Payment SPP, daftar ulang, iuran, pendaftaran semester, dan produk marketplace dapat diaktifkan oleh `super_admin` setelah pemeriksaan keamanan dan webhook lulus.
+- Tombol bayar hanya aktif untuk `wali_murid` dan hanya jika flag environment, database, dan modul payment terkait aktif.
+- `admin_sekolah` mengelola invoice dan modul yang telah diizinkan, tetapi tidak dapat melewati aktivasi global super admin.
+- Status `paid` hanya boleh berasal dari callback Midtrans yang signature-nya valid dan idempotent.
+- `MIDTRANS_SERVER_KEY` tidak boleh disimpan di database atau dikirim ke client.
 
-Agent boleh membuat:
-- env variable;
-- tabel setup;
-- halaman setup;
-- invoice draft;
-- webhook skeleton.
-
-Agent tidak boleh membuat aktif:
-- tombol bayar nyata;
-- Snap transaction production;
-- update status paid tanpa callback valid;
-- menyimpan server key di database/client.
+## Scope Fitur yang Disetujui
+- Pendaftaran murid baru.
+- Absensi guru pada 07.30 dan 14.30 Senin-Jumat, dengan akhir pekan opsional oleh kepala sekolah.
+- Absensi siswa per jadwal pelajaran, tanpa absensi pembelajaran Sabtu-Minggu.
+- Chat real-time terbatas pada anggota thread.
+- Marketplace konten pembelajaran dengan checkout akun `wali_murid`.
+- Import data CSV oleh super admin dengan template resmi.
 
 ## Larangan Fitur
 Jangan membuat fitur berikut kecuali diminta eksplisit:
 - video conference internal;
-- chat real-time;
-- marketplace materi;
 - AI grading otomatis;
 - payroll;
 - inventaris;
-- payment aktif production.
 
 ## Ketika Ragu
 Jika informasi tidak ada di docs:

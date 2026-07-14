@@ -18,7 +18,7 @@ Sebelum mengerjakan task apa pun, baca folder `docs/`.
 - Jangan membuat route baru tanpa update docs.
 - Jangan membuat tabel/kolom baru tanpa update docs.
 - Jangan mengubah tema visual tanpa instruksi eksplisit.
-- Jangan mengaktifkan payment Midtrans; payment saat ini setup saja.
+- Payment Midtrans boleh diaktifkan hanya oleh `super_admin` setelah konfigurasi, signature webhook, RLS, dan environment server tervalidasi.
 - Jangan expose secret ke client.
 - Jangan mengandalkan frontend untuk security.
 
@@ -28,11 +28,20 @@ Sebelum mengerjakan task apa pun, baca folder `docs/`.
 - `kepala_sekolah`
 - `guru`
 - `wali_kelas`
-- `siswa`
-- `orang_tua`
+- `murid`
+- `wali_murid`
 
 ## Tema UI Final
 - Claymorphism.
 - Bento grid.
 - Primary biru cerah.
 - Bahasa Indonesia.
+
+## Scope Tambahan dari `note.md`
+- Halaman publik dapat diakses tanpa login; seluruh halaman internal wajib login.
+- Fitur pendaftaran murid, absensi guru/siswa, chat real-time, marketplace konten, import CSV, dan payment Midtrans termasuk scope.
+- Login murid menggunakan NIS dan password awal berbentuk `tempatddmmyyyy` dari biodata; password wajib diganti pada login pertama.
+- Akun `wali_murid` dibuat terpisah dan hanya role tersebut yang dapat memulai pembayaran serta melihat bukti pembayaran anak yang terhubung.
+- Semua file/gambar yang diunggah wajib memiliki URL atau storage path yang disimpan pada tabel domain terkait.
+- Super admin mengelola identitas/kontak sekolah, konfigurasi payment, import data, dan pengumuman ke semua user atau role tertentu.
+- Admin sekolah mengelola konten publik operasional dan invoice, tetapi tidak dapat mengubah identitas/kontak utama sekolah atau melewati aktivasi global payment super admin.

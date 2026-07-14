@@ -100,4 +100,8 @@ Format commit disarankan:
 - Jangan membuat role baru sembarangan.
 - Jangan membuat route baru tanpa dokumentasi.
 - Jangan membuat tabel baru tanpa dokumentasi.
+- Semua upload harus menyimpan URL/path ke tabel domain.
+- Jangan memakai client time untuk aturan absensi atau status payment.
+- Jangan menganggap event realtime sebagai sumber kebenaran atau bypass RLS.
+- Role database hanya boleh berasal dari daftar final di `01-role-permission.md`.
 - Jangan ignore TypeScript error.

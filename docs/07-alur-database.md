@@ -13,15 +13,15 @@ Alur:
 ## Relasi Role Akademik
 
 ### Siswa
-- `profiles.role = siswa`.
+- `profiles.role = murid`.
 - Detail siswa disimpan di `students`.
 - Siswa masuk rombel melalui `class_students`.
 
-### Orang Tua
-- `profiles.role = orang_tua`.
-- Relasi orang tua ke siswa disimpan di `parent_students`.
-- Satu orang tua bisa memiliki lebih dari satu anak.
-- Satu siswa bisa memiliki lebih dari satu orang tua/wali jika diperlukan.
+### Wali Murid
+- `profiles.role = wali_murid`.
+- Relasi wali murid ke siswa disimpan di `parent_students`.
+- Satu wali murid bisa memiliki lebih dari satu anak.
+- Satu siswa bisa memiliki lebih dari satu wali murid jika diperlukan.
 
 ### Guru
 - `profiles.role = guru` atau `wali_kelas`.
@@ -76,16 +76,43 @@ Target pengumuman:
 - semua user;
 - role tertentu;
 - kelas tertentu;
-- siswa/orang tua tertentu.
+- murid/wali murid tertentu.
 
-## Alur Payment Setup
-1. Admin membuat konfigurasi payment.
+## Alur Pendaftaran dan Import
+1. Pendaftaran publik membuat `student_registration_applications` tanpa membuka data internal.
+2. Setiap unggahan disimpan ke Storage dan URL/path dicatat di `student_registration_documents`.
+3. Super admin menyetujui pendaftaran dan membuat profile/relasi akademik.
+4. Super admin mengimpor data memakai template CSV.
+5. Sistem menyimpan file sumber dan ringkasan hasil di `import_batches`.
+
+## Alur Absensi
+1. `school_period_settings` menentukan bulan, tahun, dan weekend attendance.
+2. `teacher_attendances` menyimpan sesi `check_in` 07.30 dan `check_out` 14.30.
+3. Sabtu-Minggu guru hanya boleh diabsen jika flag aktif oleh kepala sekolah.
+4. `student_attendances` terkait `schedules` dan hanya dibuat untuk hari Senin-Jumat.
+5. RLS membatasi pencatatan dan pembacaan berdasarkan role serta relasi kelas/mapel.
+
+## Alur Chat
+1. Super admin/admin membuat thread atau menambahkan anggota sesuai permission.
+2. Anggota thread disimpan di `chat_thread_members`.
+3. Pesan disimpan di `chat_messages`; Realtime hanya mengirim event dari data yang telah lolos RLS.
+
+## Alur Marketplace
+1. Konten dikelola di `marketplace_products` dengan cover/file URL atau path.
+2. Wali murid membuat `marketplace_orders` dan itemnya.
+3. Order menghasilkan `payment_invoices` bertipe `marketplace`.
+4. Signed URL file baru dibuat setelah transaksi berstatus paid.
+
+## Alur Payment Midtrans
+1. Super admin membuat konfigurasi payment dan aktivasi global.
 2. Midtrans secret disimpan di env.
 3. Tabel `payment_settings` menyimpan status feature flag.
-4. Admin membuat invoice SPP/daftar ulang.
-5. Jika payment belum aktif, invoice hanya tampil sebagai draft/internal.
-6. Jika payment aktif nanti, sistem membuat Snap transaction ke Midtrans.
-7. Callback/webhook Midtrans memperbarui `payment_transactions` dan status invoice.
+4. Admin sekolah membuat invoice SPP, iuran, pendaftaran semester, tagihan lain, atau marketplace.
+5. Hanya `wali_murid` yang dapat membuat transaksi checkout.
+6. Sistem membuat Snap transaction hanya bila env, setting, dan modul terkait aktif.
+7. Callback/webhook memvalidasi signature dan memperbarui `payment_transactions` serta invoice secara idempotent.
+8. Sistem membuat `payment_receipts` dengan URL logo dan snapshot data bank/transaksi.
+9. Receipt hanya dapat diakses wali murid yang memiliki relasi dengan siswa.
 
 ## Alur Audit Log
 Audit log disarankan untuk aksi sensitif:

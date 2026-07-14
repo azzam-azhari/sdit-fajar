@@ -1,29 +1,25 @@
-# Payment Midtrans Setup
+# Payment Midtrans
 
-## Status Saat Ini
-Payment SPP dan daftar ulang disiapkan untuk Midtrans, tetapi belum digunakan sebagai fitur aktif.
+## Status
+Payment Midtrans termasuk fitur aktif terkontrol. Aktivasi global hanya dilakukan oleh `super_admin` setelah checklist keamanan, environment, signature webhook, RLS, dan pengujian sandbox/production lulus.
 
-Tujuan tahap ini:
-- menyiapkan struktur database;
-- menyiapkan env;
-- menyiapkan halaman konfigurasi;
-- menyiapkan skeleton webhook;
-- memastikan tidak ada transaksi aktif sebelum feature flag dinyalakan.
+## Peran
+- `super_admin`: mengatur provider, environment, key non-secret, global flag, dan go-live.
+- `admin_sekolah`: membuat, mengubah, menghapus invoice serta mengaktifkan/menonaktifkan modul yang telah diizinkan super admin.
+- `wali_murid`: satu-satunya role yang dapat memulai pembayaran dan checkout marketplace; hanya melihat invoice/receipt anak yang terhubung.
+- Role lain: tidak dapat memulai transaksi.
 
-## Fitur Payment yang Disiapkan
-- Setup provider Midtrans.
-- Mode sandbox/production.
-- Pengaturan client key dan merchant id.
-- Server key via environment variable.
-- Draft invoice SPP.
-- Draft invoice daftar ulang.
-- Status invoice.
-- Skeleton webhook callback.
+## Jenis Tagihan
+- SPP bulanan.
+- Iuran ekstrakurikuler.
+- Pendaftaran semester ganjil.
+- Pendaftaran semester genap.
+- Produk marketplace.
+- Jenis lain yang disetujui sekolah.
 
-## Feature Flag
-Payment harus dikontrol oleh dua lapis flag:
+## Flag Berlapis
+Transaksi hanya boleh aktif jika semua kondisi benar:
 
-### Environment
 ```env
 PAYMENT_ENABLED=false
 MIDTRANS_ENVIRONMENT=sandbox
@@ -33,73 +29,55 @@ MIDTRANS_SERVER_KEY=
 NEXT_PUBLIC_MIDTRANS_CLIENT_KEY=
 ```
 
-### Database
-Tabel `payment_settings`:
-- `is_enabled`
-- `is_spp_enabled`
-- `is_daftar_ulang_enabled`
+Dan database memiliki:
+- `payment_settings.is_enabled = true`;
+- flag modul terkait true;
+- invoice bukan draft dan belum memiliki transaksi aktif;
+- role user `wali_murid` serta relasi anak valid.
 
-Transaksi hanya boleh aktif jika:
-- `PAYMENT_ENABLED=true` di env;
-- `payment_settings.is_enabled=true`;
-- modul terkait juga enabled.
+`MIDTRANS_SERVER_KEY` hanya di environment server. Jangan simpan di database atau kirim ke client.
 
-## Halaman Setup
-Route:
+## Alur Transaksi
+1. Admin membuat invoice dengan bulan/tahun aktif, jenis, nominal, jatuh tempo, dan siswa/parent terkait.
+2. Admin dapat mengatur pengingat sebelum jatuh tempo, misalnya 30, 14, 7, 3, dan 1 hari.
+3. Wali murid membuka invoice anak.
+4. Server memvalidasi role, relasi, flag, nominal, dan status invoice.
+5. Server membuat order ID dan Snap transaction.
+6. Midtrans memproses pembayaran.
+7. Webhook memverifikasi signature, order ID, nominal, dan idempotency.
+8. Sistem memperbarui transaksi/invoice dan membuat `payment_receipts` saat status valid.
+
+## Receipt
+Receipt dapat dibuka di tab baru dan diunduh oleh wali murid yang memiliki relasi. Isi minimal:
+- logo sekolah;
+- logo Midtrans;
+- tanggal dan jam pembayaran;
+- nomor invoice;
+- nama siswa dan kelas;
+- jumlah dan status pembayaran;
+- nama bank, nomor rekening, dan nama rekening pengirim jika tersedia;
+- bank tujuan, nomor rekening tujuan, dan nama rekening tujuan jika tersedia.
+
+Logo dan file receipt selalu dirujuk melalui URL/path yang tersimpan di tabel. Data bank yang tidak dikirim Midtrans boleh nullable dan tidak boleh ditebak.
+
+## Status
+- `draft`, `unpaid`, `pending`, `paid`, `expired`, `failed`, `cancelled`.
+- Perubahan ke `paid` hanya dari callback signature valid.
+- Webhook idempotent dan menolak status transition yang tidak sah.
+
+## Route
+- `/dashboard/super-admin/payment`
 - `/dashboard/admin/payment/settings`
-- `/dashboard/admin/payment/spp`
-- `/dashboard/admin/payment/daftar-ulang`
-- `/dashboard/orang-tua/payment`
+- `/dashboard/admin/payment/invoices`
+- `/dashboard/admin/payment/modules`
+- `/dashboard/wali-murid/payment`
+- `/dashboard/wali-murid/payment/[invoiceId]`
+- `/dashboard/wali-murid/payment/[invoiceId]/receipt`
+- `POST /api/midtrans/webhook`
 
-Status UI saat belum aktif:
-- tampilkan badge “Setup saja”.
-- tombol “Bayar” disabled.
-- tampilkan pesan “Fitur pembayaran belum diaktifkan oleh sekolah.”
-
-## Payment Status
-Gunakan enum:
-- `draft`: tagihan dibuat tetapi belum ditampilkan untuk pembayaran aktif.
-- `unpaid`: tagihan belum dibayar.
-- `pending`: transaksi dibuat dan menunggu pembayaran.
-- `paid`: pembayaran berhasil.
-- `expired`: transaksi kedaluwarsa.
-- `failed`: pembayaran gagal.
-- `cancelled`: dibatalkan.
-
-## Order ID Format
-Saat fitur aktif nanti, gunakan format:
-
-```text
-SDITFAJAR-{PAYMENT_TYPE}-{INVOICE_ID_SHORT}-{TIMESTAMP}
-```
-
-Contoh:
-```text
-SDITFAJAR-SPP-8F31A2-202607101030
-```
-
-## Webhook Rules
-Webhook `/api/midtrans/webhook` harus:
-- menerima POST dari Midtrans;
-- verify signature key;
-- idempotent;
-- menyimpan raw payload;
-- update status transaksi;
-- update invoice terkait;
-- mencatat audit log.
-
-## Larangan
-- Jangan hardcode `MIDTRANS_SERVER_KEY`.
-- Jangan expose server key ke client.
-- Jangan membuat tombol bayar aktif jika flag false.
-- Jangan mengubah invoice menjadi `paid` tanpa callback valid.
-- Jangan menggunakan production key untuk development.
-
-## Acceptance Setup
-Payment setup dianggap selesai jika:
-- env example berisi variable Midtrans;
-- halaman setup bisa menyimpan config non-secret;
-- server key hanya dibaca dari server env;
-- tombol bayar belum aktif;
-- webhook route tersedia sebagai skeleton aman;
-- dokumentasi menjelaskan bahwa transaksi belum dipakai.
+## Acceptance
+- Global payment hanya dapat diubah super admin.
+- Admin dapat CRUD invoice sesuai permission.
+- Tombol bayar tidak tampil aktif untuk role selain wali murid.
+- Receipt membuka di tab baru, dapat diunduh, dan tidak bocor ke parent lain.
+- Server key tidak pernah masuk client/database.

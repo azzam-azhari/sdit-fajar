@@ -1,7 +1,7 @@
 # Notifikasi & Pengumuman
 
 ## Tujuan
-Memberi informasi penting kepada user tanpa membuat fitur chat kompleks.
+Memberi informasi penting kepada user dan menyediakan chat real-time internal yang terpisah dari pengumuman.
 
 ## Pengumuman
 Pengumuman adalah konten resmi dari sekolah/guru/wali kelas.
@@ -18,6 +18,8 @@ Target pengumuman:
 - `kepala_sekolah`: semua target atau role tertentu.
 - `guru`: kelas/mapel yang diajar.
 - `wali_kelas`: kelas binaan.
+
+Super admin dapat memilih target semua user atau satu role tertentu. Target harus disimpan eksplisit dan tidak boleh bergantung pada filter frontend.
 
 ## Field Pengumuman
 - title;
@@ -37,6 +39,8 @@ Notifikasi bisa dibuat sederhana dari event berikut:
 - nilai sudah diberikan;
 - pengumuman baru;
 - invoice payment dibuat jika payment aktif nanti.
+- payment berhasil/gagal;
+- pesan chat baru pada thread yang diikuti.
 
 ## Tabel Opsional `notifications`
 
@@ -64,7 +68,12 @@ Notifikasi bisa dibuat sederhana dari event berikut:
 - Halaman semua notifikasi opsional.
 - Empty state: “Belum ada notifikasi.”
 
+## Chat Real-time
+- Chat berada di route `/dashboard/chat` dan hanya untuk user login.
+- Thread, anggota, dan pesan memiliki tabel serta RLS sendiri.
+- Supabase Realtime hanya mengirim event dari thread yang user boleh baca.
+- Chat tidak menggantikan pengumuman resmi dan tidak boleh dipakai untuk mengubah nilai/payment.
+
 ## Larangan
-- Jangan membuat chat real-time saat ini.
 - Jangan membuat push notification browser sebelum diminta.
 - Jangan membuat WhatsApp broadcast otomatis tanpa izin eksplisit.

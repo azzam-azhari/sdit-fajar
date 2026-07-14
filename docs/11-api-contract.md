@@ -12,7 +12,7 @@ Route UI: `/login`
 Input:
 ```ts
 type LoginInput = {
-  email: string
+  identifier: string
   password: string
 }
 ```
@@ -114,7 +114,7 @@ Rules:
 
 ### `submitAssignmentAction`
 Role:
-- `siswa`
+- `murid`
 
 Input:
 ```ts
@@ -176,6 +176,54 @@ Rules:
 - Wali kelas hanya bisa target kelas binaan.
 - Admin dan kepala sekolah bisa target semua.
 
+## Pendaftaran dan Import
+
+### `submitRegistrationAction`
+Role: public guest.
+
+Rules:
+- validasi data pendaftar dan dokumen;
+- setiap file disimpan ke Storage dan URL/path dicatat;
+- tidak membuat akun sebelum review.
+
+### `importCsvAction`
+Role: `super_admin` only.
+
+Rules:
+- hanya template yang didukung;
+- preview dan error per baris sebelum commit;
+- simpan `import_batches` dan audit log.
+
+## Absensi
+
+### `recordTeacherAttendanceAction`
+Role: `guru`, `wali_kelas` untuk diri sendiri; admin/kepala sekolah untuk review.
+
+Rules:
+- check-in 07.30 dan check-out 14.30 Senin-Jumat;
+- weekend hanya saat flag aktif;
+- gunakan server time dan cegah duplikasi.
+
+### `recordStudentAttendanceAction`
+Role: `guru`, `wali_kelas`.
+
+Rules:
+- wajib terkait schedule dan assignment/kelas;
+- tolak Sabtu-Minggu;
+- satu siswa per jadwal per tanggal.
+
+## Chat
+
+### `sendChatMessageAction`
+Role: authenticated thread member.
+
+Rules:
+- `senderId` berasal dari session, bukan input bebas;
+- body divalidasi;
+- RLS wajib memeriksa membership.
+
+## Payment dan Receipt
+
 ## Payment Setup
 
 ### `updatePaymentSettingsAction`
@@ -192,18 +240,37 @@ type UpdatePaymentSettingsInput = {
   clientKey: string
   isEnabled: boolean
   isSppEnabled: boolean
-  isDaftarUlangEnabled: boolean
+  isIuranEnabled: boolean
+  isPendaftaranSemesterEnabled: boolean
+  isMarketplaceEnabled: boolean
 }
 ```
 
 Rules:
 - `serverKey` tidak dikirim dari client form.
-- `isEnabled` default false.
+- `isEnabled` hanya dapat diubah `super_admin`; admin sekolah hanya dapat mengubah flag modul yang diizinkan.
 - Jika env `PAYMENT_ENABLED` bukan `true`, transaksi tidak boleh aktif meski database enabled.
+
+### `createPaymentTransactionAction`
+Role: `wali_murid` only.
+
+Rules:
+- invoice wajib terkait anak;
+- modul dan global payment harus aktif;
+- nominal/order ID berasal dari server;
+- hanya satu transaksi aktif per invoice.
+
+### `getPaymentReceiptAction`
+Role: `wali_murid` yang memiliki relasi ke invoice.
+
+Rules:
+- receipt hanya untuk transaksi valid/paid;
+- output memuat logo, waktu, invoice, siswa, kelas, nominal, status, dan data bank jika tersedia;
+- halaman dapat dibuka di tab baru/diunduh.
 
 ### `POST /api/midtrans/webhook`
 Status:
-- skeleton setup saja.
+- harus aktif terkontrol sesuai flag dan signature verification.
 
 Rules:
 - Harus verify signature.

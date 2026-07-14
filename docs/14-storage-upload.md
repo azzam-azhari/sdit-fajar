@@ -10,6 +10,8 @@ Gunakan Supabase Storage.
 | `images` | public atau signed | avatar, berita, galeri |
 | `lms-files` | private disarankan | materi, tugas, submission |
 | `payment-files` | private | bukti pembayaran manual jika nanti ada |
+| `registration-files` | private | dokumen pendaftaran murid |
+| `marketplace-files` | private | file digital konten yang sudah dibeli |
 
 Jika ingin sederhana pada MVP, bucket `images` boleh tetap dipakai untuk gambar publik. Untuk file akademik, gunakan bucket private.
 
@@ -26,6 +28,9 @@ lms-files/
 ├── materials/{classroomId}/{materialId}/
 ├── assignments/{assignmentId}/
 └── submissions/{assignmentId}/{studentId}/
+
+registration-files/{applicationId}/
+marketplace-files/{productId}/
 ```
 
 ## Batas File
@@ -59,7 +64,7 @@ Tolak file:
 3. Server Action validasi ulang.
 4. Server membuat path aman.
 5. File diupload ke Supabase Storage.
-6. URL/path disimpan ke tabel domain.
+6. URL dan storage path disimpan ke tabel domain terkait (`file_url`/`file_path`, `cover_url`, atau kolom khusus dokumen).
 7. Jika update file, file lama dihapus setelah file baru berhasil tersimpan.
 
 ## Metadata File
@@ -72,9 +77,9 @@ Untuk file penting, simpan metadata:
 - uploaded at.
 
 ## Signed URL
-Untuk file LMS private:
+Untuk file LMS, pendaftaran, payment, dan marketplace yang private:
 - siswa hanya bisa membuka file kelasnya;
-- orang tua hanya file anaknya;
+- wali murid hanya file anaknya atau order miliknya;
 - guru hanya file kelas/mapel yang diajar;
 - gunakan signed URL dengan masa berlaku terbatas.
 
@@ -91,3 +96,5 @@ Untuk file LMS private:
 - File type divalidasi di client dan server.
 - File lama dibersihkan saat update.
 - File orphan dibersihkan berkala.
+- Tidak ada unggahan yang dianggap selesai jika URL/path belum tercatat di database.
+- Dokumen pendaftaran dan file marketplace selalu private dan diakses dengan signed URL setelah authorization.

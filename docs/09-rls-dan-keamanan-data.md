@@ -35,10 +35,15 @@ $$;
 - Super admin bisa mengubah semua profile.
 - Admin sekolah bisa mengelola user operasional, kecuali super admin.
 
+## Policy Konten Publik dan `school_settings`
+- Konten published seperti berita, galeri, katalog marketplace, dan halaman publik dapat dibaca guest.
+- Admin sekolah mengelola konten operasional yang ditugaskan.
+- Hanya super admin yang dapat mengubah `school_settings`, termasuk logo, alamat, nomor telepon, WhatsApp, email, peta, dan social links.
+
 ## Policy Data Siswa
 Siswa boleh membaca data dirinya sendiri.
 
-Orang tua boleh membaca data anak yang terhubung melalui `parent_students`.
+Wali murid boleh membaca data anak yang terhubung melalui `parent_students`.
 
 Guru boleh membaca data siswa pada kelas yang diajar.
 
@@ -50,7 +55,7 @@ Admin sekolah dan super admin boleh mengelola data siswa.
 
 ## Policy Materi
 - Materi `published` bisa dibaca siswa pada kelas terkait.
-- Orang tua bisa membaca materi anaknya.
+- Wali murid bisa membaca materi anaknya.
 - Guru bisa mengelola materi yang dibuat olehnya.
 - Wali kelas bisa melihat materi kelas binaannya.
 - Admin/kepala sekolah bisa melihat semua materi.
@@ -60,21 +65,49 @@ Admin sekolah dan super admin boleh mengelola data siswa.
 - Siswa hanya bisa membuat/mengubah submission miliknya sendiri.
 - Guru hanya bisa membuat tugas untuk kelas/mapel yang diajar.
 - Guru hanya bisa menilai submission dari assignment miliknya.
-- Orang tua hanya bisa melihat tugas/submission anaknya.
+- Wali murid hanya bisa melihat tugas/submission anaknya.
 
 ## Policy Nilai
 - Siswa hanya melihat nilai sendiri.
-- Orang tua hanya melihat nilai anak.
+- Wali murid hanya melihat nilai anak.
 - Guru hanya melihat nilai kelas/mapel yang diajar.
 - Wali kelas melihat nilai kelas binaan.
 - Kepala sekolah melihat laporan semua kelas.
 
+## Policy Pendaftaran dan Import
+- Pendaftar publik hanya dapat membuat application dan upload dokumen melalui endpoint terbatas.
+- Admin dapat membaca/review application sesuai permission.
+- Super admin menyetujui application dan menjalankan import CSV.
+- Hanya super admin yang dapat membaca `import_batches` dan template source file.
+- Semua file pendaftaran private dan diakses signed URL setelah guard relasi.
+
+## Policy Absensi
+- Guru dapat membuat/update absensi dirinya sendiri pada sesi yang sedang terbuka.
+- Guru hanya dapat mencatat absensi siswa dari kelas/mapel assignment-nya.
+- Wali kelas dapat mencatat dan melihat siswa kelas binaannya.
+- Kepala sekolah/admin dapat membaca rekap; kepala sekolah mengubah flag weekend.
+- Siswa dan wali murid hanya membaca absensi diri/anak.
+- Server memvalidasi hari, waktu sesi, periode aktif, dan duplikasi.
+
+## Policy Chat
+- User hanya dapat membaca `chat_threads` jika terdaftar di `chat_thread_members`.
+- User hanya dapat mengirim pesan sebagai `sender_id = auth.uid()` pada thread yang diikutinya.
+- Realtime tidak boleh menjadi bypass RLS.
+
+## Policy Marketplace
+- Katalog published dapat dibaca publik tanpa login.
+- Admin/super admin mengelola produk.
+- Wali murid hanya dapat membaca order miliknya dan file setelah payment paid.
+- File produk tetap private; gunakan signed URL berumur pendek.
+
 ## Policy Payment
-Karena payment belum aktif:
-- Admin dan super admin boleh melihat/mengelola setup.
-- Orang tua hanya boleh melihat invoice anaknya jika invoice sudah bukan draft.
-- Siswa tidak perlu melihat payment kecuali nanti diminta.
-- Endpoint create transaction harus disabled jika `payment_settings.is_enabled = false`.
+- Hanya super admin yang dapat mengubah credential/config provider dan aktivasi global.
+- Admin sekolah dapat mengelola invoice dan modul yang telah diizinkan.
+- Hanya `wali_murid` yang dapat membuat transaksi pembayaran dan checkout marketplace.
+- Wali murid hanya membaca invoice, transaction, dan receipt untuk siswa yang terhubung.
+- Admin tidak otomatis mendapat akses ke receipt anak tanpa profile `wali_murid` terpisah.
+- Endpoint create transaction harus menolak jika flag environment/database/modul tidak aktif.
+- Webhook tidak boleh menerima status `paid` tanpa signature valid dan idempotency check.
 
 ## File Upload Security
 - Validasi tipe file di frontend dan backend.
@@ -103,6 +136,11 @@ Aksi yang wajib dicatat:
 - update nilai;
 - create/update payment setting;
 - create/update invoice;
+- create/update/delete registration/import batch;
+- create/update attendance;
+- create/delete chat thread/message;
+- create/update marketplace product/order;
+- create/update payment receipt;
 - callback payment.
 
 ## Checklist Keamanan Tiap Fitur

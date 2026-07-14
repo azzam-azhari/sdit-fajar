@@ -1,12 +1,12 @@
 # Konten Publik Sekolah
 
 ## Tujuan
-Website publik SDIT Fajar berfungsi sebagai profil sekolah, media informasi, publikasi berita, dan pintu masuk pendaftaran.
+Website publik SDIT Fajar berfungsi sebagai profil sekolah, media informasi, publikasi berita, marketplace konten, dan pintu masuk pendaftaran. Seluruh halaman publik dapat diakses tanpa login.
 
 ## Beranda `/`
 Section wajib:
 - Hero section.
-- CTA daftar ke Google Form.
+- CTA daftar ke `/pendaftaran`.
 - Berita terbaru.
 - Berita sekolah.
 - Motto, visi, misi.
@@ -14,6 +14,7 @@ Section wajib:
 - Statistik sekolah dengan animasi count-up.
 - Testimoni.
 - FAQ accordion.
+- Preview katalog marketplace.
 
 ## Navbar
 Fitur wajib:
@@ -23,7 +24,8 @@ Fitur wajib:
 - dropdown Profil;
 - active link;
 - blur/shadow saat scroll;
-- tombol “Daftar” ke Google Form.
+- tombol “Daftar” ke `/pendaftaran`.
+- menu Marketplace.
 
 Menu rekomendasi:
 - Beranda;
@@ -101,6 +103,26 @@ Konten:
 - Google Maps;
 - social media.
 
+## Pendaftaran `/pendaftaran`
+- Form pendaftaran murid baru.
+- Upload dokumen dengan validasi server.
+- Setiap file disimpan sebagai URL/path pada tabel pendaftaran.
+- Halaman dapat diisi tanpa login; review dilakukan internal.
+
+## Marketplace `/marketplace`
+- Katalog buku/konten pembelajaran yang dikelola sekolah.
+- Cover dan file digital menggunakan URL/path Storage.
+- Katalog dapat dilihat publik tanpa login.
+- Checkout dan akses file setelah bayar hanya melalui akun `wali_murid`.
+
+## Pengelolaan Konten
+- Admin sekolah mengelola berita, galeri, FAQ, dan konten operasional.
+- Super admin mengubah identitas sekolah, logo, alamat, nomor telepon, WhatsApp, email, peta, dan social links.
+- Semua gambar/dokumen konten memiliki URL/path yang tersimpan di tabel.
+
+## Bahasa Publik
+Bahasa Indonesia adalah default. Halaman atau konten terpilih boleh menyediakan Bahasa Inggris untuk publikasi; dashboard dan pesan keamanan tetap Bahasa Indonesia.
+
 ## Berita `/berita`
 Fitur:
 - list berita;
@@ -111,7 +133,7 @@ Fitur:
 - detail berita di `/berita/[slug]`.
 
 ## Integrasi Eksternal
-- Google Form pendaftaran.
+- Google Form pendaftaran hanya opsi legacy jika diaktifkan eksplisit; alur utama menggunakan `/pendaftaran` dan tabel internal.
 - WhatsApp.
 - Google Maps.
 - YouTube.
