@@ -1,0 +1,70 @@
+# Ringkasan Produk
+
+## Nama Produk
+LMS SDIT Fajar
+
+## Jenis Produk
+Aplikasi web untuk website profil sekolah, publikasi konten, dashboard internal, dan Learning Management System untuk sekolah dasar Islam terpadu.
+
+## Tujuan Produk
+LMS SDIT Fajar dibuat untuk membantu sekolah mengelola:
+- informasi publik sekolah;
+- data siswa, guru, kelas, mata pelajaran, dan tahun ajaran;
+- materi pembelajaran;
+- jadwal pelajaran di setiap kelas;
+- absensi kehadiran siswa di setiap jadwal pelajarannya;
+- absensi kehadiran guru di setiap hari sekolah;
+- tugas dan pengumpulan tugas;
+- nilai dan progres akademik siswa;
+- pengumuman sekolah dan pengumuman per kelas, yang muncul di dashboard murid dan wali murid;
+- pendaftaran murid baru;
+- absensi guru dan siswa sesuai jadwal sekolah;
+- pembayaran SPP, iuran, pendaftaran semester, dan produk pembelajaran via Midtrans;
+- marketplace konten pembelajaran;
+- modul tahfidz & tahsin (mutabaah setoran Al-Qur'an);
+- import data sekolah melalui CSV.
+
+Menggantikan semua berkas berbentuk kertas di sekolah menjadi digital di website ini agar lebih mudah dikelola oleh guru dan siswa, sekolah juga bisa mempromosikan dirinya ke publik melalui website ini dengan menampilkan beberapa informasi tentang sekolah seperti prestasi dan kegiatan sekolah.
+
+## Target Pengguna
+Role tampilan boleh menggunakan label manusiawi, tetapi value database wajib lowercase snake_case.
+
+| Label UI | Value Database |
+|---|---|
+| Super Admin | `super_admin` |
+| Admin | `admin` |
+| Guru | `guru` |
+| Murid | `murid` |
+| Wali Murid | `wali_murid` |
+
+Jabatan (positions) di bawah role `guru` memberikan hak akses tambahan: `kepala_sekolah`, `wakil_kepala`, `bendahara`, `wali_kelas`, `koordinator_tahfidz`, `pustakawan`, `operator`. Sisanya dinamis.
+
+## Prinsip Produk
+- Mudah digunakan guru, murid SD, dan wali murid.
+- UI ramah anak, bersih, modern, dan tidak terlalu padat.
+- Data akademik dan data anak harus aman.
+- Akses user harus mengikuti role dan relasi data.
+- Semua fitur harus punya empty state, loading state, error state, dan success feedback.
+- Bahasa UI utama adalah Bahasa Indonesia.
+- Halaman publik sekolah dapat dibuka tanpa login. Semua halaman internal dan dashboard wajib login.
+- Beberapa konten publik boleh tersedia dalam Bahasa Inggris untuk kebutuhan publikasi, dengan Bahasa Indonesia sebagai default.
+- Semua dokumen dan gambar yang diunggah harus menghasilkan URL atau storage path yang disimpan pada tabel terkait.
+
+
+## Stack Utama
+- Next.js App Router.
+- TypeScript.
+- Tailwind CSS.
+- Shadcn UI, Radix UI, Lucide/Hugeicons.
+- Supabase Auth, Database, Storage, dan Realtime jika dibutuhkan.
+- React Query untuk data client-side.
+- Zod dan React Hook Form untuk validasi form.
+- Recharts untuk visualisasi dashboard.
+
+## Batasan Produk Saat Ini
+- Payment Midtrans diaktifkan melalui kontrol `super_admin` setelah validasi konfigurasi dan webhook; transaksi hanya dapat dimulai oleh akun `wali_murid`.
+- Jabatan `kepala_sekolah` dan `wali_kelas` bukan role terpisah; hak akses tambahan diatur melalui tabel `positions`.
+- Tidak membuat video conference internal.
+- Fitur chat internal / pesan real-time ditiadakan.
+- Marketplace hanya berisi konten/perlengkapan yang dikelola sekolah dan checkout melalui `wali_murid`.
+- Tidak membuat role baru tanpa memperbarui dokumentasi.

@@ -1,0 +1,30 @@
+# SDIT Fajar — Cursor Rules & Code Instructions
+
+# Core Principles
+- Strictly adhere to Next.js 16 (App Router), React 19, TypeScript strict mode, and Tailwind CSS 4.
+- NEVER use TypeScript `any`. All interfaces/types must live in `@/types/`.
+- UI Design Concept: Minimalist Craft & Design Engineering (inspired by https://jakub.kr/).
+  - Use Shadcn UI (Radix primitives) + Tailwind CSS 4 + Lucide React + Hugeicons React.
+  - DO NOT use Claymorphism or Bento Grid styles.
+  - ALL data tables MUST implement Zebra Cross styling (alternating row backgrounds `even:bg-muted/25`) with crisp borders.
+  - UI copy must be in Bahasa Indonesia. Code/comments in clean English.
+
+# Role & Authentication Rules
+- Exact 5 roles: `super_admin`, `admin`, `guru`, `murid`, `wali_murid`. NEVER hallucinate other roles.
+- Teacher positions (`kepala_sekolah`, `wali_kelas`, `bendahara`, `koordinator_tahfidz`, `pustakawan`, `operator`) are POSITIONS under role `guru`, not separate roles.
+- Murid logs in using NIS and default birthdate password (`tempatddmmyyyy`), with required first-time password reset.
+- ONLY `wali_murid` can initiate payments for their linked children via Midtrans Snap Popup Modal.
+- Receipt generated as print-friendly clean web receipt with `@media print`.
+
+# PPDB Online Staging Flow
+- New applicant data is stored in the dedicated staging table `registrations`.
+- Only promoted to `students` and given credentials after admin approval.
+
+# Scope Exclusions
+- Internal Chat / Real-time messaging feature is EXPLICITLY REMOVED from the system. Do not create chat tables, endpoints, or UI components.
+
+# Security & Data Integrity
+- Supabase RLS is mandatory for all tables.
+- All client mutations must go through Next.js Server Actions with Zod schema validation.
+- Never expose `SUPABASE_SERVICE_ROLE_KEY` to client components.
+- Midtrans webhook must strictly verify SHA512 signature keys before updating invoice statuses.
