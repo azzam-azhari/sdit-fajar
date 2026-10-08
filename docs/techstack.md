@@ -29,7 +29,7 @@
   - PostgreSQL Row Level Security (RLS) pada 100% tabel domain.
   - Validasi hak akses ganda: Middleware sesi + RLS DB + Server Action Guard.
   - Akses `SUPABASE_SERVICE_ROLE_KEY` hanya diperbolehkan pada server-side Route Handlers/Actions terisolasi.
-- **File Storage:** Supabase Storage (Buckets: `avatars`, `documents`, `school-media`, `submissions`).
+- **File Storage:** Supabase Storage (Buckets resmi: `images`, `lms-files`, `registration-files`, `marketplace-files` sesuai PRD 14).
 
 ---
 

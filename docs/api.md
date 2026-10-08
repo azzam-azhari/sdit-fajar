@@ -68,7 +68,7 @@ export async function createStudentAction(input: StudentInput): Promise<ActionRe
   }
 
   // 4. Revalidasi Cache
-  revalidatePath('/dashboard/admin/students');
+  revalidatePath('/dashboard/admin/siswa');
   return { success: true, data: { id: data.id }, message: 'Data siswa berhasil disimpan.' };
 }
 ```
@@ -81,12 +81,12 @@ export async function createStudentAction(input: StudentInput): Promise<ActionRe
 - **Action:** `createPaymentSnapAction(invoiceId: string)`
 - **Akses:** Khusus role `wali_murid`.
 - **Alur:**
-  1. Cek apakah invoice berstatus `unpaid`.
-  2. Verifikasi apakah anak terdaftar di `student_guardians` akun wali terkait.
+  1. Cek apakah invoice berstatus `unpaid` pada tabel `payment_invoices`.
+  2. Verifikasi apakah anak terdaftar di `parent_students` akun wali terkait.
   3. Panggil Midtrans Snap API dengan payload:
      - `transaction_details: { order_id: string, gross_amount: number }`
      - `customer_details: { first_name: string, email: string, phone: string }`
-  4. Simpan record di tabel `payments` dengan status `pending`.
+  4. Simpan record di tabel `payment_transactions` dengan status `pending`.
   5. Kembalikan `snap_token` ke frontend.
 - **Client Execution (Snap Popup Modal):**
   Frontend memanggil popup modal langsung di atas dashboard wali murid tanpa redirect tab:
@@ -114,11 +114,11 @@ export async function createStudentAction(input: StudentInput): Promise<ActionRe
   }
   ```
 - **Alur Pembaruan Status:**
-  - `settlement` / `capture` (accept) -> Update `payments.status = 'paid'`, `invoices.status = 'paid'`, buat record `payment_receipts`.
-  - `expire` / `cancel` / `deny` -> Update `payments.status = 'failed'`, `invoices.status = 'unpaid'`.
+  - `settlement` / `capture` (accept) -> Update `payment_transactions.status = 'paid'`, `payment_invoices.status = 'paid'`, buat record `payment_receipts`.
+  - `expire` / `cancel` / `deny` -> Update `payment_transactions.status = 'failed'`, `payment_invoices.status = 'unpaid'`.
 
 ### C. Kuitansi Pembayaran (Web Print-Friendly)
-- **Halaman:** `/dashboard/wali-murid/receipts/[id]`
+- **Halaman:** `/dashboard/wali-murid/payment/[invoiceId]/receipt`
 - **Format:** Halaman web kuitansi formal berstandar sekolah, dilengkapi tombol *Cetak / Simpan PDF* (`window.print()`).
 - Menggunakan styling `@media print` murni untuk menyembunyikan navigasi/sidebar dan menyajikan tata letak kertas A4 kuitansi bersih.
 
@@ -130,5 +130,5 @@ export async function createStudentAction(input: StudentInput): Promise<ActionRe
   1. Cari `login_identifier = nis` pada tabel `profiles` dengan role `murid`.
   2. Autentikasi dengan Supabase Auth via email terdaftar internal.
   3. Cek flag `must_change_password`:
-     - Jika `true`: Arahkan langsung ke halaman `/auth/first-time-password` untuk penggantian password wajib sebelum membuka dashboard.
+     - Jika `true`: Arahkan langsung ke halaman `/ganti-password` untuk penggantian password wajib sebelum membuka dashboard.
      - Jika `false`: Arahkan ke `/dashboard/murid`.

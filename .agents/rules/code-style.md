@@ -23,7 +23,7 @@ Patuhi konvensi penamaan berikut tanpa deviasi:
 | **Custom Hooks** | `use[Nama].ts` | `use[Nama]` | `useZebraTable.ts` -> `export function useZebraTable()` |
 | **Utility Functions** | `camelCase.ts` | `camelCase` | `formatCurrency.ts` -> `export function formatCurrency()` |
 | **Zustand Store** | `use[Nama]Store.ts` | `use[Nama]Store` | `useSidebarStore.ts` -> `export const useSidebarStore` |
-| **Database Tables** | `plural_snake_case` | - | `students`, `attendance_records`, `invoices` |
+| **Database Tables** | `plural_snake_case` | - | `students`, `student_attendances`, `payment_invoices` |
 | **Database Columns** | `snake_case` | - | `login_identifier`, `created_at`, `birth_date` |
 
 ---

@@ -501,7 +501,7 @@ Mengaktifkan pembayaran secara aman setelah semua relasi wali-anak, invoice, sto
 
 ### 7.4 Webhook Midtrans
 
-- [ ] Buat `POST /api/midtrans/webhook`.
+- [ ] Buat `POST /api/webhooks/midtrans`.
 - [ ] Verifikasi signature menggunakan server key.
 - [ ] Cocokkan order ID dan gross amount dengan data server.
 - [ ] Terapkan idempotensi untuk callback duplikat.

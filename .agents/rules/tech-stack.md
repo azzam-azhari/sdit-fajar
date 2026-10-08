@@ -52,7 +52,7 @@ Hanya library berikut yang diizinkan untuk digunakan pada frontend SDIT Fajar:
 - **Database & Auth**: `@supabase/ssr` dan `@supabase/supabase-js` (PostgreSQL 15+ Managed BaaS).
   - **Catatan Development**: Pengembangan dilakukan dengan terhubung **langsung ke Remote Supabase project** (bukan menggunakan Supabase CLI/Docker lokal).
 - **Payment Gateway**: Midtrans (Snap API via Popup Modal & Core API).
-- **File Storage**: Supabase Storage Buckets (`avatars`, `documents`, `school-media`, `submissions`).
+- **File Storage**: Supabase Storage Buckets resmi (`images`, `lms-files`, `registration-files`, `marketplace-files` sesuai PRD 14).
 
 ---
 

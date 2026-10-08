@@ -72,26 +72,30 @@ Tidak boleh (semua guru):
 Peserta didik.
 
 Boleh:
-- melihat dashboard siswa;
+- melihat dashboard murid (`/dashboard/murid`);
 - melihat materi untuk kelasnya;
 - melihat tugas untuk kelasnya;
 - mengumpulkan tugas;
-- melihat nilai miliknya sendiri;
+- melihat nilai miliknya sendiri & e-raport;
+- melihat capaian dan mutabaah setoran tahfidz miliknya;
 - melihat pengumuman sekolah atau kelas;
-- bisa edit data diri sebagai siswa;
-- mencatat absensi pembelajaran sesuai jadwal pada hari sekolah.
+- melihat data profil diri;
+- melihat riwayat presensi pembelajaran miliknya (*read-only*).
 
 Tidak boleh:
-- melihat nilai siswa lain;
+- mencatat presensi mandiri (pencatatan presensi siswa dilakukan oleh guru pengampu / wali kelas);
+- melihat nilai atau submission siswa lain;
 - mengakses dashboard admin/guru;
-- mengubah jawaban setelah deadline kecuali guru mengizinkan.
+- mengubah jawaban setelah deadline kecuali guru mengizinkan;
+- melakukan inisiasi pembayaran atau melihat tombol bayar (pembayaran eksklusif hanya untuk `wali_murid`).
 
 ### `wali_murid`
 Wali murid.
 
 Boleh:
 - melihat profil anak yang terhubung;
-- melihat nilai dan progres anak;
+- melihat nilai dan progres akademik anak;
+- melihat mutabaah dan setoran tahfidz anak;
 - melihat tugas anak;
 - melihat pengumuman;
 - melihat tagihan SPP dan daftar ulang jika fitur pembayaran aktif;

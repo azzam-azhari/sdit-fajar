@@ -73,7 +73,7 @@ Logo dan file receipt selalu dirujuk melalui URL/path yang tersimpan di tabel. D
 - `/dashboard/wali-murid/payment`
 - `/dashboard/wali-murid/payment/[invoiceId]`
 - `/dashboard/wali-murid/payment/[invoiceId]/receipt`
-- `POST /api/midtrans/webhook`
+- `POST /api/webhooks/midtrans`
 
 ## Acceptance
 - Global payment hanya dapat diubah super admin.

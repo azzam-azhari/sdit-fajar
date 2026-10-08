@@ -283,7 +283,7 @@ Rules:
 - output memuat logo, waktu, invoice, siswa, kelas, nominal, status, dan data bank jika tersedia;
 - halaman dapat dibuka di tab baru/diunduh.
 
-### `POST /api/midtrans/webhook`
+### `POST /api/webhooks/midtrans`
 Status:
 - harus aktif terkontrol sesuai flag dan signature verification.
 

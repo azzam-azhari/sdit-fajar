@@ -49,7 +49,7 @@ Agent **DILARANG MENGUBAH ATAU MENGHAPUS** berkas-berkas berikut kecuali penggun
      `super_admin`, `admin`, `guru`, `murid`, `wali_murid`.
    - Jabatan guru (`kepala_sekolah`, `wali_kelas`, dll.) adalah data jabatan di bawah role `guru`, bukan role database baru.
 2. **Pintu Pembayaran SPP / Tagihan**:
-   - Tombol bayar dan pemanggilan Midtrans Snap Popup Modal **HANYA boleh diakses oleh role `wali_murid`** untuk anak yang terhubung via `student_guardians`.
+   - Tombol bayar dan pemanggilan Midtrans Snap Popup Modal **HANYA boleh diakses oleh role `wali_murid`** untuk anak yang terhubung via `parent_students`.
    - Murid dilarang memiliki tombol bayar atau akses inisiasi transaksi.
 3. **Peniadaan Fitur Chat**:
    - Fitur chat internal / pesan real-time telah **ditiadakan**. Jangan pernah membuat tabel, komponen UI, atau rute pesan instan.

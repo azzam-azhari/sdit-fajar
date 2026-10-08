@@ -32,13 +32,13 @@ Bukan role terpisah di database, melainkan atribusi jabatan dinamis yang membuka
 ### A. Portal Publik & Informasi Sekolah
 - **Landing Page Profil**: Beranda sekolah, visi misi, fasilitas, keunggulan kurikulum terpadu (Kemenag + Diknas + Tahfidz).
 - **Berita & Pengumuman**: Artikel kegiatan, agenda sekolah, majalah dinding digital.
-- **PPDB Online (Penerimaan Peserta Didik Baru)**: Formulir pendaftaran calon siswa masuk ke tabel staging `registrations`. Data baru dimigrasikan ke tabel `students` dan dibuatkan akun login setelah diverifikasi dan diterima admin.
+- **PPDB Online (Penerimaan Peserta Didik Baru)**: Formulir pendaftaran calon siswa masuk ke tabel staging `student_registration_applications`. Data baru dimigrasikan ke tabel `students` dan dibuatkan akun login setelah diverifikasi dan diterima admin.
 - **Peta Lokasi & Kontak**: Peta interaktif MapLibre GL dan formulir narahubung resmi.
 
 ### B. Otentikasi & Manajemen Pengguna
-- **Login Khusus Murid**: Login menggunakan **NIS** (Nomor Induk Siswa) dan password default terstruktur (`tempatddmmyyyy` dari data lahir). Wajib mengganti password pada saat login pertama kali (`must_change_password`).
-- **Login Staf & Wali**: Menggunakan Email / Username resmi dengan pengamanan sesi Supabase Auth.
-- **Relasi Wali-Anak**: Akun wali murid terhubung ke satu atau lebih data murid secara multi-relasi.
+- **Login Khusus Murid**: Login menggunakan **NIS** (Nomor Induk Siswa) dan password default terstruktur (`tempatddmmyyyy` dari data lahir, huruf kecil tanpa spasi). Wajib mengganti password pada saat login pertama kali (`must_change_password`).
+- **Login Staf & Wali**: Staf menggunakan Email resmi; Wali Murid menggunakan Nomor WhatsApp/HP aktif yang terdaftar (password awal sama dengan nomor HP dan wajib diganti pada login perdana).
+- **Relasi Wali-Anak**: Akun wali murid terhubung ke satu atau lebih data murid secara multi-relasi via tabel pivot `parent_students`.
 
 ### C. Akademik & LMS Terpadu
 - **Jadwal Pelajaran & Kalender Akademik**: Pemetaan jadwal per kelas dan mata pelajaran.
