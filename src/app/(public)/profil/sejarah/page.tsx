@@ -1,4 +1,4 @@
-import * as React from "react";
+﻿import * as React from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -19,7 +19,7 @@ const MILESTONES = [
   {
     year: "2016",
     title: "Angkatan Pertama (2 Rombel Perdana)",
-    desc: "Memulai kegiatan belajar mengajar dengan 48 santri perdana. Gedung pertama beroperasi dengan 4 ruang kelas dan mushola sekolah sederhana.",
+    desc: "Memulai kegiatan belajar mengajar dengan 48 murid perdana. Gedung pertama beroperasi dengan 4 ruang kelas dan mushola sekolah sederhana.",
   },
   {
     year: "2019",
@@ -34,14 +34,14 @@ const MILESTONES = [
   {
     year: "2026",
     title: "Digitalisasi Sistem & Peluncuran Portal Terpadu",
-    desc: "Mengimplementasikan platform manajemen sekolah digital, pembayaran terpadu Midtrans, PPDB daring transparan berkuota 100 santri, dan marketplace buku sekolah.",
+    desc: "Mengimplementasikan platform manajemen sekolah digital, pembayaran terpadu Midtrans, PPDB daring transparan berkuota 100 murid, dan marketplace buku sekolah.",
   },
 ];
 
 export default function SejarahPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-12">
-      
+
       <PageHeader
         title="Sejarah & Linimasa Sekolah"
         badge="Sejarah"
@@ -51,7 +51,7 @@ export default function SejarahPage() {
           <Link href="/profil">Profil & Visi Misi</Link>
         </Button>
         <Button asChild variant="outline" size="sm" className="text-xs">
-          <Link href="/profil/manajemen">Manajemen & Asatidz</Link>
+          <Link href="/profil/manajemen">Manajemen Sekolah</Link>
         </Button>
       </PageHeader>
 
@@ -114,7 +114,7 @@ export default function SejarahPage() {
         </p>
         <Button asChild size="sm" className="text-xs bg-primary text-primary-foreground">
           <Link href="/profil/manajemen" className="flex items-center gap-1.5">
-            <span>Lihat Profil Manajemen & Asatidz</span>
+            <span>Lihat Profil Manajemen Sekolah</span>
             <ArrowRight className="h-3.5 w-3.5" />
           </Link>
         </Button>

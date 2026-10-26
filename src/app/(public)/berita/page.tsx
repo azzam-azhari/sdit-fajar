@@ -1,4 +1,4 @@
-import * as React from "react";
+﻿import * as React from "react";
 import Link from "next/link";
 import { Calendar, Search, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,7 @@ import { StatusBadge } from "@/components/common/status-badge";
 export const metadata = {
   title: "Berita & Pengumuman — SDIT Fajar",
   description:
-    "Kabar terkini seputar kegiatan santri, prestasi akademik, agenda sekolah, dan pengumuman resmi SDIT Fajar.",
+    "Kabar terkini seputar kegiatan murid, prestasi akademik, agenda sekolah, dan pengumuman resmi SDIT Fajar.",
 };
 
 interface ArticleItem {
@@ -22,13 +22,13 @@ interface ArticleItem {
 
 const ARTICLES: ArticleItem[] = [
   {
-    slug: "santri-raih-juara-1-mhq-depok",
-    title: "Santri SDIT Fajar Raih Juara 1 MHQ Tingkat Kota Depok",
+    slug: "murid-raih-juara-1-mhq-depok",
+    title: "Murid SDIT Fajar Raih Juara 1 MHQ Tingkat Kota Depok",
     category: "Prestasi",
     date: "24 Oktober 2026",
     author: "Humas SDIT Fajar",
     excerpt:
-      "Ananda Rayyan Al-Ghifari santri kelas 5 berhasil menyabet medali emas pada ajang Musabaqah Hifdzil Qur'an kategori 2 Juz antar SD/MI tingkat Kota Depok.",
+      "Ananda Rayyan Al-Ghifari murid kelas 5 berhasil menyabet medali emas pada ajang Musabaqah Hifdzil Qur'an kategori 2 Juz antar SD/MI tingkat Kota Depok.",
   },
   {
     slug: "market-day-edukasi-wirausaha-islami",
@@ -37,7 +37,7 @@ const ARTICLES: ArticleItem[] = [
     date: "18 Oktober 2026",
     author: "Tim Kesiswaan",
     excerpt:
-      "Santri kelas 4 dan 5 mempraktikkan muamalah jual beli syar'i secara langsung dalam kegiatan Market Day sekolah yang berlangsung meriah di lapangan utama.",
+      "Murid kelas 4 dan 5 mempraktikkan muamalah jual beli syar'i secara langsung dalam kegiatan Market Day sekolah yang berlangsung meriah di lapangan utama.",
   },
   {
     slug: "sosialisasi-program-adab-ibadah",
@@ -46,10 +46,10 @@ const ARTICLES: ArticleItem[] = [
     date: "10 Oktober 2026",
     author: "Kurikulum Diniyah",
     excerpt:
-      "Pertemuan komite sekolah dan wali murid menyepakati penguatan mutabaah ibadah harian santri di rumah dan integrasi pencatatan digital.",
+      "Pertemuan komite sekolah dan wali murid menyepakati penguatan mutabaah ibadah harian murid di rumah dan integrasi pencatatan digital.",
   },
   {
-    slug: "pelatihan-robotik-dasar-santri-inovatif",
+    slug: "pelatihan-robotik-dasar-murid-inovatif",
     title: "Pelatihan Robotik Dasar: Mengasah Nalar Teknologi Generasi Muda",
     category: "Akademik",
     date: "28 September 2026",
@@ -64,7 +64,7 @@ const ARTICLES: ArticleItem[] = [
     date: "15 September 2026",
     author: "Koordinator Tahfidz",
     excerpt:
-      "Sebanyak 42 santri kelas 2 dan 3 sukses menyelesaikan ujian tasmi' sekali duduk satu juz penuh disaksikan orang tua dan asatidz penguji.",
+      "Sebanyak 42 murid kelas 2 dan 3 sukses menyelesaikan ujian tasmi' sekali duduk satu juz penuh disaksikan orang tua dan guru penguji.",
   },
   {
     slug: "donor-darah-dan-bakti-sosial-komite",
@@ -80,16 +80,16 @@ const ARTICLES: ArticleItem[] = [
 export default function BeritaPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-10">
-      
+
       <PageHeader
         title="Berita & Informasi Sekolah"
         badge="Warta Fajar"
-        description="Informasi resmi seputar agenda akademik, prestasi santri, dokumentasi kegiatan, dan pengumuman yayasan."
+        description="Informasi resmi seputar agenda akademik, prestasi murid, dokumentasi kegiatan, dan pengumuman yayasan."
       />
 
       {/* Filter Kategori & Search Bar */}
       <div className="flex flex-col md:flex-row items-center justify-between gap-4 border-b border-border/80 pb-4">
-        
+
         {/* Kategori Tabs */}
         <div className="flex flex-wrap items-center gap-1.5 w-full md:w-auto">
           <Button
@@ -132,8 +132,8 @@ export default function BeritaPage() {
             article.category === "Prestasi"
               ? "success"
               : article.category === "Pengumuman"
-              ? "warning"
-              : "info";
+                ? "warning"
+                : "info";
 
           return (
             <article

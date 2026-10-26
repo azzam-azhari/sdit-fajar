@@ -15,8 +15,8 @@ Urutan fase dirancang terstruktur secara berurutan (*sequential gates*) untuk:
 |---|---|---|---|
 | **Fase 0** | Finalisasi Dokumentasi, Single Source of Truth & Kontrak | Spesifikasi, rute, skema, 5 role, kontrak API konsisten | 🔄 Selesai / Konsisten |
 | **Fase 1** | Fondasi Aplikasi, Design System (jakub.kr) & Frontend Publik | Next.js 16, Tailwind 4, Shadcn, ZebraDataTable, web publik | 🔄 Selesai / Konsisten |
-| **Fase 2** | Supabase Auth SSR, Session, Storage Buckets & Guard | Auth NIS/WhatsApp, middleware guard, 4 private bucket | ⏳ Siap Dikerjakan |
-| **Fase 3** | Database PostgreSQL, Relasi Skema, RLS & Seed Data | Migration terurut, 100% RLS aktif, audit log, seed demo | ⏳ Antrean |
+| **Fase 2** | Supabase Auth SSR, Session, Storage Buckets & Guard | Auth NIS/WhatsApp, middleware guard, 4 private bucket | 🔄 Selesai / Konsisten |
+| **Fase 3** | Database PostgreSQL, Relasi Skema, RLS & Seed Data | Migration terurut, 100% RLS aktif, audit log, seed demo | 🔄 Selesai / Konsisten |
 | **Fase 4** | Admin Akademik, Verifikasi PPDB, Konten & Import CSV | Dashboard admin, rombel, PPDB staging, batch CSV import | ⏳ Antrean |
 | **Fase 5** | Dashboard Role, LMS (Materi/Tugas/Nilai), Jadwal & Presensi | Siklus LMS end-to-end, presensi server-time, gradebook | ⏳ Antrean |
 | **Fase 6** | Pengumuman Sekolah, Modul Tahfidz & Marketplace | Broadcast targeted, mutabaah hafalan Quran, toko sekolah | ⏳ Antrean |
@@ -79,12 +79,12 @@ Urutan fase dirancang terstruktur secara berurutan (*sequential gates*) untuk:
   - `PageHeader`, `StatCard`, `StatusBadge`, `EmptyState`, `DatePicker`.
 - [x] Pembangunan layout publik (`PublicNavbar`, `PublicFooter`, floating WhatsApp button non-intrusif).
 - [x] Pembangunan seluruh halaman publik:
-  - Beranda (`/`): Hero section, CTA PPDB, visi-misi, statistik santri/guru, cuplikan berita, profil ringkas manajemen, testimoni, FAQ, dan katalog marketplace unggulan.
+  - Beranda (`/`): Hero section, CTA PPDB, visi-misi, statistik murid/guru, cuplikan berita, profil ringkas manajemen, testimoni, FAQ, dan katalog marketplace unggulan.
   - Profil Sekolah (`/profil`, `/profil/sejarah`, `/profil/manajemen`).
   - Akademik & Kesiswaan (`/kurikulum`, `/ekstrakurikuler`).
   - Berita & Informasi (`/berita`, `/berita/[slug]`) dengan UI pagination.
   - Hubungi Kami (`/kontak`).
-  - Formulir PPDB Online (`/pendaftaran`): Form biodata santri/wali dan preview unggah dokumen berkas.
+  - Formulir PPDB Online (`/pendaftaran`): Form biodata murid/wali dan preview unggah dokumen berkas.
   - Katalog Publik Marketplace (`/marketplace`): Etalase produk terbitan sekolah.
 - [x] Implementasi metadata SEO, Open Graph tags, robots.txt, dan sitemap dinamis.
 - [x] Penerapan state antarmuka lengkap: loading skeleton, empty state, error state, dan feedback form.
@@ -103,7 +103,7 @@ Urutan fase dirancang terstruktur secara berurutan (*sequential gates*) untuk:
 ---
 
 ### Fase 2 — Setup Supabase, Auth SSR, Session & Storage Buckets
-**Status**: ⏳ Antrean
+**Status**: 🔄 Selesai / Konsisten
 
 #### A. Target & Fokus Utama
 - Membangun koneksi aman ke remote Supabase project menggunakan `@supabase/ssr`.
@@ -115,25 +115,25 @@ Urutan fase dirancang terstruktur secara berurutan (*sequential gates*) untuk:
 - Menyiapkan 4 Supabase Storage Buckets resmi dengan isolasi private.
 
 #### B. Checklist Implementasi Teknis
-- [ ] Konfigurasi Supabase Client SSR di `src/lib/supabase/`:
+- [x] Konfigurasi Supabase Client SSR di `src/lib/supabase/`:
   - `client.ts` (Browser client menggunakan Anon Key).
   - `server.ts` (Server client dengan cookie store).
   - `admin.ts` (Admin client dengan Service Role Key, server-only).
-- [ ] Setup Next.js Middleware (`src/middleware.ts`) untuk:
+- [x] Setup Next.js Middleware (`src/middleware.ts`) untuk:
   - Refresh auth tokens & session cookies.
   - Role-based redirect guard (guest ditendang ke `/login`, user aktif diarahkan ke dashboard rolenya).
   - Blokir user dengan status `profiles.is_active = false`.
-- [ ] Pembangunan halaman login tunggal (`/login`) dengan tab/selector identifier yang elegan.
-- [ ] Pembangunan halaman ganti password wajib (`/ganti-password`).
-- [ ] Pembuatan helper autentikasi server: `requireUser()`, `requireRole()`, `getCurrentProfile()`.
-- [ ] Pembuatan 4 Storage Buckets resmi:
+- [x] Pembangunan halaman login tunggal (`/login`) dengan tab/selector identifier yang elegan.
+- [x] Pembangunan halaman ganti password wajib (`/ganti-password`).
+- [x] Pembuatan helper autentikasi server: `requireUser()`, `requireRole()`, `getCurrentProfile()`.
+- [x] Pembuatan 4 Storage Buckets resmi:
   1. `images` (banner, profil, cover buku/berita).
   2. `lms-files` (materi ajar, lampiran tugas, berkas submission murid).
   3. `registration-files` (akta kelahiran, kartu keluarga, ijazah pendaftar PPDB).
   4. `marketplace-files` (berkas digital produk/buku terproteksi).
-- [ ] Implementasi validasi MIME type, ekstensi, dan batas ukuran file di sisi server.
-- [ ] Implementasi signed URL berumur pendek untuk akses file privat.
-- [ ] Aturan sinkronisasi: setiap file yang diunggah wajib mencatatkan storage path/URL ke kolom tabel domain terkait.
+- [x] Implementasi validasi MIME type, ekstensi, dan batas ukuran file di sisi server.
+- [x] Implementasi signed URL berumur pendek untuk akses file privat.
+- [x] Aturan sinkronisasi: setiap file yang diunggah wajib mencatatkan storage path/URL ke kolom tabel domain terkait.
 
 #### C. Deliverables (Luaran Resmi)
 - Middleware proteksi sesi dan role redirect berfungsi secara presisi.
@@ -142,14 +142,14 @@ Urutan fase dirancang terstruktur secara berurutan (*sequential gates*) untuk:
 - `SUPABASE_SERVICE_ROLE_KEY` terisolasi 100% di server (zero-leakage ke browser).
 
 #### D. Gate Fase 2
-- [ ] Tamu (*guest*) tidak dapat membuka rute `/dashboard/*`.
-- [ ] Pengguna dengan satu role tidak dapat membuka rute dashboard milik role lain.
-- [ ] Berkas privat di bucket tidak dapat diakses tanpa sesi yang berhak dan signed URL valid.
+- [x] Tamu (*guest*) tidak dapat membuka rute `/dashboard/*`.
+- [x] Pengguna dengan satu role tidak dapat membuka rute dashboard milik role lain.
+- [x] Berkas privat di bucket tidak dapat diakses tanpa sesi yang berhak dan signed URL valid.
 
 ---
 
 ### Fase 3 — Skema Database PostgreSQL, Relasi, RLS & Seed Data
-**Status**: ⏳ Antrean
+**Status**: 🔄 Selesai / Konsisten
 
 #### A. Target & Fokus Utama
 - Mengeksekusi migration DDL skema database PostgreSQL Supabase lengkap sesuai [08-skema-database-supabase.md](file:///c:/Users/muhaz/OneDrive/Desktop/sdit-fajar/docs/PRD/08-skema-database-supabase.md).
@@ -158,8 +158,8 @@ Urutan fase dirancang terstruktur secara berurutan (*sequential gates*) untuk:
 - Mengisi data master dan seed data pengembangan untuk tahun ajaran 2026/2027 tanpa menyertakan data pribadi asli.
 
 #### B. Checklist Implementasi Teknis
-- [ ] Eksekusi migration enum resmi: `app_role`, `registration_status`, `payment_status`, `invoice_type`, `attendance_status`, dll.
-- [ ] Pembuatan tabel terurut berdasar dependensi foreign key:
+- [x] Eksekusi migration enum resmi: `app_role`, `registration_status`, `payment_status`, `invoice_type`, `attendance_status`, dll.
+- [x] Pembuatan tabel terurut berdasar dependensi foreign key:
   1. `profiles`, `school_settings`, `audit_logs`.
   2. `academic_years`, `semesters`, `school_period_settings`.
   3. `teachers`, `teacher_positions`, `students`, `parents`, `parent_students`.
@@ -172,16 +172,16 @@ Urutan fase dirancang terstruktur secara berurutan (*sequential gates*) untuk:
   10. `marketplace_products`, `marketplace_orders`, `marketplace_order_items`.
   11. `payment_settings`, `payment_invoices`, `payment_transactions`, `payment_receipts`.
   12. `import_batches`.
-- [ ] Penambahan index performa, unique constraint, dan foreign key constraints.
-- [ ] Penegakan statement `alter table [nama_tabel] enable row level security;` pada seluruh tabel.
-- [ ] Perumusan RLS policies:
+- [x] Penambahan index performa, unique constraint, dan foreign key constraints.
+- [x] Penegakan statement `alter table [nama_tabel] enable row level security;` pada seluruh tabel.
+- [x] Perumusan RLS policies:
   - Proteksi profil: user tidak dapat mengubah role sendiri; admin tidak dapat menurunkan super admin.
   - Relasi siswa-wali: akses data siswa dibatasi hanya untuk wali murid yang terhubung di `parent_students`.
   - Relasi guru: akses materi/nilai dibatasi berdasar `teaching_assignments` dan `classrooms.homeroom_teacher_id`.
   - Transaksi & invoice: hanya dapat dilihat oleh wali murid terkait dan staf keuangan.
-- [ ] Pembuatan helper mutasi audit log untuk setiap perubahan sensitif.
-- [ ] Pengisian seed data demo: tahun ajaran 2026/2027, kelas 1–6, mata pelajaran kurikulum Islam terpadu, akun dummy untuk 5 role dan 7 jabatan guru.
-- [ ] Pengujian RLS negatif: percobaan akses data lintas akun/anak via query langsung.
+- [x] Pembuatan helper mutasi audit log untuk setiap perubahan sensitif.
+- [x] Pengisian seed data demo: tahun ajaran 2026/2027, kelas 1–6, mata pelajaran kurikulum Islam terpadu, akun dummy untuk 5 role dan 7 jabatan guru.
+- [x] Pengujian RLS negatif: percobaan akses data lintas akun/anak via query langsung.
 
 #### C. Deliverables (Luaran Resmi)
 - Migration SQL modular yang dapat dijalankan ulang secara bersih (*idempotent*).
@@ -189,9 +189,9 @@ Urutan fase dirancang terstruktur secara berurutan (*sequential gates*) untuk:
 - Lingkungan development memiliki data demo operasional siap uji.
 
 #### D. Gate Fase 3
-- [ ] Seluruh migrasi database sukses dijalankan pada schema Supabase.
-- [ ] Uji RLS negatif membuktikan bahwa santri A tidak dapat melihat tugas/nilai santri B, dan wali murid A tidak dapat melihat invoice santri B.
-- [ ] Tidak ada data kredensial asli yang tersimpan dalam seed database.
+- [x] Seluruh migrasi database sukses dijalankan pada schema Supabase.
+- [x] Uji RLS negatif membuktikan bahwa murid A tidak dapat melihat tugas/nilai murid B, dan wali murid A tidak dapat melihat invoice murid B.
+- [x] Tidak ada data kredensial asli yang tersimpan dalam seed database.
 
 ---
 
@@ -201,7 +201,7 @@ Urutan fase dirancang terstruktur secara berurutan (*sequential gates*) untuk:
 #### A. Target & Fokus Utama
 - Membangun antarmuka dashboard untuk `super_admin` dan `admin` dengan navigasi sidebar dinamis.
 - Manajemen data master akademik: rombongan belajar (`classrooms`), tahun ajaran, semester, mata pelajaran, dan penugasan mengajar (`teaching_assignments`).
-- Alur verifikasi pendaftaran PPDB online: memproses calon santri dari tabel staging `registrations`, verifikasi berkas, persetujuan admin, hingga pembuatan akun otomatis murid & wali murid.
+- Alur verifikasi pendaftaran PPDB online: memproses calon murid dari tabel staging `registrations`, verifikasi berkas, persetujuan admin, hingga pembuatan akun otomatis murid & wali murid.
 - Modul Batch Import CSV khusus `super_admin`: mengimpor data massal siswa, guru, wali murid dengan template resmi, validasi per baris, dan rollback transaksi jika ada baris korup.
 - Pengelolaan identitas sekolah publik (`school_settings`) dan publikasi berita/kegiatan.
 
@@ -223,10 +223,10 @@ Urutan fase dirancang terstruktur secara berurutan (*sequential gates*) untuk:
   - CRUD kelas, rombel, mata pelajaran, data biodata siswa, guru, dan wali murid.
   - Penugasan wali kelas (`classrooms.homeroom_teacher_id`) dan guru mata pelajaran (`teaching_assignments`).
 - [ ] Verifikasi Pendaftaran PPDB (`/dashboard/admin/pendaftaran`):
-  - Tabel verifikasi calon santri menggunakan format **`ZebraDataTable`**.
+  - Tabel verifikasi calon murid menggunakan format **`ZebraDataTable`**.
   - Pemeriksaan kelengkapan berkas pendaftaran (akta, KK, pas foto) via signed URL.
   - Perubahan status pendaftaran: `submitted` -> `in_review` -> `approved` / `rejected`.
-  - Tombol promosi santri disetujui: memindahkan data ke `students`, membuat akun Auth murid (NIS + password biodata) dan akun wali murid, serta mengaitkan relasi `parent_students`.
+  - Tombol promosi murid disetujui: memindahkan data ke `students`, membuat akun Auth murid (NIS + password biodata) dan akun wali murid, serta mengaitkan relasi `parent_students`.
 - [ ] Manajemen Konten Berita Sekolah (`/dashboard/admin/berita`): CRUD artikel, unggah foto cover, draft & publish toggle.
 
 #### C. Deliverables (Luaran Resmi)
@@ -248,14 +248,14 @@ Urutan fase dirancang terstruktur secara berurutan (*sequential gates*) untuk:
 #### A. Target & Fokus Utama
 - Membangun antarmuka dashboard personal untuk role `guru`, `murid`, dan `wali_murid`.
 - Menerapkan *Position-based Feature Toggles* pada dashboard guru berdasarkan atribut `positions` (misal menu khusus kepala sekolah, wali kelas, atau koordinator tahfidz).
-- Membangun siklus pembelajaran digital LMS: pembagian materi belajar, penugasan tugas dengan batas waktu, pengumpulan tugas santri, dan penilaian oleh guru.
+- Membangun siklus pembelajaran digital LMS: pembagian materi belajar, penugasan tugas dengan batas waktu, pengumpulan tugas murid, dan penilaian oleh guru.
 - Menerapkan modul presensi kehadiran guru (masuk 06.30–07.30, pulang >= 14.30 Senin–Jumat, opsi akhir pekan oleh kepala sekolah).
-- Menerapkan presensi santri per jadwal mata pelajaran pada hari kerja (Senin–Jumat) dengan penolakan keras akhir pekan di tingkat server.
+- Menerapkan presensi murid per jadwal mata pelajaran pada hari kerja (Senin–Jumat) dengan penolakan keras akhir pekan di tingkat server.
 
 #### B. Checklist Implementasi Teknis
 - [ ] Dashboard Guru (`/dashboard/guru`):
   - Ringkasan kelas yang diampu, jadwal hari ini, materi aktif, dan tugas yang membutuhkan penilaian.
-  - Tampilan dinamis jabatan `kepala_sekolah`: rekapitulasi kehadiran seluruh guru/santri dan laporan akademik lintas kelas.
+  - Tampilan dinamis jabatan `kepala_sekolah`: rekapitulasi kehadiran seluruh guru/murid dan laporan akademik lintas kelas.
   - Tampilan dinamis jabatan `wali_kelas`: monitoring progres nilai dan kehadiran siswa kelas binaannya.
 - [ ] Dashboard Murid (`/dashboard/murid`):
   - Jadwal pelajaran harian, daftar materi yang bisa diakses, tenggat waktu tugas, dan rekapitulasi nilai pribadi.
@@ -269,7 +269,7 @@ Urutan fase dirancang terstruktur secara berurutan (*sequential gates*) untuk:
   - Pembuatan tugas dengan batas waktu (*deadline*), instruksi, bobot skor maksimal, dan toleransi keterlambatan.
   - Antarmuka pengumpulan tugas murid: unggah file jawaban/teks (dibatasi 1 submission aktif per tugas).
   - Status keterlambatan (`is_late`) ditentukan secara otomatis oleh waktu server.
-  - Antarmuka penilaian guru: pemberian nilai angka (0–100) dan catatan evaluasi/feedback santri.
+  - Antarmuka penilaian guru: pemberian nilai angka (0–100) dan catatan evaluasi/feedback murid.
   - Buku Nilai (*Gradebook*): Rekapitulasi nilai tugas dan nilai akhir semester.
 - [ ] Modul Jadwal Pelajaran (`/dashboard/jadwal`): Penataan jadwal mingguan per rombel dan guru pengampu.
 - [ ] Modul Presensi Guru (`/dashboard/guru/presensi`):
@@ -298,7 +298,7 @@ Urutan fase dirancang terstruktur secara berurutan (*sequential gates*) untuk:
 
 #### A. Target & Fokus Utama
 - Sistem pengumuman terstruktur sekolah (*Announcements*) dengan target audiens spesifik (seluruh sekolah, role tertentu, atau rombel kelas tertentu).
-- **Modul Khusus Tahfidz & Tahsin**: Buku mutabaah hafalan Qur'an santri, pencatatan setoran ayat harian oleh ustadz/guru tahfidz, dan rekapitulasi juz santri.
+- **Modul Khusus Tahfidz & Tahsin**: Buku mutabaah hafalan Qur'an murid, pencatatan setoran ayat harian oleh ustadz/guru tahfidz, dan rekapitulasi juz murid.
 - **Marketplace Perlengkapan Sekolah**: Etalase buku materi, modul digital, dan seragam sekolah yang dikelola admin, dengan pemesanan khusus oleh akun `wali_murid`.
 - Proteksi berkas digital: file e-book/modul digital tidak dapat diunduh sebelum transaksi dinyatakan lunas (*paid*).
 
@@ -308,13 +308,13 @@ Urutan fase dirancang terstruktur secara berurutan (*sequential gates*) untuk:
   - Pembuatan pengumuman oleh kepala sekolah atau wali kelas (target: rombel kelas binaan).
   - Visibilitas pesan sesuai target audiens di halaman dashboard masing-masing.
 - [ ] Modul Tahfidz & Tahsin (`/dashboard/guru/tahfidz`):
-  - Formulir setoran hafalan harian santri: Nama Surah, Ayat Mulai, Ayat Selesai, Jumlah Halaman, dan Predikat Kelancaran (*Mumtaz*, *Jayyid Jiddan*, *Jayyid*, *Maqbul*).
+  - Formulir setoran hafalan harian murid: Nama Surah, Ayat Mulai, Ayat Selesai, Jumlah Halaman, dan Predikat Kelancaran (*Mumtaz*, *Jayyid Jiddan*, *Jayyid*, *Maqbul*).
   - Dashboard pemantauan perkembangan hafalan untuk `murid` dan `wali_murid` (progres juz dan riwayat setoran).
-  - Tampilan rekapitulasi capaian hafalan seluruh santri untuk guru jabatan `koordinator_tahfidz` menggunakan **`ZebraDataTable`**.
+  - Tampilan rekapitulasi capaian hafalan seluruh murid untuk guru jabatan `koordinator_tahfidz` menggunakan **`ZebraDataTable`**.
 - [ ] Modul Marketplace Sekolah (`/marketplace` & `/dashboard/marketplace`):
   - Pengelolaan katalog produk oleh admin: judul buku/atribut, deskripsi, harga, stok fisik, cover gambar, dan file digital (jika ada).
   - Etalase publik dapat dijelajahi oleh pengunjung umum (*guest*).
-  - Alur Checkout: Pembelian hanya dapat diinisiasi oleh akun login role **`wali_murid`** (dengan pemilihan santri yang bersangkutan).
+  - Alur Checkout: Pembelian hanya dapat diinisiasi oleh akun login role **`wali_murid`** (dengan pemilihan murid yang bersangkutan).
   - Pembuatan order dan item dengan *server-side price snapshot* (mencegah manipulasi harga dari client browser).
   - Integrasi order ke sistem penagihan (*invoice*) sekolah.
   - Pengambilan berkas digital privat menggunakan signed URL yang hanya diterbitkan setelah invoice berstatus `paid`.
@@ -325,7 +325,7 @@ Urutan fase dirancang terstruktur secara berurutan (*sequential gates*) untuk:
 - Marketplace perlengkapan sekolah siap memproses pemesanan dari wali murid secara teratur.
 
 #### D. Gate Fase 6
-- [ ] Riwayat setoran tahfidz tersimpan valid dan hanya dapat diakses oleh santri serta wali murid yang bersangkutan.
+- [ ] Riwayat setoran tahfidz tersimpan valid dan hanya dapat diakses oleh murid serta wali murid yang bersangkutan.
 - [ ] Pengunjung umum dan akun selain `wali_murid` tidak dapat melakukan checkout pemesanan marketplace.
 - [ ] Berkas unduhan digital produk marketplace terkunci rapat sebelum status pembayaran terverifikasi sah.
 
@@ -338,7 +338,7 @@ Urutan fase dirancang terstruktur secara berurutan (*sequential gates*) untuk:
 - Mengaktifkan integrasi payment gateway **Midtrans** (Snap API Popup Modal & Core API).
 - Konfigurasi environment (Sandbox / Production), Server Key, Client Key, dan Merchant ID dikunci di tingkat server dan hanya dapat diaktifkan secara global oleh **`super_admin`**.
 - Pengelolaan tagihan invoice oleh admin sekolah: SPP bulanan, uang kegiatan/ekstrakurikuler, daftar ulang semester ganjil/genap, dan pesanan marketplace.
-- **Pintu Pembayaran Khusus Wali Murid**: Tombol bayar dan pemanggilan Midtrans Snap Modal **HANYA** dapat diakses oleh role `wali_murid` untuk anak yang terhubung. Santri dilarang memiliki tombol bayar.
+- **Pintu Pembayaran Khusus Wali Murid**: Tombol bayar dan pemanggilan Midtrans Snap Modal **HANYA** dapat diakses oleh role `wali_murid` untuk anak yang terhubung. Murid dilarang memiliki tombol bayar.
 - Route Handler Webhook Midtrans (`POST /api/webhooks/midtrans`) yang memverifikasi signature hash SHA512 dan menerapkan proses *idempotent*.
 - Kuitansi pembayaran resmi print-friendly menggunakan standar styling CSS `@media print` (`window.print()`).
 
@@ -350,8 +350,8 @@ Urutan fase dirancang terstruktur secara berurutan (*sequential gates*) untuk:
   - Pengaturan mode environment (Sandbox vs Production), Merchant ID, Client Key, dan toggle aktivasi global payment.
   - Setiap perubahan konfigurasi terekam otomatis pada `audit_logs`.
 - [ ] Dashboard Admin — Manajemen Tagihan (`/dashboard/admin/tagihan`):
-  - CRUD invoice tagihan santri (`payment_invoices`): SPP bulanan, daftar ulang, iuran kegiatan.
-  - Penentuan nominal tagihan, tanggal jatuh tempo, bulan/tahun aktif buku, dan target santri.
+  - CRUD invoice tagihan murid (`payment_invoices`): SPP bulanan, daftar ulang, iuran kegiatan.
+  - Penentuan nominal tagihan, tanggal jatuh tempo, bulan/tahun aktif buku, dan target murid.
   - Filter dan pencarian invoice dengan format **`ZebraDataTable`**.
 - [ ] Portal Pembayaran Wali Murid (`/dashboard/wali-murid/tagihan`):
   - Daftar invoice aktif dan riwayat pembayaran untuk seluruh anak yang diasuh.
@@ -375,10 +375,10 @@ Urutan fase dirancang terstruktur secara berurutan (*sequential gates*) untuk:
 - Wali murid dapat langsung mengunduh dan mencetak kuitansi pembayaran resmi.
 
 #### D. Gate Fase 7
-- [ ] Tombol pembayaran hanya dapat dilihat dan ditekan oleh akun `wali_murid` untuk tagihan santri yang sah.
+- [ ] Tombol pembayaran hanya dapat dilihat dan ditekan oleh akun `wali_murid` untuk tagihan murid yang sah.
 - [ ] Webhook palsu atau tanpa signature key SHA512 yang valid ditolak dengan HTTP 400/401.
 - [ ] Status invoice `paid` hanya dapat berubah melalui webhook callback Midtrans yang sah.
-- [ ] Kuitansi pembayaran santri A tidak dapat diakses oleh akun santri B atau wali murid B.
+- [ ] Kuitansi pembayaran murid A tidak dapat diakses oleh akun murid B atau wali murid B.
 
 ---
 
@@ -400,7 +400,7 @@ Urutan fase dirancang terstruktur secara berurutan (*sequential gates*) untuk:
   - `npm run build` berhasil memproduksi bundle produksi yang optimal.
 - [ ] Audit Keamanan & Data:
   - Audit seluruh environment variable: pastikan `SUPABASE_SERVICE_ROLE_KEY` dan `MIDTRANS_SERVER_KEY` tidak bocor ke client bundle.
-  - Uji penetrasi IDOR pada entitas santri, submission tugas, nilai raport, invoice, berkas dokumen, dan kuitansi pembayaran.
+  - Uji penetrasi IDOR pada entitas murid, submission tugas, nilai raport, invoice, berkas dokumen, dan kuitansi pembayaran.
   - Verifikasi RLS policies di Supabase dashboard untuk menjamin isolasi data multi-pengguna.
   - Pemasangan rate-limiting pada rute login, formulir pendaftaran PPDB, dan unggah berkas.
 - [ ] Skenario UAT Komprehensif:

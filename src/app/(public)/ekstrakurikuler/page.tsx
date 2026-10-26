@@ -1,4 +1,4 @@
-import * as React from "react";
+﻿import * as React from "react";
 import Link from "next/link";
 import {
   Compass,
@@ -18,7 +18,7 @@ import { StatusBadge } from "@/components/common/status-badge";
 export const metadata = {
   title: "Ekstrakurikuler — SDIT Fajar",
   description:
-    "Ragam kegiatan ekstrakurikuler kepanduan Pramuka SIT, panahan, robotic, kaligrafi, dan olahraga santri SDIT Fajar.",
+    "Ragam kegiatan ekstrakurikuler kepanduan Pramuka SIT, panahan, robotic, kaligrafi, dan olahraga murid SDIT Fajar.",
 };
 
 const EKSTRAKURIKULER = [
@@ -47,7 +47,7 @@ const EKSTRAKURIKULER = [
     desc: "Mengenalkan logika algoritma pemrograman visual (Scratch/Blockly) dan merakit robotika cerdas pengikut garis (Line Follower).",
   },
   {
-    name: "Futsal Santri",
+    name: "Futsal Murid",
     category: "Olahraga Prestasi",
     icon: Trophy,
     schedule: "Selasa & Kamis, 16.00 – 17.30 WIB",
@@ -76,7 +76,7 @@ const EKSTRAKURIKULER = [
     icon: Languages,
     schedule: "Kamis, 15.30 – 16.45 WIB",
     target: "Kelas 3 – 6",
-    desc: "Permainan peran (role play), storytelling kisah nabi dalam bahasa Inggris/Arab, dan pembiasaan percakapan sehari-hari santri.",
+    desc: "Permainan peran (role play), storytelling kisah nabi dalam bahasa Inggris/Arab, dan pembiasaan percakapan sehari-hari murid.",
   },
 ];
 
@@ -87,10 +87,10 @@ export default function EkstrakurikulerPage() {
       <PageHeader
         title="Ekstrakurikuler & Minat Bakat"
         badge="Kesiswaan"
-        description="Wadah pengembangan potensi jasmani, kreativitas seni islami, teknologi, dan kepemimpinan santri di luar jam intrakurikuler."
+        description="Wadah pengembangan potensi jasmani, kreativitas seni islami, teknologi, dan kepemimpinan murid di luar jam intrakurikuler."
       >
         <Button asChild size="sm" className="text-xs bg-primary text-primary-foreground">
-          <Link href="/pendaftaran">Daftar Santri Baru</Link>
+          <Link href="/pendaftaran">Daftar Murid Baru</Link>
         </Button>
       </PageHeader>
 
@@ -139,17 +139,17 @@ export default function EkstrakurikulerPage() {
       <section className="rounded-2xl border border-border/80 bg-card p-6 md:p-8 space-y-4">
         <h3 className="text-base font-bold text-foreground flex items-center gap-2">
           <Trophy className="h-5 w-5 text-amber-500" />
-          Jejak Prestasi Santri SDIT Fajar
+          Jejak Prestasi Murid SDIT Fajar
         </h3>
         <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">
-          Melalui pembinaan ekstrakurikuler intensif, santri SDIT Fajar telah berhasil menorehkan prestasi gemilang, di antaranya: Juara 1 Lomba Panahan Tradisional Pelajar se-Jawa Barat (2025), Juara 2 Lomba Robotic Line Follower Tingkat SD (2024), dan Regu Teladan Jambore Pramuka SIT Nasional (2024).
+          Melalui pembinaan ekstrakurikuler intensif, murid SDIT Fajar telah berhasil menorehkan prestasi gemilang, di antaranya: Juara 1 Lomba Panahan Tradisional Pelajar se-Jawa Barat (2025), Juara 2 Lomba Robotic Line Follower Tingkat SD (2024), dan Regu Teladan Jambore Pramuka SIT Nasional (2024).
         </p>
       </section>
 
       {/* Footer Navigation */}
       <div className="pt-6 border-t border-border/80 flex flex-col sm:flex-row items-center justify-between gap-4">
         <p className="text-xs text-muted-foreground">
-          Ingin membaca kabar prestasi dan kegiatan terbaru santri?
+          Ingin membaca kabar prestasi dan kegiatan terbaru murid?
         </p>
         <Button asChild size="sm" className="text-xs bg-primary text-primary-foreground">
           <Link href="/berita" className="flex items-center gap-1.5">

@@ -1,4 +1,4 @@
-import * as React from "react";
+﻿import * as React from "react";
 import Link from "next/link";
 import { CheckCircle2, Target, Compass, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -13,17 +13,17 @@ export const metadata = {
 export default function ProfilPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-12">
-      
+
       <PageHeader
         title="Profil & Visi Misi"
         badge="Tentang Sekolah"
-        description="Mengenal lebih dekat landasan nilai, falsafah pendidikan, dan cita-cita luhur SDIT Fajar dalam membina santri generasi Qur'ani."
+        description="Mengenal lebih dekat landasan nilai, falsafah pendidikan, dan cita-cita luhur SDIT Fajar dalam membina murid generasi Qur'ani."
       >
         <Button asChild variant="outline" size="sm" className="text-xs">
           <Link href="/profil/sejarah">Sejarah Pendirian</Link>
         </Button>
         <Button asChild variant="outline" size="sm" className="text-xs">
-          <Link href="/profil/manajemen">Dewan Asatidz & Pimpinan</Link>
+          <Link href="/profil/manajemen">Dewan Guru & Pimpinan</Link>
         </Button>
       </PageHeader>
 
@@ -43,12 +43,12 @@ export default function ProfilPage() {
             SDIT Fajar hadir di tengah masyarakat sebagai ikhtiar nyata menjawab tantangan zaman dalam mempersiapkan anak-anak kita menjadi generasi yang tidak hanya unggul secara akademis dan teknologi, tetapi juga kokoh aqidahnya, luhur akhlaknya, dan mencintai kitab suci Al-Qur&apos;an.
           </p>
           <p>
-            Dengan semangat kebersamaan antara sekolah, santri, dan para orang tua yang terjalin erat, kami berkomitmen memberikan lingkungan belajar yang aman, ramah, dan penuh kasih sayang demi melahirkan pemimpin masa depan yang bertauhid.
+            Dengan semangat kebersamaan antara sekolah, murid, dan para orang tua yang terjalin erat, kami berkomitmen memberikan lingkungan belajar yang aman, ramah, dan penuh kasih sayang demi melahirkan pemimpin masa depan yang bertauhid.
           </p>
         </div>
         <div className="pt-2 border-t border-border/60">
           <div className="font-bold text-sm text-foreground">
-            Ustadz H. Muhammad Ridwan, Lc., M.Pd.
+            Ummi Nining Juningsih S.Pd.
           </div>
           <div className="text-xs text-muted-foreground">
             Kepala Sekolah SDIT Fajar
@@ -58,7 +58,7 @@ export default function ProfilPage() {
 
       {/* Visi & Misi Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        
+
         {/* Visi */}
         <div className="rounded-xl border border-primary/30 bg-primary/5 p-6 md:p-8 space-y-4 flex flex-col justify-between">
           <div className="space-y-3">
@@ -107,7 +107,7 @@ export default function ProfilPage() {
             <li className="flex items-start gap-2.5">
               <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
               <span>
-                Membangun sinergi harmonis antara sekolah, orang tua, dan masyarakat dalam pembentukan karakter santri.
+                Membangun sinergi harmonis antara sekolah, orang tua, dan masyarakat dalam pembentukan karakter murid.
               </span>
             </li>
           </ul>
@@ -127,14 +127,14 @@ export default function ProfilPage() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          
+
           <div className="rounded-xl border border-border/80 bg-card p-5 space-y-2">
             <div className="text-primary font-bold text-lg font-mono">01. ADAB</div>
             <h4 className="text-sm font-semibold text-foreground">
               Mendahulukan Adab Sebelum Ilmu
             </h4>
             <p className="text-xs text-muted-foreground leading-relaxed">
-              Santri dibimbing untuk menghormati guru, berbakti kepada orang tua, menyayangi sesama, dan menjaga tutur kata yang santun.
+              Murid dibimbing untuk menghormati guru, berbakti kepada orang tua, menyayangi sesama, dan menjaga tutur kata yang santun.
             </p>
           </div>
 

@@ -1,4 +1,4 @@
-# Database Schema & API Contract Reference — SDIT Fajar
+﻿# Database Schema & API Contract Reference — SDIT Fajar
 
 Dokumen ini adalah referensi lengkap untuk skema database Supabase PostgreSQL, daftar enum resmi, model data domain, dan kontrak Server Actions di SDIT Fajar yang diselaraskan 100% dengan dokumen acuan resmi [08-skema-database-supabase.md](file:///c:/Users/muhaz/OneDrive/Desktop/sdit-fajar/docs/PRD/08-skema-database-supabase.md).
 
@@ -60,19 +60,19 @@ create type order_status as enum ('draft', 'pending', 'confirmed', 'fulfilled', 
 - **`school_period_settings`**: Penentuan bulan dan tahun aktif operasional untuk presensi dan akademik.
 - **`classes`**: Master tingkat kelas (`id (uuid PK)`, `name (contoh '1')`, `grade_level (int 1-6)`).
 - **`classrooms`**: Rombongan belajar per tahun ajaran (`id (uuid PK)`, `class_id (uuid FK classes.id)`, `academic_year_id (uuid FK academic_years.id)`, `name (contoh '1A - 2026/2027')`, `homeroom_teacher_id (uuid FK teachers.id)`).
-- **`class_students`**: Penempatan santri pada rombel (`id`, `classroom_id FK classrooms`, `student_id FK students`, `status`).
+- **`class_students`**: Penempatan murid pada rombel (`id`, `classroom_id FK classrooms`, `student_id FK students`, `status`).
 - **`subjects`**: Master mata pelajaran (`id (uuid PK)`, `name`, `code`, `grade_level`).
 - **`teaching_assignments`**: Penugasan guru mengajar mapel di rombel (`id`, `teacher_id FK teachers`, `classroom_id FK classrooms`, `subject_id FK subjects`, `academic_year_id`).
 - **`schedules`**: Jadwal pelajaran harian (`id`, `teaching_assignment_id`, `day_of_week (1-5)`, `start_time`, `end_time`).
 
 ### C. Siswa, Wali Murid & PPDB Staging
-- **`admission_waves`**: Gelombang pendaftaran PPDB (Gelombang 1–3, kuota default 100 santri, target periode).
-- **`student_registration_applications`**: Staging formulir pendaftaran calon santri baru.
+- **`admission_waves`**: Gelombang pendaftaran PPDB (Gelombang 1–3, kuota default 100 murid, target periode).
+- **`student_registration_applications`**: Staging formulir pendaftaran calon murid baru.
   - Kolom: `id (uuid PK)`, `admission_wave_id (uuid FK admission_waves.id)`, `registration_number (text unique)`, `student_name`, `nik`, `nisn`, `gender`, `birth_place`, `birth_date`, `parent_name`, `parent_phone`, `parent_email`, `status (registration_status default 'submitted')`, `admin_notes`.
   - *Aturan Penting*: Data calon siswa di tabel ini **BELUM memiliki akun Auth** sampai disetujui (`status = 'approved'`) oleh admin panitia.
 - **`student_registration_documents`**: Berkas fisik unggahan persyaratan pendaftaran (Pas Foto, Akta, KK, KTP, SKL TK, Surat Sehat).
   - Kolom: `id (uuid PK)`, `application_id (uuid FK student_registration_applications.id)`, `document_type`, `file_url`, `file_path`, `verification_status`.
-- **`students`**: Data pokok santri aktif terdaftar.
+- **`students`**: Data pokok murid aktif terdaftar.
   - Kolom: `id (uuid PK)`, `profile_id (uuid FK profiles.id)`, `nis (text unique)`, `nisn (text unique)`, `birth_place`, `birth_date`, `gender`, `enrollment_year`.
 - **`parents`**: Data pokok orang tua/wali murid aktif.
   - Kolom: `id (uuid PK)`, `profile_id (uuid FK profiles.id)`, `phone_wa (text unique)`, `relationship (text)`.
@@ -82,14 +82,14 @@ create type order_status as enum ('draft', 'pending', 'confirmed', 'fulfilled', 
 ### D. Pembelajaran, Kehadiran & Tahfidz
 - **`teacher_attendances`**: Presensi harian guru.
   - Kolom: `id`, `teacher_id FK teachers`, `date`, `check_in_time (06.30-07.30)`, `check_out_time (>= 14.30)`, `status`, `is_weekend`.
-- **`student_attendances`**: Presensi santri per jadwal mata pelajaran pada hari kerja (Senin–Jumat).
+- **`student_attendances`**: Presensi murid per jadwal mata pelajaran pada hari kerja (Senin–Jumat).
   - Kolom: `id`, `student_id FK students`, `schedule_id FK schedules`, `date`, `status ('present','late','absent','excused')`.
-- **`tahfidz_records`**: Mutabaah setoran Al-Qur'an santri.
+- **`tahfidz_records`**: Mutabaah setoran Al-Qur'an murid.
   - Kolom: `id`, `student_id FK students`, `teacher_id FK teachers`, `surah_number (1-114)`, `ayat_start`, `ayat_end`, `predicate (tahfidz_predicate)`, `notes`, `date`.
 - **`materials`**: Modul dan materi ajar pembelajaran (`id`, `teaching_assignment_id`, `title`, `content`, `file_url`, `status`).
 - **`assignments`**: Penugasan tugas murid (`id`, `teaching_assignment_id`, `title`, `description`, `due_at`, `status`).
 - **`assignment_submissions`**: Pengumpulan tugas murid (`id`, `assignment_id`, `student_id`, `file_url`, `score (numeric)`, `feedback`, `is_late`).
-- **`grades`**: Rekap nilai akhir semester / buku rapor santri.
+- **`grades`**: Rekap nilai akhir semester / buku rapor murid.
 
 ### E. Marketplace Sekolah (Pemesanan & Reservasi Fisik)
 - **`marketplace_products`**: Katalog buku pembelajaran dan atribut seragam sekolah (`id`, `title`, `description`, `price`, `stock`, `cover_url`, `status`).

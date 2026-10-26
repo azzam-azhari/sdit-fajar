@@ -1,4 +1,4 @@
-import * as React from "react";
+﻿import * as React from "react";
 import Link from "next/link";
 import {
   ShoppingBag,
@@ -13,7 +13,7 @@ import { StatusBadge } from "@/components/common/status-badge";
 export const metadata = {
   title: "Marketplace & Buku Sekolah — SDIT Fajar",
   description:
-    "Katalog resmi buku panduan tahfidz, seragam sekolah, modul kurikulum, dan perlengkapan santri SDIT Fajar.",
+    "Katalog resmi buku panduan tahfidz, seragam sekolah, modul kurikulum, dan perlengkapan murid SDIT Fajar.",
 };
 
 interface ProductItem {
@@ -38,7 +38,7 @@ const PRODUCTS: ProductItem[] = [
   },
   {
     id: "PROD-002",
-    name: "Buku Panduan Adab & Mutabaah Ibadah Harian Santri",
+    name: "Buku Panduan Adab & Mutabaah Ibadah Harian Murid",
     category: "Buku & Modul",
     price: 45000,
     stock: 85,
@@ -56,7 +56,7 @@ const PRODUCTS: ProductItem[] = [
   },
   {
     id: "PROD-004",
-    name: "Setelan Olahraga & Kaos Panahan Santri",
+    name: "Setelan Olahraga & Kaos Panahan Murid",
     category: "Seragam",
     price: 140000,
     stock: 60,
@@ -90,7 +90,7 @@ export default function MarketplacePage() {
       <PageHeader
         title="Marketplace & Perlengkapan Sekolah"
         badge="Etalase Resmi"
-        description="Penyediaan buku panduan tahfidz, seragam, modul ajar, dan atribut resmi SDIT Fajar untuk kemudahan santri dan wali murid."
+        description="Penyediaan buku panduan tahfidz, seragam, modul ajar, dan atribut resmi SDIT Fajar untuk kemudahan murid dan wali murid."
       />
 
       {/* Info Alur Fulfillment */}

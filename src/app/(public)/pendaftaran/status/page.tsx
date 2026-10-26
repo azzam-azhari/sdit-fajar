@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import * as React from "react";
 import Link from "next/link";
@@ -60,7 +60,7 @@ export default function CekStatusPage() {
       <PageHeader
         title="Cek Status Pendaftaran Mandiri"
         badge="Pelacak PPDB"
-        description="Masukkan Nomor Registrasi (didapat saat pendaftaran) dan Tanggal Lahir calon santri untuk melihat progres verifikasi berkas dan jadwal tes observasi."
+        description="Masukkan Nomor Registrasi (didapat saat pendaftaran) dan Tanggal Lahir calon murid untuk melihat progres verifikasi berkas dan jadwal tes observasi."
       />
 
       {/* Formulir Pencarian */}
@@ -81,7 +81,7 @@ export default function CekStatusPage() {
           </div>
 
           <DatePicker
-            label="Tanggal Lahir Calon Santri *"
+            label="Tanggal Lahir Calon Murid *"
             value={birthDate}
             onChange={(val) => setBirthDate(val)}
             required
@@ -122,7 +122,7 @@ export default function CekStatusPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-xs">
             <div>
-              <span className="text-muted-foreground">Nama Calon Santri:</span>
+              <span className="text-muted-foreground">Nama Calon Murid:</span>
               <div className="font-bold text-sm text-foreground mt-0.5">
                 {result.nama}
               </div>

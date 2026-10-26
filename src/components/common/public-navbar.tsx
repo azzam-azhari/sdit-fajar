@@ -2,9 +2,9 @@
 
 import * as React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
-  GraduationCap,
   Menu,
   X,
   ChevronDown,
@@ -39,8 +39,8 @@ const NAV_LINKS: NavLinkItem[] = [
       },
       {
         href: "/profil/manajemen",
-        label: "Manajemen & Pengajar",
-        desc: "Dewan pembina, pimpinan, dan dewan asatidz",
+        label: "Manajemen Sekolah",
+        desc: "Dewan pembina, pimpinan, dan Dewan Guru",
       },
     ],
   },
@@ -51,7 +51,7 @@ const NAV_LINKS: NavLinkItem[] = [
   { href: "/kontak", label: "Kontak" },
 ];
 
-export function PublicNavbar() {
+function PublicNavbarContent() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   const [profilDropdownOpen, setProfilDropdownOpen] = React.useState(false);
@@ -66,14 +66,21 @@ export function PublicNavbar() {
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border/80 bg-background/95 backdrop-blur-md supports-backdrop-filter:bg-background/80 transition-colors">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        
+
         {/* Brand Logo & Name */}
         <Link
           href="/"
           className="flex items-center gap-2.5 transition-opacity hover:opacity-90"
         >
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-xs">
-            <GraduationCap className="h-5 w-5" />
+          <div className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg">
+            <Image
+              src="/logo.png"
+              alt="Logo SDIT Fajar"
+              width={40}
+              height={40}
+              className="h-full w-full object-contain"
+              priority
+            />
           </div>
           <div className="flex flex-col">
             <span className="text-base font-bold tracking-tight text-foreground leading-none">
@@ -286,5 +293,37 @@ export function PublicNavbar() {
         </div>
       )}
     </header>
+  );
+}
+
+function PublicNavbarSkeleton() {
+  return (
+    <header className="sticky top-0 z-40 w-full border-b border-border/80 bg-background/95 backdrop-blur-md">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center gap-2.5">
+          <div className="h-10 w-10 rounded-lg bg-muted animate-pulse" />
+          <div className="space-y-1 hidden sm:block">
+            <div className="h-4 w-28 bg-muted animate-pulse rounded" />
+            <div className="h-3 w-40 bg-muted/60 animate-pulse rounded" />
+          </div>
+        </div>
+        <div className="hidden lg:flex items-center gap-6">
+          <div className="h-4 w-16 bg-muted animate-pulse rounded" />
+          <div className="h-4 w-16 bg-muted animate-pulse rounded" />
+          <div className="h-4 w-16 bg-muted animate-pulse rounded" />
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="h-8 w-24 bg-muted animate-pulse rounded-md" />
+        </div>
+      </div>
+    </header>
+  );
+}
+
+export function PublicNavbar() {
+  return (
+    <React.Suspense fallback={<PublicNavbarSkeleton />}>
+      <PublicNavbarContent />
+    </React.Suspense>
   );
 }

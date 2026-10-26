@@ -1,4 +1,4 @@
-import * as React from "react";
+﻿import * as React from "react";
 import {
   MapPin,
   Phone,
@@ -20,7 +20,7 @@ export const metadata = {
 export default function KontakPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-12">
-      
+
       <PageHeader
         title="Hubungi Kami & Peta Lokasi"
         badge="Layanan Informasi"
@@ -28,7 +28,7 @@ export default function KontakPage() {
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
+
         {/* Kolom 1 & 2: Formulir Kirim Pesan */}
         <div className="lg:col-span-2 rounded-2xl border border-border/80 bg-card p-6 sm:p-8 space-y-6">
           <div className="space-y-1">
@@ -118,17 +118,17 @@ export default function KontakPage() {
 
         {/* Kolom 3: Informasi Kontak & Layanan Cepat */}
         <div className="space-y-6">
-          
+
           <div className="rounded-2xl border border-border/80 bg-card p-6 space-y-4">
             <h3 className="text-sm font-bold text-foreground uppercase tracking-wider">
               Kantor Tata Usaha
             </h3>
-            
+
             <ul className="space-y-3.5 text-xs text-muted-foreground">
               <li className="flex items-start gap-2.5">
                 <MapPin className="h-4 w-4 text-primary shrink-0 mt-0.5" />
                 <span className="leading-snug">
-                  Jl. Cempaka No. 12, Kel. Sukamaju, Kec. Cilodong, Kota Depok, Jawa Barat 16415
+                  Jl. Jati III No.04 RT 07/07, Jatijajar, Kec. Tapos, Kota Depok, Jawa Barat 16466.
                 </span>
               </li>
               <li className="flex items-center gap-2.5">
@@ -156,7 +156,7 @@ export default function KontakPage() {
               <span>Respon Cepat WhatsApp</span>
             </div>
             <p className="text-xs text-muted-foreground leading-relaxed">
-              Membutuhkan informasi cepat mengenai kuota PPDB atau jadwal tes pemetaan santri? Chat langsung dengan panitia.
+              Membutuhkan informasi cepat mengenai kuota PPDB atau jadwal tes pemetaan murid? Chat langsung dengan panitia.
             </p>
             <a
               href="https://wa.me/6281234567890?text=Assalamu'alaikum,%20saya%20ingin%20bertanya%20informasi%20PPDB%20SDIT%20Fajar"
@@ -181,12 +181,12 @@ export default function KontakPage() {
               Petunjuk Akses & Peta Lokasi
             </h3>
             <p className="text-xs text-muted-foreground mt-0.5">
-              Kampus SDIT Fajar mudah diakses dari Jl. Raya Bogor maupun Stasiun Depok Lama.
+              SDIT FAJAR | Sekolah Dasar Islam Terpadu, Jl. Jati III No.04 RT 07/07, Jatijajar, Kec. Tapos, Kota Depok, Jawa Barat 16466.
             </p>
           </div>
           <Button asChild variant="outline" size="sm" className="text-xs">
             <a
-              href="https://maps.google.com"
+              href="https://maps.app.goo.gl/tuUfbeECwwGeoCpy5"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1.5"
@@ -200,13 +200,13 @@ export default function KontakPage() {
         <div className="h-64 sm:h-80 w-full rounded-xl border border-border/80 bg-muted/40 flex flex-col items-center justify-center text-center p-4">
           <MapPin className="h-10 w-10 text-primary/60 mb-2" />
           <div className="font-semibold text-xs sm:text-sm text-foreground">
-            Kampus SDIT Fajar Cilodong
+            SDIT FAJAR | Sekolah Dasar Islam Terpadu
           </div>
           <div className="text-xs text-muted-foreground max-w-sm mt-1">
-            Jl. Cempaka No. 12, Kel. Sukamaju, Kec. Cilodong, Kota Depok, Jawa Barat 16415
+            Jl. Jati III No.04 RT 07/07, Jatijajar, Kec. Tapos, Kota Depok, Jawa Barat 16466.
           </div>
           <div className="mt-3 text-[11px] font-mono text-primary font-medium bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
-            Titik Koordinat: -6.425812, 106.842391
+            Titik Koordinat: -6.414378235237263, 106.86558773787966
           </div>
         </div>
       </section>

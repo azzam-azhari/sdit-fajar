@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import * as React from "react";
 import Link from "next/link";
@@ -23,7 +23,7 @@ export default function PendaftaranSuksesPage() {
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8 space-y-6">
-      
+
       {/* Action Bar (Hidden on Print) */}
       <div className="print:hidden flex items-center justify-between pb-4 border-b border-border/80">
         <Button asChild variant="ghost" size="sm" className="text-xs text-muted-foreground hover:text-foreground">
@@ -46,7 +46,7 @@ export default function PendaftaranSuksesPage() {
 
       {/* Printable Sheet Container */}
       <div className="rounded-2xl border border-border/80 bg-card p-8 sm:p-12 space-y-8 shadow-xs print:border-none print:shadow-none print:p-0">
-        
+
         {/* Letterhead (Kop Dokumen) */}
         <div className="flex items-center justify-between border-b-2 border-foreground/80 pb-6">
           <div className="flex items-center gap-3">
@@ -58,7 +58,7 @@ export default function PendaftaranSuksesPage() {
                 SDIT FAJAR CILODONG
               </h2>
               <p className="text-xs text-muted-foreground mt-1">
-                Jl. Cempaka No. 12, Kel. Sukamaju, Kec. Cilodong, Kota Depok, Jawa Barat 16415
+                Jl. Jati III No.04 RT 07/07, Jatijajar, Kec. Tapos, Kota Depok, Jawa Barat 16466.
               </p>
               <p className="text-[11px] font-mono text-muted-foreground">
                 NPSN: 10814529 • Telp: (021) 7788-9900 • Website: sditfajar.sch.id
@@ -78,7 +78,7 @@ export default function PendaftaranSuksesPage() {
         {/* Title & Registration Code */}
         <div className="text-center space-y-2 py-2">
           <span className="text-xs font-semibold uppercase tracking-wider text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
-            Bukti Tanda Terima Pendaftaran Santri Baru
+            Bukti Tanda Terima Pendaftaran Murid Baru
           </span>
           <h1 className="text-xl sm:text-2xl font-extrabold text-foreground tracking-tight pt-2">
             TAHUN PELAJARAN 2026 / 2027
@@ -93,10 +93,10 @@ export default function PendaftaranSuksesPage() {
           </div>
         </div>
 
-        {/* Data Calon Santri Table */}
+        {/* Data Calon Murid Table */}
         <div className="space-y-4">
           <h3 className="text-xs font-bold uppercase tracking-wider text-foreground border-b border-border/60 pb-1">
-            A. Data Calon Santri
+            A. Data Calon Murid
           </h3>
           <table className="w-full text-xs border-collapse">
             <tbody className="divide-y divide-border/60">
@@ -157,14 +157,14 @@ export default function PendaftaranSuksesPage() {
             <li>Cetak lembar bukti pendaftaran ini sebanyak 1 lembar.</li>
             <li>Hadir ke kampus SDIT Fajar sesuai jadwal observasi (Sabtu, 06 Desember 2026, pukul 08.30 WIB).</li>
             <li>Bawa fotokopi Akta Kelahiran (2 lembar), fotokopi Kartu Keluarga (2 lembar), dan pas foto 3x4 berwarna (3 lembar).</li>
-            <li>Wawancara kesiapan orang tua dilaksanakan bersamaan dengan observasi santri.</li>
+            <li>Wawancara kesiapan orang tua dilaksanakan bersamaan dengan observasi murid.</li>
           </ol>
         </div>
 
         {/* Tanda Tangan & Cap */}
         <div className="pt-6 flex justify-between items-end text-xs text-center">
           <div>
-            <p className="text-muted-foreground">Orang Tua / Wali Santri,</p>
+            <p className="text-muted-foreground">Orang Tua / Wali Murid,</p>
             <div className="h-16" />
             <p className="font-semibold text-foreground underline">( ............................................ )</p>
           </div>

@@ -1,4 +1,4 @@
-# Panduan Keahlian & Buku Pedoman Eksekusi Agen — SDIT Fajar
+﻿# Panduan Keahlian & Buku Pedoman Eksekusi Agen — SDIT Fajar
 
 Dokumen ini adalah katalog keahlian resmi (*Skills Registry & Playbook*) bagi AI Coding Assistant (Antigravity, Cursor, Windsurf, Claude Code) saat merancang, menulis, dan memelihara kode di repositori SDIT Fajar. Dokumen ini menjadi pedoman operasional praktis yang diselaraskan secara penuh dengan seluruh dokumen perancangan di folder `docs/` dan aturan konstitusi di `.agents/rules/`.
 
@@ -21,9 +21,9 @@ Dokumen ini adalah katalog keahlian resmi (*Skills Registry & Playbook*) bagi AI
 | **2** | **Autentikasi Supabase SSR & Penjagaan Hak Akses Peran** | Login NIS murid, login WhatsApp wali, middleware guard, role redirect | Sesi SSR aman, helper proteksi server, dan pemaksaan ganti password perdana |
 | **3** | **Skema Basis Data PostgreSQL & Penerapan Kebijakan RLS** | Pembuatan tabel, penambahan kolom, perumusan Row Level Security | File migrasi DDL terurut, isolasi data 100% RLS aktif, dan pencatatan audit log |
 | **4** | **Mutasi Data Server Actions & Validasi Skema Zod** | Pengiriman form, pembuatan data baru, update status, penghapusan | Fungsi Server Action bertipe ketat (`ActionResult<T>`) dengan pesan error Bahasa Indonesia |
-| **5** | **Pengelolaan PPDB Bergelombang & Alur Verifikasi Calon Siswa** | Formulir pendaftaran publik, seleksi berkas admin, promosi santri | Alur tabel perantara (*staging*) `registrations` menjadi siswa aktif `students` |
+| **5** | **Pengelolaan PPDB Bergelombang & Alur Verifikasi Calon Siswa** | Formulir pendaftaran publik, seleksi berkas admin, promosi murid | Alur tabel perantara (*staging*) `registrations` menjadi siswa aktif `students` |
 | **6** | **Sistem Akademik LMS & Aturan Presensi Jam Server** | Pembagian materi, penugasan, penilaian murid, presensi guru & siswa | Siklus pembelajaran digital end-to-end dengan validasi waktu server (Senin–Jumat) |
-| **7** | **Pencatatan Mutabaah Tahfidz & Tahsin Al-Qur'an** | Setoran hafalan harian oleh guru, rekap capaian juz santri | Formulir mutabaah dengan predikat kelancaran dan tabel rekapitulasi capaian hafalan |
+| **7** | **Pencatatan Mutabaah Tahfidz & Tahsin Al-Qur'an** | Setoran hafalan harian oleh guru, rekap capaian juz murid | Formulir mutabaah dengan predikat kelancaran dan tabel rekapitulasi capaian hafalan |
 | **8** | **Pengelolaan Berkas Privat Supabase Storage & Tautan Aman** | Unggah dokumen berkas pendaftaran, modul materi, tugas, cover | Berkas tersimpan di bucket privat dengan signed URL berumur pendek dan tautan DB |
 | **9** | **Pengumuman Terstruktur & Manajemen Konten Informasi Sekolah** | Berita publik, profil sekolah, siaran informasi per peran | Konten terpublikasi tepat sasaran berdasarkan peran atau rombongan kelas |
 | **10** | **Standar Kualitas Kode, Pemeriksaan Tipe Data & Uji Keamanan** | Sebelum komit kode, verifikasi integritas, pengujian celah data | Kode lolos `npm run typecheck` tanpa tipe `any`, lulus linter, dan teruji RLS negatif |
@@ -323,16 +323,16 @@ export async function simpanSetoranTahfidzAction(
 ---
 
 ### Keahlian 5: Pengelolaan PPDB Bergelombang & Alur Verifikasi Calon Siswa
-**Tujuan**: Mengatur pendaftaran santri baru melalui tabel perantara (*staging*), sistem kuota multi-gelombang, seleksi berkas, hingga pembuatan akun otomatis.
+**Tujuan**: Mengatur pendaftaran murid baru melalui tabel perantara (*staging*), sistem kuota multi-gelombang, seleksi berkas, hingga pembuatan akun otomatis.
 
 #### Pedoman Alur Bisnis PPDB:
 1. **Tabel Perantara (`registrations`)**:
    - Formulir publik mengisi data ke tabel `registrations`.
-   - Calon santri dan orang tua di tabel ini **TIDAK langsung dibuatkan akun auth**.
+   - Calon murid dan orang tua di tabel ini **TIDAK langsung dibuatkan akun auth**.
 2. **Sistem Gelombang (Gelombang 1, 2, 3)**:
-   - Kuota default: 100 santri per tahun ajaran.
+   - Kuota default: 100 murid per tahun ajaran.
    - Perhitungan kuota tersisa dan jumlah pendaftar dihitung secara dinamis.
-3. **Verifikasi & Promosi Santri**:
+3. **Verifikasi & Promosi Murid**:
    - Admin memeriksa kelengkapan berkas fisik/unggah (akta, kartu keluarga, pas foto).
    - Mengubah status pendaftaran: `submitted` -> `under_review` -> `approved` / `rejected`.
    - Saat status berubah menjadi `approved`:
@@ -379,7 +379,7 @@ export async function catatPresensiSiswaAction(input: InputPresensiSiswa) {
 ---
 
 ### Keahlian 7: Pencatatan Mutabaah Tahfidz & Tahsin Al-Qur'an
-**Tujuan**: Mengelola buku catatan mutabaah hafalan Qur'an harian dan pemantauan capaian juz santri.
+**Tujuan**: Mengelola buku catatan mutabaah hafalan Qur'an harian dan pemantauan capaian juz murid.
 
 #### Komponen Penilaian Hafalan:
 - **Identitas Setoran**: Nomor Surah (1–114), Ayat Mulai, Ayat Selesai, dan Tanggal Setoran.
@@ -388,7 +388,7 @@ export async function catatPresensiSiswaAction(input: InputPresensiSiswa) {
   - `jayyid_jiddan`: Baik Sekali.
   - `jayyid`: Cukup Baik.
   - `maqbul`: Cukup / Perlu Mengulang.
-- **Pelaporan**: Rekapitulasi disajikan menggunakan tabel Zebra Cross dengan filter nama santri dan tingkatan kelas.
+- **Pelaporan**: Rekapitulasi disajikan menggunakan tabel Zebra Cross dengan filter nama murid dan tingkatan kelas.
 
 ---
 
@@ -398,7 +398,7 @@ export async function catatPresensiSiswaAction(input: InputPresensiSiswa) {
 #### Pedoman Storage:
 1. **4 Bucket Resmi Privat**:
    - `images`: Foto profil, foto kegiatan berita, cover modul.
-   - `lms-files`: Modul materi pembelajaran dan berkas tugas santri.
+   - `lms-files`: Modul materi pembelajaran dan berkas tugas murid.
    - `registration-files`: Berkas kartu keluarga, akta kelahiran pendaftar PPDB.
    - `marketplace-files`: Berkas buku panduan atau modul digital sekolah.
 2. **Aturan Akses**:
@@ -433,7 +433,7 @@ export async function catatPresensiSiswaAction(input: InputPresensiSiswa) {
 2. **Pemeriksaan Format Linter**:
    - Jalankan `npm run lint` untuk memastikan tidak ada import mati atau pelanggaran sintaksis.
 3. **Uji Negatif Hak Akses**:
-   - Pastikan santri A tidak bisa membaca tugas/nilai santri B.
+   - Pastikan murid A tidak bisa membaca tugas/nilai murid B.
    - Pastikan wali murid A tidak bisa melihat data anak dari wali murid B.
    - Pastikan rute internal `/dashboard/*` langsung mengarahkan tamu tak dikenal ke `/login`.
 4. **Pemeriksaan Bahasa Antarmuka**:

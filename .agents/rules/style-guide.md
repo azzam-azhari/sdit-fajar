@@ -1,4 +1,4 @@
----
+﻿---
 trigger: always_on
 description: UI Style Guide & Frontend Design Guidelines untuk SDIT Fajar
 ---
@@ -34,7 +34,7 @@ Gaya visual mengadopsi pendekatan **Minimalist Craft & Design Engineering** yang
 1. **Zero Claymorphism**: Dilarang keras menggunakan elemen 3D gelembung (*clay*), bayangan tebal bengkak, atau warna pastel kartun tebal.
 2. **Zero Heavy Bento Clutter**: Dilarang menggunakan bento-grid berlebihan tanpa fungsi jelas yang membuang-buang ruang layar.
 3. **Precision & Micro-Borders**: Mengutamakan garis batas tipis yang tajam (*subtle crisp micro-borders* `border border-border/80`), padding presisi, dan *whitespace* terukur.
-4. **Data-First & High Legibility**: Karena sistem mengelola nilai, absensi, tagihan, dan data santri/siswa, keterbacaan data horizontal dan vertikal adalah prioritas tertinggi.
+4. **Data-First & High Legibility**: Karena sistem mengelola nilai, absensi, tagihan, dan data murid/siswa, keterbacaan data horizontal dan vertikal adalah prioritas tertinggi.
 5. **Clean & Editorial Feel**: Memadukan font sans-serif modern dengan sentuhan font monospaced untuk data angka/kode administratif.
 
 ---

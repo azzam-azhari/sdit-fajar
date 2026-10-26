@@ -1,18 +1,18 @@
-import * as React from "react";
+﻿import * as React from "react";
 import Link from "next/link";
 import { GraduationCap, Award, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/common/page-header";
 
 export const metadata = {
-  title: "Manajemen & Dewan Asatidz — SDIT Fajar",
+  title: "Manajemen Sekolah — SDIT Fajar",
   description:
-    "Susunan pimpinan sekolah, dewan pembina yayasan, dan jajaran dewan asatidz SDIT Fajar.",
+    "Susunan pimpinan sekolah, dewan pembina yayasan, dan jajaran Dewan Guru SDIT Fajar.",
 };
 
 const LEADERS = [
   {
-    name: "Ustadz H. Muhammad Ridwan, Lc., M.Pd.",
+    name: "Ummi Nining Juningsih S.Pd.",
     role: "Kepala Sekolah",
     edu: "S1 Universitas Al-Azhar Kairo (Syariah) • S2 Manajemen Pendidikan Islam",
     desc: "Berpengalaman lebih dari 15 tahun dalam manajemen pendidikan Islam terpadu dan pembinaan generasi muda.",
@@ -27,13 +27,13 @@ const LEADERS = [
     name: "Ustadz Ahmad Fauzan, S.Sos.I.",
     role: "Wakil Kepala Sekolah Bidang Kesiswaan",
     edu: "S1 Komunikasi Penyiaran Islam (UIN Syarif Hidayatullah Jakarta)",
-    desc: "Memimpin pembinaan karakter santri, kepanduan Pramuka SIT, dan kegiatan ekstrakurikuler sekolah.",
+    desc: "Memimpin pembinaan karakter murid, kepanduan Pramuka SIT, dan kegiatan ekstrakurikuler sekolah.",
   },
   {
     name: "Ustadz Hafizh Al-Bantani, Al-Hafizh",
     role: "Koordinator Tahfidz Al-Qur'an",
     edu: "Kulliyatul Qur'an • Sanad Hafalan Qira'at 'Ashim riwayat Hafsh",
-    desc: "Membimbing dan mengawal standarisasi bacaan tahsin serta target hafalan 3 Juz santri SDIT Fajar.",
+    desc: "Membimbing dan mengawal standarisasi bacaan tahsin serta target hafalan 3 Juz murid SDIT Fajar.",
   },
 ];
 
@@ -49,11 +49,11 @@ const TEACHERS = [
 export default function ManajemenPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-12">
-      
+
       <PageHeader
-        title="Manajemen & Dewan Asatidz"
+        title="Manajemen Sekolah"
         badge="Struktur Organisasi"
-        description="Mengenal figur-figur pendidik profesional, amanah, dan berdedikasi yang membimbing santri SDIT Fajar setiap hari."
+        description="Mengenal figur-figur pendidik profesional, amanah, dan berdedikasi yang membimbing murid SDIT Fajar setiap hari."
       >
         <Button asChild variant="outline" size="sm" className="text-xs">
           <Link href="/profil">Profil & Visi Misi</Link>
@@ -113,7 +113,7 @@ export default function ManajemenPage() {
             Pendidik & Tenaga Kependidikan
           </span>
           <h2 className="text-xl md:text-2xl font-bold tracking-tight text-foreground mt-1">
-            Dewan Asatidz & Wali Kelas
+            Dewan Guru & Wali Kelas
           </h2>
           <p className="text-xs text-muted-foreground mt-1">
             Didukung oleh 34 guru berkompeten dengan dedikasi tinggi pada pendidikan islami.
@@ -145,7 +145,7 @@ export default function ManajemenPage() {
           Standar Kualifikasi Tenaga Pendidik
         </h3>
         <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">
-          Seluruh asatidz di SDIT Fajar wajib melalui proses seleksi ketat meliputi: kelancaran membaca Al-Qur&apos;an bertajwid, komitmen aqidah shahihah, kompetensi pedagogik sarjana pendidikan linier, serta sertifikasi berkala pembinaan karakter Islam terpadu.
+          Seluruh guru di SDIT Fajar wajib melalui proses seleksi ketat meliputi: kelancaran membaca Al-Qur&apos;an bertajwid, komitmen aqidah shahihah, kompetensi pedagogik sarjana pendidikan linier, serta sertifikasi berkala pembinaan karakter Islam terpadu.
         </p>
       </section>
 

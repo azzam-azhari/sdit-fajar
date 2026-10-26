@@ -1,4 +1,4 @@
-import * as React from "react";
+﻿import * as React from "react";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -20,7 +20,7 @@ import { StatusBadge } from "@/components/common/status-badge";
 export const metadata = {
   title: "Beranda — SDIT Fajar",
   description:
-    "Portal resmi SDIT Fajar. Sekolah Islam Terpadu berakreditasi A yang mendidik santri berakhlak mulia, cerdas, dan penghafal Al-Qur'an.",
+    "Portal resmi SDIT Fajar. Sekolah Islam Terpadu berakreditasi A yang mendidik murid berakhlak mulia, cerdas, dan penghafal Al-Qur'an.",
 };
 
 export default function HomePage() {
@@ -41,7 +41,7 @@ export default function HomePage() {
               <span>PPDB TP 2026/2027 Telah Dibuka</span>
               <span className="text-muted-foreground">•</span>
               <span className="text-foreground/80 group-hover:text-foreground">
-                Kuota Terbatas 100 Santri
+                Kuota Terbatas 100 Murid
               </span>
               <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
             </Link>
@@ -107,14 +107,14 @@ export default function HomePage() {
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
           <StatCard
-            title="Santri Aktif"
+            title="Murid Aktif"
             value="428"
             description="Tingkat 1 sampai dengan Kelas 6"
             isMono
             icon={<Users className="h-5 w-5" />}
           />
           <StatCard
-            title="Dewan Asatidz"
+            title="Dewan Guru"
             value="34"
             description="Pendidik bersertifikasi & hafizh"
             isMono
@@ -149,7 +149,7 @@ export default function HomePage() {
               Program Unggulan Terpadu
             </h2>
             <p className="text-xs sm:text-sm text-muted-foreground mt-1 max-w-xl">
-              Dirancang sistematis untuk menyeimbangkan kecerdasan intelektual, kemandirian karakter, dan kedalaman spiritual santri.
+              Dirancang sistematis untuk menyeimbangkan kecerdasan intelektual, kemandirian karakter, dan kedalaman spiritual murid.
             </p>
           </div>
           <Button asChild variant="ghost" size="sm" className="text-xs">
@@ -303,14 +303,14 @@ export default function HomePage() {
                 </span>
               </div>
               <h3 className="text-base font-bold text-foreground group-hover:text-primary transition-colors leading-snug">
-                Santri SDIT Fajar Raih Juara 1 MHQ Tingkat Kota Depok
+                Murid SDIT Fajar Raih Juara 1 MHQ Tingkat Kota Depok
               </h3>
               <p className="text-xs text-muted-foreground line-clamp-3 leading-relaxed">
-                Ananda Rayyan Al-Ghifari santri kelas 5 berhasil menyabet medali emas pada ajang Musabaqah Hifdzil Qur&apos;an kategori 2 Juz antar SD/MI.
+                Ananda Rayyan Al-Ghifari murid kelas 5 berhasil menyabet medali emas pada ajang Musabaqah Hifdzil Qur&apos;an kategori 2 Juz antar SD/MI.
               </p>
             </div>
             <Link
-              href="/berita/santri-raih-juara-1-mhq-depok"
+              href="/berita/murid-raih-juara-1-mhq-depok"
               className="text-xs font-semibold text-primary inline-flex items-center gap-1 pt-2"
             >
               <span>Baca Selengkapnya</span>
@@ -331,7 +331,7 @@ export default function HomePage() {
                 Market Day Edukasi: Menumbuhkan Jiwa Wirausaha Islami
               </h3>
               <p className="text-xs text-muted-foreground line-clamp-3 leading-relaxed">
-                Santri kelas 4 dan 5 mempraktikkan muamalah jual beli syar&apos;i secara langsung dalam kegiatan Market Day sekolah yang meriah.
+                Murid kelas 4 dan 5 mempraktikkan muamalah jual beli syar&apos;i secara langsung dalam kegiatan Market Day sekolah yang meriah.
               </p>
             </div>
             <Link
@@ -356,7 +356,7 @@ export default function HomePage() {
                 Sosialisasi Program Pembiasaan Adab & Shalat Dhuha
               </h3>
               <p className="text-xs text-muted-foreground line-clamp-3 leading-relaxed">
-                Pertemuan rutin komite dan wali murid membahas evaluasi mutabaah ibadah harian santri di rumah dan di sekolah.
+                Pertemuan rutin komite dan wali murid membahas evaluasi mutabaah ibadah harian murid di rumah dan di sekolah.
               </p>
             </div>
             <Link
@@ -466,7 +466,7 @@ export default function HomePage() {
               Berapa kuota penerimaan murid baru setiap tahunnya?
             </h3>
             <p className="text-xs text-muted-foreground leading-relaxed pl-6">
-              SDIT Fajar membatasi kuota tepat 100 santri baru setiap tahun ajaran (terbagi ke dalam 4 rombel kelas, masing-masing 25 santri) demi menjaga efektivitas pembelajaran talaqqi dan pendampingan personal guru.
+              SDIT Fajar membatasi kuota tepat 100 murid baru setiap tahun ajaran (terbagi ke dalam 4 rombel kelas, masing-masing 25 murid) demi menjaga efektivitas pembelajaran talaqqi dan pendampingan personal guru.
             </p>
           </div>
 
@@ -476,7 +476,7 @@ export default function HomePage() {
               Apakah calon siswa harus sudah hafal huruf hijaiyah saat mendaftar?
             </h3>
             <p className="text-xs text-muted-foreground leading-relaxed pl-6">
-              Tidak wajib. Tim asatidz akan melakukan tes pemetaan kesiapan belajar dan penempatan kelas tahsin yang ramah anak saat observasi, sehingga santri akan dibimbing bertahap dari tingkat dasar.
+              Tidak wajib. Tim guru akan melakukan tes pemetaan kesiapan belajar dan penempatan kelas tahsin yang ramah anak saat observasi, sehingga murid akan dibimbing bertahap dari tingkat dasar.
             </p>
           </div>
 

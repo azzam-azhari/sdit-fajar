@@ -1,4 +1,4 @@
-import * as React from "react";
+﻿import * as React from "react";
 import Link from "next/link";
 import {
   GraduationCap,
@@ -15,7 +15,7 @@ export function PublicFooter() {
     <footer className="border-t border-border/80 bg-muted/20 dark:bg-zinc-950/40 text-foreground transition-colors">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-          
+
           {/* Column 1: School Identity */}
           <div className="space-y-4">
             <Link href="/" className="flex items-center gap-2.5">
@@ -84,7 +84,7 @@ export function PublicFooter() {
                   href="/ekstrakurikuler"
                   className="hover:text-primary transition-colors flex items-center gap-1"
                 >
-                  <span>Ekstrakurikuler Santri</span>
+                  <span>Ekstrakurikuler Murid</span>
                 </Link>
               </li>
               <li>
@@ -134,7 +134,7 @@ export function PublicFooter() {
                   href="/login"
                   className="hover:text-primary transition-colors flex items-center gap-1"
                 >
-                  <span>Portal Login Santri (NIS)</span>
+                  <span>Portal Login Murid (NIS)</span>
                 </Link>
               </li>
               <li>
@@ -157,7 +157,7 @@ export function PublicFooter() {
               <li className="flex items-start gap-2">
                 <MapPin className="h-4 w-4 shrink-0 text-primary mt-0.5" />
                 <span className="leading-snug">
-                  Jl. Cempaka No. 12, Kel. Sukamaju, Kec. Cilodong, Kota Depok, Jawa Barat 16415
+                  Jl. Jati III No.04 RT 07/07, Jatijajar, Kec. Tapos, Kota Depok, Jawa Barat 16466.
                 </span>
               </li>
               <li className="flex items-center gap-2">

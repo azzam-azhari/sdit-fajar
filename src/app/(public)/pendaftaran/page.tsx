@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import * as React from "react";
 import Link from "next/link";
@@ -17,7 +17,7 @@ import { DatePicker } from "@/components/common/date-picker";
 export default function PendaftaranPage() {
   const router = useRouter();
 
-  // Stepper State (1: Gelombang, 2: Calon Santri, 3: Orang Tua, 4: Selesai/Kirim)
+  // Stepper State (1: Gelombang, 2: Calon Murid, 3: Orang Tua, 4: Selesai/Kirim)
   const [step, setStep] = React.useState(1);
 
   // Form Fields State
@@ -56,7 +56,7 @@ export default function PendaftaranPage() {
       <PageHeader
         title="Pendaftaran Peserta Didik Baru (PPDB)"
         badge="Tahun Pelajaran 2026/2027"
-        description="Portal pendaftaran daring santri baru SDIT Fajar. Kuota penerimaan dibatasi 100 santri baru (4 rombel) demi efektivitas pembinaan talaqqi Al-Qur'an."
+        description="Portal pendaftaran daring murid baru SDIT Fajar. Kuota penerimaan dibatasi 100 murid baru (4 rombel) demi efektivitas pembinaan talaqqi Al-Qur'an."
       >
         <Button asChild variant="outline" size="sm" className="text-xs">
           <Link href="/pendaftaran/status" className="flex items-center gap-1.5">
@@ -66,19 +66,19 @@ export default function PendaftaranPage() {
         </Button>
       </PageHeader>
 
-      {/* Tracker Kuota 100 Santri & Gelombang Status */}
+      {/* Tracker Kuota 100 Murid & Gelombang Status */}
       <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
         
         {/* Kuota Ringkasan */}
         <div className="rounded-xl border border-border/80 bg-card p-5 space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Total Kuota Santri Baru
+              Total Kuota Murid Baru
             </span>
             <Sparkles className="h-4 w-4 text-primary" />
           </div>
           <div className="text-2xl font-bold font-mono text-foreground">
-            100 Santri
+            100 Murid
           </div>
           <div className="space-y-1.5 pt-1">
             <div className="flex justify-between text-xs font-mono">
@@ -160,7 +160,7 @@ export default function PendaftaranPage() {
             }`}
           >
             <span className="font-mono">2.</span>
-            <span>Data Calon Santri</span>
+            <span>Data Calon Murid</span>
           </button>
 
           <button
@@ -214,7 +214,7 @@ export default function PendaftaranPage() {
                     />
                   </div>
                   <p className="text-xs text-muted-foreground leading-relaxed">
-                    Dibuka untuk calon santri umum. Termasuk tes observasi kesiapan belajar dan wawancara orang tua.
+                    Dibuka untuk calon murid umum. Termasuk tes observasi kesiapan belajar dan wawancara orang tua.
                   </p>
                 </div>
                 <div className="mt-4 pt-2 border-t border-border/60 text-xs font-mono font-semibold text-primary">
@@ -257,19 +257,19 @@ export default function PendaftaranPage() {
                 onClick={() => setStep(2)}
                 className="text-xs font-semibold bg-primary text-primary-foreground h-9 px-5 flex items-center gap-1.5"
               >
-                <span>Lanjut ke Data Santri</span>
+                <span>Lanjut ke Data Murid</span>
                 <ArrowRight className="h-3.5 w-3.5" />
               </Button>
             </div>
           </div>
         )}
 
-        {/* STEP 2: DATA CALON SANTRI */}
+        {/* STEP 2: DATA CALON MURID */}
         {step === 2 && (
           <div className="space-y-6">
             <div className="space-y-1">
               <h3 className="text-base font-bold text-foreground">
-                Langkah 2: Biodata Calon Santri
+                Langkah 2: Biodata Calon Murid
               </h3>
               <p className="text-xs text-muted-foreground">
                 Isi data calon siswa sesuai dengan Akta Kelahiran dan Kartu Keluarga (KK).
@@ -279,7 +279,7 @@ export default function PendaftaranPage() {
             <div className="space-y-4">
               <div className="space-y-1.5">
                 <label className="text-xs font-semibold text-foreground">
-                  Nama Lengkap Santri *
+                  Nama Lengkap Murid *
                 </label>
                 <input
                   type="text"
@@ -294,7 +294,7 @@ export default function PendaftaranPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
                   <label className="text-xs font-semibold text-foreground">
-                    NIK Calon Santri (16 Digit) *
+                    NIK Calon Murid (16 Digit) *
                   </label>
                   <input
                     type="text"
@@ -387,7 +387,7 @@ export default function PendaftaranPage() {
           <div className="space-y-6">
             <div className="space-y-1">
               <h3 className="text-base font-bold text-foreground">
-                Langkah 3: Data Orang Tua / Wali Santri
+                Langkah 3: Data Orang Tua / Wali Murid
               </h3>
               <p className="text-xs text-muted-foreground">
                 Nomor WhatsApp aktif digunakan untuk notifikasi jadwal observasi dan hasil seleksi berkas.
@@ -474,9 +474,9 @@ export default function PendaftaranPage() {
                   <span>Kelengkapan Berkas Fisik Saat Observasi:</span>
                 </div>
                 <ul className="list-disc pl-5 space-y-1 leading-relaxed">
-                  <li>Fotokopi Akta Kelahiran santri (2 lembar)</li>
+                  <li>Fotokopi Akta Kelahiran murid (2 lembar)</li>
                   <li>Fotokopi Kartu Keluarga dan KTP kedua orang tua (2 lembar)</li>
-                  <li>Pas foto santri ukuran 3x4 berwarna (3 lembar)</li>
+                  <li>Pas foto murid ukuran 3x4 berwarna (3 lembar)</li>
                 </ul>
               </div>
             </div>
