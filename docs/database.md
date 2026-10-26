@@ -43,7 +43,7 @@ create type payment_type as enum (
 create type registration_status as enum ('draft', 'submitted', 'under_review', 'approved', 'rejected');
 create type admission_wave_status as enum ('draft', 'open', 'closed', 'archived');
 create type document_verification_status as enum ('pending', 'valid', 'invalid');
-create type attendance_status as enum ('present', 'late', 'absent', 'excused');
+create type attendance_status as enum ('present', 'late', 'absent', 'excused', 'sick');
 create type order_status as enum ('draft', 'pending_payment', 'paid', 'cancelled', 'fulfilled');
 create type tahfidz_predicate as enum ('mumtaz', 'jayyid_jiddan', 'jayyid', 'maqbul');
 ```

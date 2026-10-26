@@ -19,6 +19,7 @@ Jalankan ke-8 berkas berikut **satu per satu secara berurutan** dari nomor `01` 
 | **7** | `20261026_000007_seed_auth_users.sql` | Inisialisasi 7 akun demo di sistem otentikasi Supabase GoTrue (`auth.users` & `auth.identities`) dengan password bcrypt. |
 | **8** | `20261026_000008_seed_development_data.sql` | Inisialisasi data awal pengembangan (jabatan guru, rombel kelas 3-A, jadwal pelajaran, tagihan invoice demo, dan gelombang PPDB). |
 | **9** | `20261026_000009_repair_auth_users.sql` | Sinkronisasi field boolean `is_sso_user` & `is_anonymous` Supabase GoTrue agar login tidak menghasilkan error schema 500. |
+| **10** | `20261026_000010_fix_rls_infinite_recursion.sql` | Perbaikan error PostgreSQL 42P17 (infinite recursion RLS) pada tabel `parent_students` & `profiles` agar login langsung mengarah ke dashboard role. |
 
 ---
 

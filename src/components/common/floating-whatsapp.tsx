@@ -4,7 +4,8 @@ import * as React from "react";
 import { MessageCircle } from "lucide-react";
 
 export function FloatingWhatsapp() {
-  const whatsappNumber = "6281234567890";
+  // WA Padil
+  const whatsappNumber = "6287737860657";
   const defaultMessage = encodeURIComponent(
     "Assalamu'alaikum Warahmatullahi Wabarakatuh, Admin SDIT Fajar. Saya ingin bertanya mengenai informasi pendaftaran dan program sekolah."
   );

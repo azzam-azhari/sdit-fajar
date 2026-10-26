@@ -1,0 +1,6 @@
+import { requireRole } from '@/lib/supabase/auth-helpers';
+import { createClient } from '@/lib/supabase/server';
+import { PageHeader } from '@/components/common/page-header';
+import { ZebraDataTable } from '@/components/common/zebra-data-table';
+type GradeRow = { id: string; score: number; grade_type: string; created_at: string };
+export default async function GuruNilaiPage() { const { user } = await requireRole(['guru']); const supabase=await createClient(); const {data:teacher}=await supabase.from('teachers').select('id').eq('profile_id',user.id).single(); const {data}=teacher ? await supabase.from('grades').select('id,score,grade_type,created_at').eq('teacher_id',teacher.id).order('created_at',{ascending:false}) : {data: [] as GradeRow[]}; return <div className="space-y-6"><PageHeader title="Buku Nilai" description="Rerata tugas menjadi referensi; nilai akhir semester disimpan secara eksplisit."/><ZebraDataTable<GradeRow> data={data??[]} columns={[{header:'Jenis',accessorKey:'grade_type'},{header:'Nilai',accessorKey:'score',isMono:true},{header:'Tanggal',cell:(row)=>new Intl.DateTimeFormat('id-ID').format(new Date(row.created_at))}]} keyExtractor={(row)=>row.id} emptyText="Belum ada nilai akhir."/></div>; }

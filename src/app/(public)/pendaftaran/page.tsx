@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import * as React from "react";
 import Link from "next/link";
@@ -37,17 +37,39 @@ export default function PendaftaranPage() {
 
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate registration generation and redirect to success page
-    setTimeout(() => {
-      const generatedRegNumber = `REG-${new Date().getFullYear()}-${Math.floor(
-        1000 + Math.random() * 9000
-      )}`;
-      router.push(`/pendaftaran/sukses/${generatedRegNumber}`);
-    }, 600);
+    try {
+      const { submitPublicRegistrationAction } = await import("@/actions/ppdb.actions");
+      const res = await submitPublicRegistrationAction({
+        student_name: namaLengkap,
+        nik: nik || null,
+        gender: jenisKelamin as 'L' | 'P',
+        birth_place: tempatLahir,
+        birth_date: tanggalLahir || "2020-01-01",
+        address: alamat || "Depok",
+        parent_name: namaAyah || namaIbu || "Orang Tua Calon Murid",
+        parent_phone: noWaAyah || noWaIbu || "081234567890",
+        father_name: namaAyah || null,
+        mother_name: namaIbu || null,
+        father_occupation: pekerjaanAyah || null,
+      });
+
+      if (res.success) {
+        router.push(`/pendaftaran/sukses/${res.data.registrationNumber}`);
+      } else {
+        const { toast } = await import("sonner");
+        toast.error(res.error);
+        setIsSubmitting(false);
+      }
+    } catch (err: unknown) {
+      const { toast } = await import("sonner");
+      const msg = err instanceof Error ? err.message : "Gagal mengirim formulir.";
+      toast.error(msg);
+      setIsSubmitting(false);
+    }
   };
 
   return (

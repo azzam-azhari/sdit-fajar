@@ -18,7 +18,7 @@ Urutan fase dirancang terstruktur secara berurutan (*sequential gates*) untuk:
 | **Fase 2** | Supabase Auth SSR, Session, Storage Buckets & Guard | Auth NIS/WhatsApp, middleware guard, 4 private bucket | 🔄 Selesai / Konsisten |
 | **Fase 3** | Database PostgreSQL, Relasi Skema, RLS & Seed Data | Migration terurut, 100% RLS aktif, audit log, seed demo | 🔄 Selesai / Konsisten |
 | **Fase 4** | Admin Akademik, Verifikasi PPDB, Konten & Import CSV | Dashboard admin, rombel, PPDB staging, batch CSV import | ⏳ Antrean |
-| **Fase 5** | Dashboard Role, LMS (Materi/Tugas/Nilai), Jadwal & Presensi | Siklus LMS end-to-end, presensi server-time, gradebook | ⏳ Antrean |
+| **Fase 5** | Dashboard Role, LMS (Materi/Tugas/Nilai), Jadwal & Presensi | Siklus LMS end-to-end, presensi server-time, gradebook | 🔄 Dalam pengerjaan |
 | **Fase 6** | Pengumuman Sekolah, Modul Tahfidz & Marketplace | Broadcast targeted, mutabaah hafalan Quran, toko sekolah | ⏳ Antrean |
 | **Fase 7** | Billing SPP, Integrasi Midtrans Snap Modal & Kuitansi Cetak | Invoice admin, popup Snap wali murid, webhook, receipt print | ⏳ Antrean |
 | **Fase 8** | Testing, Audit Keamanan RLS, Hardening & Deployment | Quality gates, IDOR test, UAT role, deploy remote Supabase | ⏳ Antrean |
@@ -196,7 +196,7 @@ Urutan fase dirancang terstruktur secara berurutan (*sequential gates*) untuk:
 ---
 
 ### Fase 4 — Admin Akademik, Verifikasi PPDB & Import CSV
-**Status**: ⏳ Antrean
+**Status**: 🔄 Selesai / Konsisten
 
 #### A. Target & Fokus Utama
 - Membangun antarmuka dashboard untuk `super_admin` dan `admin` dengan navigasi sidebar dinamis.
@@ -206,28 +206,28 @@ Urutan fase dirancang terstruktur secara berurutan (*sequential gates*) untuk:
 - Pengelolaan identitas sekolah publik (`school_settings`) dan publikasi berita/kegiatan.
 
 #### B. Checklist Implementasi Teknis
-- [ ] Pembuatan `DashboardShell`, sidebar berbasis role, topbar navigasi, avatar profil, breadcrumb, dan drawer mobile.
-- [ ] Dashboard Super Admin (`/dashboard/super-admin`):
+- [x] Pembuatan `DashboardShell`, sidebar berbasis role, topbar navigasi, avatar profil, breadcrumb, dan drawer mobile.
+- [x] Dashboard Super Admin (`/dashboard/super-admin`):
   - Manajemen seluruh pengguna aplikasi (aktifkan/nonaktifkan akun, reset password aman).
   - Pengelolaan assignment jabatan guru (`teacher_positions`).
   - Pemantauan jejak rekam audit log (`audit_logs`).
   - Pengaturan identitas dan kontak resmi sekolah (`school_settings`).
-- [ ] Fitur Import CSV Massal (`/dashboard/super-admin/import`):
+- [x] Fitur Import CSV Massal (`/dashboard/super-admin/import`):
   - Penyediaan template file CSV resmi untuk diunduh.
   - Validasi header, encoding, tipe data, foreign key, dan deteksi duplikasi.
   - Antarmuka preview baris data sebelum dieksekusi dengan penanda baris error.
   - Eksekusi import berbasis database transaction (menolak komit parsial jika ada kegagalan kritis).
   - Pencatatan riwayat pada `import_batches` dan `audit_logs`.
-- [ ] Dashboard Admin Sekolah (`/dashboard/admin`):
+- [x] Dashboard Admin Sekolah (`/dashboard/admin`):
   - CRUD tahun ajaran, semester, dan setting periode aktif operasional (`school_period_settings`).
   - CRUD kelas, rombel, mata pelajaran, data biodata siswa, guru, dan wali murid.
   - Penugasan wali kelas (`classrooms.homeroom_teacher_id`) dan guru mata pelajaran (`teaching_assignments`).
-- [ ] Verifikasi Pendaftaran PPDB (`/dashboard/admin/pendaftaran`):
+- [x] Verifikasi Pendaftaran PPDB (`/dashboard/admin/pendaftaran`):
   - Tabel verifikasi calon murid menggunakan format **`ZebraDataTable`**.
   - Pemeriksaan kelengkapan berkas pendaftaran (akta, KK, pas foto) via signed URL.
   - Perubahan status pendaftaran: `submitted` -> `in_review` -> `approved` / `rejected`.
   - Tombol promosi murid disetujui: memindahkan data ke `students`, membuat akun Auth murid (NIS + password biodata) dan akun wali murid, serta mengaitkan relasi `parent_students`.
-- [ ] Manajemen Konten Berita Sekolah (`/dashboard/admin/berita`): CRUD artikel, unggah foto cover, draft & publish toggle.
+- [x] Manajemen Konten Berita Sekolah (`/dashboard/admin/berita`): CRUD artikel, unggah foto cover, draft & publish toggle.
 
 #### C. Deliverables (Luaran Resmi)
 - Seluruh data master sekolah dapat dikelola secara penuh oleh admin berwenang.
@@ -235,15 +235,15 @@ Urutan fase dirancang terstruktur secara berurutan (*sequential gates*) untuk:
 - Modul import CSV dapat mengunggah ratusan data master secara aman tanpa merusak integritas database.
 
 #### D. Gate Fase 4
-- [ ] Seluruh mutasi data lolos validasi Zod schema di Server Actions dan terlindungi otentikasi sesi.
-- [ ] Form pendaftaran tamu tidak membuka akses pembacaan data pendaftar lain.
-- [ ] Import CSV baris rusak berhasil digagalkan dan menampilkan pesan error presisi per nomor baris.
-- [ ] Admin sekolah tidak memiliki izin untuk mengubah identitas super admin atau konfigurasi payment global.
+- [x] Seluruh mutasi data lolos validasi Zod schema di Server Actions dan terlindungi otentikasi sesi.
+- [x] Form pendaftaran tamu tidak membuka akses pembacaan data pendaftar lain.
+- [x] Import CSV baris rusak berhasil digagalkan dan menampilkan pesan error presisi per nomor baris.
+- [x] Admin sekolah tidak memiliki izin untuk mengubah identitas super admin atau konfigurasi payment global.
 
 ---
 
 ### Fase 5 — Dashboard Role, LMS Akademik, Jadwal & Presensi
-**Status**: ⏳ Antrean
+**Status**: 🔄 Dalam pengerjaan
 
 #### A. Target & Fokus Utama
 - Membangun antarmuka dashboard personal untuk role `guru`, `murid`, dan `wali_murid`.
@@ -253,6 +253,14 @@ Urutan fase dirancang terstruktur secara berurutan (*sequential gates*) untuk:
 - Menerapkan presensi murid per jadwal mata pelajaran pada hari kerja (Senin–Jumat) dengan penolakan keras akhir pekan di tingkat server.
 
 #### B. Checklist Implementasi Teknis
+- [x] Fondasi keamanan Fase 5:
+  - Forward migration menambahkan status presensi `sick`, trigger integritas submission/presensi, serta policy LMS berbasis penugasan guru dan rombel.
+  - Validasi Zod dan Server Actions tersedia untuk materi, tugas, submission, penilaian, nilai akhir, jadwal, serta presensi.
+  - Akses langsung bucket `lms-files` oleh client ditutup; file LMS ditujukan untuk akses server-side/signed URL yang terotorisasi.
+- [x] Navigasi dashboard menampilkan menu khusus `guru`, `murid`, dan `wali_murid`.
+- [x] Dashboard guru menampilkan ringkasan kelas yang diampu, materi aktif, submission perlu dinilai, serta panel jabatan kepala sekolah/wali kelas.
+- [x] Dashboard wali murid menampilkan selector anak dari relasi `parent_students`.
+- [x] Halaman awal materi, tugas, buku nilai, jadwal, dan presensi telah tersedia sesuai route Fase 5.
 - [ ] Dashboard Guru (`/dashboard/guru`):
   - Ringkasan kelas yang diampu, jadwal hari ini, materi aktif, dan tugas yang membutuhkan penilaian.
   - Tampilan dinamis jabatan `kepala_sekolah`: rekapitulasi kehadiran seluruh guru/murid dan laporan akademik lintas kelas.

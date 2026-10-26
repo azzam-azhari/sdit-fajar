@@ -159,7 +159,7 @@ export default function KontakPage() {
               Membutuhkan informasi cepat mengenai kuota PPDB atau jadwal tes pemetaan murid? Chat langsung dengan panitia.
             </p>
             <a
-              href="https://wa.me/6281234567890?text=Assalamu'alaikum,%20saya%20ingin%20bertanya%20informasi%20PPDB%20SDIT%20Fajar"
+              href="https://wa.me/6287737860657?text=Assalamu'alaikum,%20saya%20ingin%20bertanya%20informasi%20PPDB%20SDIT%20Fajar"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-emerald-600 px-4 py-2.5 text-xs font-semibold text-white shadow-xs hover:bg-emerald-700 transition-colors"

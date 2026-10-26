@@ -34,11 +34,15 @@ function LoginFormContent() {
   const [password, setPassword] = React.useState('');
   const [showPassword, setShowPassword] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
-  const [errorMessage, setErrorMessage] = React.useState<string | null>(
-    errorParam === 'inactive'
-      ? 'Akun Anda dinonaktifkan. Silakan hubungi administrator sekolah.'
-      : null
-  );
+  const [errorMessage, setErrorMessage] = React.useState<string | null>(() => {
+    if (errorParam === 'inactive') {
+      return 'Akun Anda dinonaktifkan. Silakan hubungi administrator sekolah.';
+    }
+    if (errorParam === 'no_profile') {
+      return 'Sesi otentikasi dibuat, namun data profil akun belum dapat diakses (kendala hak akses data RLS). Silakan hubungi administrator sekolah.';
+    }
+    return null;
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -134,7 +138,10 @@ function LoginFormContent() {
         duration: 3000,
       });
 
-      const destination = redirectTo || result.data.redirectTo;
+      const destination =
+        redirectTo && redirectTo !== '/dashboard' && redirectTo !== '/dashboard/'
+          ? redirectTo
+          : result.data.redirectTo;
       router.push(destination);
       router.refresh();
     } catch {
@@ -347,7 +354,7 @@ function LoginFormContent() {
             <div className="border-t border-border/80 pt-3 text-center text-xs text-muted-foreground">
               Kendala masuk akun? Hubungi panitia PPDB atau{' '}
               <a
-                href="https://wa.me/6281234567890"
+                href="https://wa.me/6287737860657"
                 target="_blank"
                 rel="noreferrer"
                 className="font-medium text-primary underline underline-offset-4 hover:text-primary/80"

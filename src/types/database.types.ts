@@ -28,7 +28,7 @@ export type PaymentType =
 export type RegistrationStatus = 'draft' | 'submitted' | 'under_review' | 'approved' | 'rejected';
 export type AdmissionWaveStatus = 'draft' | 'open' | 'closed' | 'archived';
 export type DocumentVerificationStatus = 'pending' | 'valid' | 'invalid';
-export type AttendanceStatus = 'present' | 'late' | 'absent' | 'excused';
+export type AttendanceStatus = 'present' | 'late' | 'absent' | 'excused' | 'sick';
 export type OrderStatus = 'draft' | 'pending_payment' | 'paid' | 'cancelled' | 'fulfilled';
 export type TahfidzPredicate = 'mumtaz' | 'jayyid_jiddan' | 'jayyid' | 'maqbul';
 

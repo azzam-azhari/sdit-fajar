@@ -1,82 +1,179 @@
 import { requireRole } from '@/lib/supabase/auth-helpers';
-import { LogoutButton } from '@/components/common/logout-button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { School, UserCheck, BookOpen } from 'lucide-react';
+import { createClient } from '@/lib/supabase/server';
+import { SectionCards, MetricCardItem } from '@/components/section-cards';
+import { ChartAreaInteractive } from '@/components/chart-area-interactive';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import {
+  Users,
+  School,
+  UserCheck,
+  CalendarDays,
+  BookOpen,
+  Newspaper,
+  ArrowRight,
+} from 'lucide-react';
 
 export default async function AdminDashboardPage() {
   const { profile } = await requireRole(['admin', 'super_admin']);
+  const supabase = await createClient();
+
+  const [
+    { count: totalStudents },
+    { count: totalTeachers },
+    { count: totalClassrooms },
+    { count: pendingPpdb },
+    { data: activePeriod },
+  ] = await Promise.all([
+    supabase.from('students').select('*', { count: 'exact', head: true }).eq('is_active', true),
+    supabase.from('teachers').select('*', { count: 'exact', head: true }).eq('is_active', true),
+    supabase.from('classrooms').select('*', { count: 'exact', head: true }).eq('is_active', true),
+    supabase
+      .from('student_registration_applications')
+      .select('*', { count: 'exact', head: true })
+      .in('status', ['submitted', 'under_review']),
+    supabase
+      .from('school_period_settings')
+      .select(`
+        active_month,
+        active_year,
+        academic_years (
+          name
+        ),
+        semesters (
+          name
+        )
+      `)
+      .limit(1)
+      .maybeSingle(),
+  ]);
+
+  const yearObj = activePeriod?.academic_years as unknown;
+  const yearName = (Array.isArray(yearObj)
+    ? (yearObj[0] as { name?: string })?.name
+    : (yearObj as { name?: string })?.name) || '2026/2027';
+
+  const semObj = activePeriod?.semesters as unknown;
+  const semName = (Array.isArray(semObj)
+    ? (semObj[0] as { name?: string })?.name
+    : (semObj as { name?: string })?.name) || 'Semester Ganjil';
+
+  const cardsData: MetricCardItem[] = [
+    {
+      description: 'Murid Aktif Terdaftar',
+      title: `${totalStudents || 0} Siswa`,
+      badgeText: yearName,
+      footerTitle: 'Data pokok kependidikan',
+      footerSubtitle: 'Tercatat dalam rombel aktif',
+      icon: 'graduation-cap',
+    },
+    {
+      description: 'Pendidik & Tenaga Guru',
+      title: `${totalTeachers || 0} Guru`,
+      badgeText: 'Aktif',
+      footerTitle: 'Penugasan mengajar & wali kelas',
+      footerSubtitle: 'Kurikulum Islam Terpadu',
+      icon: 'users',
+    },
+    {
+      description: 'Rombongan Belajar (Rombel)',
+      title: `${totalClassrooms || 0} Kelas`,
+      badgeText: 'Aktif',
+      footerTitle: 'Kapasitas terdistribusi',
+      footerSubtitle: 'Tingkat 1 sampai 6',
+      icon: 'school',
+    },
+    {
+      description: 'Verifikasi PPDB Baru',
+      title: `${pendingPpdb || 0} Calon`,
+      badgeText: 'Perlu Tinjauan',
+      footerTitle: 'Pendaftaran daring calon murid',
+      footerSubtitle: 'Pemeriksaan berkas & promosi',
+      icon: 'user-check',
+    },
+  ];
 
   return (
-    <div className="min-h-screen bg-background p-6 md:p-8 space-y-6 max-w-6xl mx-auto">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-border">
+    <div className="space-y-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-2 border-b border-border/80">
         <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-xl font-semibold tracking-tight text-foreground">
-              Dashboard Administrator Sekolah
-            </h1>
-            <Badge variant="outline" className="border-primary/40 text-primary font-mono text-[11px]">
-              {profile.role}
-            </Badge>
-          </div>
-          <p className="text-xs text-muted-foreground mt-1">
-            Selamat datang, <span className="font-medium text-foreground">{profile.name}</span> ({profile.email})
+          <h1 className="text-xl font-bold tracking-tight text-foreground">
+            Dashboard Administrator Akademik
+          </h1>
+          <p className="text-xs text-muted-foreground mt-0.5">
+            Selamat datang, <span className="font-medium text-foreground">{profile.name}</span>. Periode aktif operasional:{' '}
+            <span className="font-semibold text-primary">{yearName} ({semName})</span>.
           </p>
         </div>
-        <LogoutButton />
+        <div className="flex items-center gap-2">
+          <Button asChild size="sm" variant="default" className="text-xs">
+            <Link href="/dashboard/admin/pendaftaran" className="flex items-center gap-1.5">
+              <UserCheck className="size-3.5" />
+              <span>Verifikasi PPDB</span>
+            </Link>
+          </Button>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="border border-border/80 bg-card">
-          <CardHeader className="pb-2">
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-sm font-medium">Verifikasi PPDB</CardTitle>
-              <UserCheck className="h-4 w-4 text-muted-foreground" />
-            </div>
-            <CardDescription className="text-xs">
-              Staging pendaftar & dokumen calon murid
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="text-xs text-muted-foreground">
-              Akses berkas via Signed URL privat
-            </p>
-          </CardContent>
-        </Card>
+      <SectionCards cards={cardsData} />
 
-        <Card className="border border-border/80 bg-card">
-          <CardHeader className="pb-2">
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-sm font-medium">Data Akademik</CardTitle>
-              <School className="h-4 w-4 text-muted-foreground" />
-            </div>
-            <CardDescription className="text-xs">
-              Tahun ajaran, rombel, dan penugasan guru
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="text-xs text-muted-foreground">
-              Tahun Ajaran Aktif 2026/2027
-            </p>
-          </CardContent>
-        </Card>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2">
+          <ChartAreaInteractive />
+        </div>
 
-        <Card className="border border-border/80 bg-card">
-          <CardHeader className="pb-2">
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-sm font-medium">Pengumuman & Konten</CardTitle>
-              <BookOpen className="h-4 w-4 text-muted-foreground" />
-            </div>
-            <CardDescription className="text-xs">
-              Publikasi berita & pengumuman resmi
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="text-xs text-muted-foreground">
-              Broadcast terarah per kelas dan role
-            </p>
-          </CardContent>
-        </Card>
+        <div className="space-y-4">
+          <Card className="border-border/80">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-semibold">Manajemen Master Akademik</CardTitle>
+              <CardDescription className="text-xs">
+                Akses cepat pengaturan data operasional sekolah
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              <Button asChild variant="outline" className="w-full justify-between text-xs h-9">
+                <Link href="/dashboard/admin/tahun-ajaran">
+                  <span className="flex items-center gap-2">
+                    <CalendarDays className="size-3.5 text-primary" />
+                    Tahun Ajaran & Periode
+                  </span>
+                  <ArrowRight className="size-3.5 text-muted-foreground" />
+                </Link>
+              </Button>
+
+              <Button asChild variant="outline" className="w-full justify-between text-xs h-9">
+                <Link href="/dashboard/admin/rombel">
+                  <span className="flex items-center gap-2">
+                    <School className="size-3.5 text-primary" />
+                    Rombel & Wali Kelas
+                  </span>
+                  <ArrowRight className="size-3.5 text-muted-foreground" />
+                </Link>
+              </Button>
+
+              <Button asChild variant="outline" className="w-full justify-between text-xs h-9">
+                <Link href="/dashboard/admin/mapel">
+                  <span className="flex items-center gap-2">
+                    <BookOpen className="size-3.5 text-primary" />
+                    Master Mata Pelajaran
+                  </span>
+                  <ArrowRight className="size-3.5 text-muted-foreground" />
+                </Link>
+              </Button>
+
+              <Button asChild variant="outline" className="w-full justify-between text-xs h-9">
+                <Link href="/dashboard/admin/berita">
+                  <span className="flex items-center gap-2">
+                    <Newspaper className="size-3.5 text-primary" />
+                    Publikasi Berita Sekolah
+                  </span>
+                  <ArrowRight className="size-3.5 text-muted-foreground" />
+                </Link>
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );

@@ -18,10 +18,13 @@ declare
 
   v_encrypted_pw  text;
 begin
-  -- 1. Generate hash bcrypt yang valid untuk 'Password123!' langsung di database
+  -- 1. Normalisasi string phone kosong jika ada dari percobaan sebelumnya
+  update auth.users set phone = null where phone = '';
+
+  -- 2. Generate hash bcrypt yang valid untuk 'Password123!' langsung di database
   v_encrypted_pw := crypt('Password123!', gen_salt('bf', 10));
 
-  -- 2. Insert / Update ke tabel auth.users
+  -- 3. Insert / Update ke tabel auth.users (phone unik khusus wali murid, staf & murid bernilai NULL)
   insert into auth.users (
     id,
     instance_id,
@@ -32,6 +35,7 @@ begin
     raw_user_meta_data,
     role,
     aud,
+    phone,
     is_sso_user,
     is_anonymous,
     created_at,
@@ -47,6 +51,7 @@ begin
       '{"name":"Super Admin SDIT Fajar"}'::jsonb,
       'authenticated',
       'authenticated',
+      null,
       false,
       false,
       now(),
@@ -62,6 +67,7 @@ begin
       '{"name":"Admin Sekolah"}'::jsonb,
       'authenticated',
       'authenticated',
+      null,
       false,
       false,
       now(),
@@ -77,6 +83,7 @@ begin
       '{"name":"Kepala Sekolah SDIT Fajar"}'::jsonb,
       'authenticated',
       'authenticated',
+      null,
       false,
       false,
       now(),
@@ -92,6 +99,7 @@ begin
       '{"name":"Ustadz Ahmad Fauzi"}'::jsonb,
       'authenticated',
       'authenticated',
+      null,
       false,
       false,
       now(),
@@ -107,6 +115,7 @@ begin
       '{"name":"Ustadzah Siti Aminah"}'::jsonb,
       'authenticated',
       'authenticated',
+      null,
       false,
       false,
       now(),
@@ -122,6 +131,7 @@ begin
       '{"name":"Ahmad Fajar"}'::jsonb,
       'authenticated',
       'authenticated',
+      null,
       false,
       false,
       now(),
@@ -137,6 +147,7 @@ begin
       '{"name":"Bapak Hendra Gunawan"}'::jsonb,
       'authenticated',
       'authenticated',
+      '081234567890',
       false,
       false,
       now(),
@@ -150,12 +161,12 @@ begin
     raw_user_meta_data = excluded.raw_user_meta_data,
     role = 'authenticated',
     aud = 'authenticated',
+    phone = excluded.phone,
     confirmation_token = '',
     recovery_token = '',
     email_change = '',
     email_change_token_new = '',
     email_change_token_current = '',
-    phone = '',
     phone_change = '',
     phone_change_token = '',
     reauthentication_token = '',
@@ -163,7 +174,7 @@ begin
     is_anonymous = false,
     updated_at = now();
 
-  -- 3. Bersihkan identitas lama untuk 7 user ini agar tidak bentrok constraint
+  -- 4. Bersihkan identitas lama untuk 7 user ini agar tidak bentrok constraint
   delete from auth.identities where user_id in (
     v_superadmin_id,
     v_admin_id,
@@ -174,7 +185,7 @@ begin
     v_parent_id
   );
 
-  -- 4. Insert ke tabel auth.identities (id kolom bertipe UUID)
+  -- 5. Insert ke tabel auth.identities (id kolom bertipe UUID)
   insert into auth.identities (
     id,
     user_id,
@@ -256,7 +267,7 @@ begin
       now()
     );
 
-  -- 5. Sinkronkan dengan tabel public.profiles
+  -- 6. Sinkronkan dengan tabel public.profiles
   insert into public.profiles (id, name, email, login_identifier, role, is_active, must_change_password)
   values
     (v_superadmin_id, 'Super Admin SDIT Fajar', 'superadmin@sditfajar.sch.id', 'superadmin', 'super_admin', true, false),

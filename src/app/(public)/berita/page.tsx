@@ -1,9 +1,10 @@
-﻿import * as React from "react";
+import * as React from "react";
 import Link from "next/link";
-import { Calendar, Search, ArrowRight } from "lucide-react";
+import { Calendar, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/common/page-header";
 import { StatusBadge } from "@/components/common/status-badge";
+import { createClient } from "@/lib/supabase/server";
 
 export const metadata = {
   title: "Berita & Pengumuman — SDIT Fajar",
@@ -20,7 +21,7 @@ interface ArticleItem {
   excerpt: string;
 }
 
-const ARTICLES: ArticleItem[] = [
+const DEFAULT_ARTICLES: ArticleItem[] = [
   {
     slug: "murid-raih-juara-1-mhq-depok",
     title: "Murid SDIT Fajar Raih Juara 1 MHQ Tingkat Kota Depok",
@@ -66,131 +67,151 @@ const ARTICLES: ArticleItem[] = [
     excerpt:
       "Sebanyak 42 murid kelas 2 dan 3 sukses menyelesaikan ujian tasmi' sekali duduk satu juz penuh disaksikan orang tua dan guru penguji.",
   },
-  {
-    slug: "donor-darah-dan-bakti-sosial-komite",
-    title: "Aksi Nyata Kepedulian: Donor Darah & Santunan Yatim Komite",
-    category: "Kegiatan",
-    date: "02 September 2026",
-    author: "Komite Sekolah",
-    excerpt:
-      "Bekerja sama dengan PMI Kota Depok, keluarga besar SDIT Fajar mengumpulkan puluhan kantong darah dan menyalurkan paket sembako untuk warga sekitar.",
-  },
 ];
 
-export default function BeritaPage() {
-  return (
-    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-10">
+export default async function BeritaPage() {
+  const supabase = await createClient();
+  const { data: dbPosts } = await supabase
+    .from("news_posts")
+    .select(`
+      id,
+      title,
+      slug,
+      excerpt,
+      status,
+      published_at,
+      profiles (
+        name
+      )
+    `)
+    .eq("status", "published")
+    .order("published_at", { ascending: false });
 
+  let displayArticles: ArticleItem[] = [...DEFAULT_ARTICLES];
+
+  if (dbPosts && dbPosts.length > 0) {
+    const formattedDb: ArticleItem[] = dbPosts.map((post) => {
+      const profObj = post.profiles as unknown;
+      const authorName = Array.isArray(profObj)
+        ? (profObj[0] as { name?: string })?.name
+        : (profObj as { name?: string })?.name;
+
+      return {
+        slug: post.slug,
+        title: post.title,
+        category: "Kegiatan",
+        date: post.published_at
+          ? new Date(post.published_at).toLocaleDateString("id-ID", { dateStyle: "medium" })
+          : "Terbaru",
+        author: authorName || "Humas SDIT Fajar",
+        excerpt: post.excerpt || "Warta terbaru dari publikasi resmi SDIT Fajar.",
+      };
+    });
+
+    // Gabungkan dengan prioritas postingan database
+    const existingSlugs = new Set(formattedDb.map((p) => p.slug));
+    displayArticles = [
+      ...formattedDb,
+      ...DEFAULT_ARTICLES.filter((a) => !existingSlugs.has(a.slug)),
+    ];
+  }
+
+  const featured = displayArticles[0];
+  const regular = displayArticles.slice(1);
+
+  return (
+    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-12">
       <PageHeader
-        title="Berita & Informasi Sekolah"
-        badge="Warta Fajar"
-        description="Informasi resmi seputar agenda akademik, prestasi murid, dokumentasi kegiatan, dan pengumuman yayasan."
+        title="Warta & Informasi Sekolah"
+        badge="Kabar SDIT Fajar"
+        description="Dokumentasi agenda kegiatan santri, prestasi tahfidz dan sains, sosialisasi program kurikulum, serta pengumuman resmi kelembagaan."
       />
 
-      {/* Filter Kategori & Search Bar */}
-      <div className="flex flex-col md:flex-row items-center justify-between gap-4 border-b border-border/80 pb-4">
+      {/* Featured Headline */}
+      {featured && (
+        <section className="relative overflow-hidden rounded-2xl border border-border/80 bg-card p-6 sm:p-10 shadow-xs">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div className="lg:col-span-8 space-y-4">
+              <div className="flex flex-wrap items-center gap-3">
+                <StatusBadge status="Utama" variant="success" />
+                <span className="text-xs font-mono text-muted-foreground flex items-center gap-1.5">
+                  <Calendar className="h-3.5 w-3.5" />
+                  {featured.date}
+                </span>
+                <span className="text-xs text-muted-foreground">• Oleh {featured.author}</span>
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground hover:text-primary transition-colors">
+                <Link href={`/berita/${featured.slug}`}>
+                  {featured.title}
+                </Link>
+              </h2>
+              <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">
+                {featured.excerpt}
+              </p>
+              <div className="pt-2">
+                <Button asChild variant="outline" size="sm" className="text-xs">
+                  <Link href={`/berita/${featured.slug}`} className="flex items-center gap-1.5">
+                    <span>Baca Selengkapnya</span>
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </Link>
+                </Button>
+              </div>
+            </div>
 
-        {/* Kategori Tabs */}
-        <div className="flex flex-wrap items-center gap-1.5 w-full md:w-auto">
-          <Button
-            variant="default"
-            size="sm"
-            className="text-xs h-8 px-3 bg-primary text-primary-foreground"
-          >
-            Semua
-          </Button>
-          <Button variant="ghost" size="sm" className="text-xs h-8 px-3 text-muted-foreground">
-            Prestasi
-          </Button>
-          <Button variant="ghost" size="sm" className="text-xs h-8 px-3 text-muted-foreground">
-            Kegiatan
-          </Button>
-          <Button variant="ghost" size="sm" className="text-xs h-8 px-3 text-muted-foreground">
-            Akademik
-          </Button>
-          <Button variant="ghost" size="sm" className="text-xs h-8 px-3 text-muted-foreground">
-            Pengumuman
-          </Button>
-        </div>
+            <div className="lg:col-span-4 flex items-center justify-center p-8 rounded-xl border border-border/60 bg-muted/20">
+              <div className="text-center space-y-2">
+                <div className="size-16 mx-auto rounded-2xl bg-primary/10 text-primary flex items-center justify-center font-bold text-xl font-mono">
+                  SDIT
+                </div>
+                <div className="text-xs font-semibold text-foreground">Warta Resmi Sekolah</div>
+                <div className="text-[11px] text-muted-foreground">Kabar terpercaya SDIT Fajar</div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
-        {/* Search Input */}
-        <div className="relative w-full md:w-72">
-          <Search className="pointer-events-none absolute left-3 top-2.5 h-3.5 w-3.5 text-muted-foreground" />
-          <input
-            type="text"
-            placeholder="Cari judul berita..."
-            className="w-full h-8 pl-8 pr-3 text-xs rounded-md border border-input bg-background shadow-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-          />
-        </div>
+      {/* Grid Berita Lainnya */}
+      <section className="space-y-6">
+        <h3 className="text-lg font-bold tracking-tight text-foreground border-b border-border/80 pb-3">
+          Arsip Berita & Agenda Terkini
+        </h3>
 
-      </div>
-
-      {/* Grid Berita */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {ARTICLES.map((article) => {
-          const badgeVariant =
-            article.category === "Prestasi"
-              ? "success"
-              : article.category === "Pengumuman"
-                ? "warning"
-                : "info";
-
-          return (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {regular.map((article) => (
             <article
               key={article.slug}
-              className="group rounded-xl border border-border/80 bg-card p-5 space-y-3 transition-all hover:border-foreground/20 hover:shadow-xs flex flex-col justify-between"
+              className="flex flex-col justify-between rounded-xl border border-border/80 bg-card p-5 hover:border-primary/50 transition-colors shadow-xs"
             >
-              <div className="space-y-2.5">
-                <div className="flex items-center justify-between text-xs text-muted-foreground">
-                  <StatusBadge status={article.category} variant={badgeVariant} />
-                  <span className="font-mono text-[11px] flex items-center gap-1">
-                    <Calendar className="h-3 w-3" />
-                    {article.date}
-                  </span>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between text-xs text-muted-foreground font-mono">
+                  <span>{article.category}</span>
+                  <span>{article.date}</span>
                 </div>
-
-                <h3 className="text-base font-bold text-foreground group-hover:text-primary transition-colors leading-snug">
-                  <Link href={`/berita/${article.slug}`}>{article.title}</Link>
-                </h3>
-
+                <h4 className="text-base font-semibold tracking-tight text-foreground hover:text-primary transition-colors">
+                  <Link href={`/berita/${article.slug}`}>
+                    {article.title}
+                  </Link>
+                </h4>
                 <p className="text-xs text-muted-foreground line-clamp-3 leading-relaxed">
                   {article.excerpt}
                 </p>
               </div>
 
-              <div className="pt-3 border-t border-border/60 flex items-center justify-between text-xs">
-                <span className="text-muted-foreground text-[11px]">
-                  Oleh: {article.author}
-                </span>
+              <div className="pt-4 mt-4 border-t border-border/60 flex items-center justify-between">
+                <span className="text-[11px] text-muted-foreground">{article.author}</span>
                 <Link
                   href={`/berita/${article.slug}`}
-                  className="font-semibold text-primary inline-flex items-center gap-1 group-hover:underline"
+                  className="text-xs font-medium text-primary hover:underline flex items-center gap-1"
                 >
                   <span>Baca</span>
                   <ArrowRight className="h-3 w-3" />
                 </Link>
               </div>
             </article>
-          );
-        })}
-      </div>
-
-      {/* Pagination UI */}
-      <div className="flex items-center justify-center gap-2 pt-6 border-t border-border/80">
-        <Button variant="outline" size="sm" className="text-xs h-8 px-3" disabled>
-          Sebelumnya
-        </Button>
-        <Button variant="default" size="sm" className="text-xs h-8 w-8 bg-primary text-primary-foreground p-0">
-          1
-        </Button>
-        <Button variant="outline" size="sm" className="text-xs h-8 w-8 p-0">
-          2
-        </Button>
-        <Button variant="outline" size="sm" className="text-xs h-8 px-3">
-          Selanjutnya
-        </Button>
-      </div>
-
+          ))}
+        </div>
+      </section>
     </div>
   );
 }

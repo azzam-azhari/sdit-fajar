@@ -101,6 +101,44 @@ as $$
   );
 $$;
 
+create or replace function public.get_current_parent_id()
+returns uuid
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select id from public.parents where profile_id = auth.uid() limit 1;
+$$;
+
+create or replace function public.get_current_student_id()
+returns uuid
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select id from public.students where profile_id = auth.uid() limit 1;
+$$;
+
+create or replace function public.get_my_children_profile_ids()
+returns setof uuid
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select s.profile_id
+  from public.students s
+  join public.parent_students ps on ps.student_id = s.id
+  join public.parents p on p.id = ps.parent_id
+  where p.profile_id = auth.uid();
+$$;
+
+grant execute on function public.get_current_parent_id() to authenticated;
+grant execute on function public.get_current_student_id() to authenticated;
+grant execute on function public.get_my_children_profile_ids() to authenticated;
+
 -- ==============================================================================
 -- 2. PENEGAKAN RLS 100% PADA SELURUH TABEL INTERNAL
 -- ==============================================================================
@@ -153,17 +191,10 @@ create policy "Profiles read policy"
   on public.profiles for select
   to authenticated
   using (
-    id = auth.uid()
+    id = (select auth.uid())
     or public.is_admin_or_super()
-    or exists (
-      select 1 from public.students s
-      where s.profile_id = public.profiles.id
-      and exists (
-        select 1 from public.parent_students ps
-        join public.parents p on p.id = ps.parent_id
-        where ps.student_id = s.id and p.profile_id = auth.uid()
-      )
-    )
+    or public.is_teacher()
+    or id in (select public.get_my_children_profile_ids())
   );
 
 drop policy if exists "Profiles update policy" on public.profiles;
@@ -282,25 +313,24 @@ create policy "Students read policy"
   on public.students for select
   to authenticated
   using (
-    profile_id = auth.uid()
+    profile_id = (select auth.uid())
     or public.is_admin_or_super()
     or public.has_teacher_position('kepala_sekolah')
-    or exists (
-      select 1 from public.parent_students ps
-      join public.parents p on p.id = ps.parent_id
-      where ps.student_id = public.students.id and p.profile_id = auth.uid()
+    or id in (
+      select ps.student_id from public.parent_students ps
+      where ps.parent_id = public.get_current_parent_id()
     )
     or exists (
       select 1 from public.class_students cs
       join public.teaching_assignments ta on ta.classroom_id = cs.classroom_id
       join public.teachers t on t.id = ta.teacher_id
-      where cs.student_id = public.students.id and t.profile_id = auth.uid()
+      where cs.student_id = public.students.id and t.profile_id = (select auth.uid())
     )
     or exists (
       select 1 from public.class_students cs
       join public.classrooms c on c.id = cs.classroom_id
       join public.teachers t on t.id = c.homeroom_teacher_id
-      where cs.student_id = public.students.id and t.profile_id = auth.uid()
+      where cs.student_id = public.students.id and t.profile_id = (select auth.uid())
     )
   );
 
@@ -332,14 +362,9 @@ create policy "Parent students read policy"
   to authenticated
   using (
     public.is_admin_or_super()
-    or exists (
-      select 1 from public.parents p
-      where p.id = public.parent_students.parent_id and p.profile_id = auth.uid()
-    )
-    or exists (
-      select 1 from public.students s
-      where s.id = public.parent_students.student_id and s.profile_id = auth.uid()
-    )
+    or parent_id = public.get_current_parent_id()
+    or student_id = public.get_current_student_id()
+    or public.is_teacher()
   );
 
 drop policy if exists "Parent students admin write" on public.parent_students;

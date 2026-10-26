@@ -142,6 +142,9 @@ begin
   select id into v_subj_tfz_id from public.subjects where code = 'TFZ';
 
   -- 6. SEED AKUN DEMO AUTH.USERS & AUTH.IDENTITIES (Supabase GoTrue)
+  -- Normalisasi string phone kosong jika ada dari percobaan sebelumnya
+  update auth.users set phone = null where phone = '';
+
   -- Kata sandi resmi: Password123!
   insert into auth.users (
     id,
@@ -153,18 +156,19 @@ begin
     raw_user_meta_data,
     role,
     aud,
+    phone,
     is_sso_user,
     is_anonymous,
     created_at,
     updated_at
   ) values
-    (v_superadmin_id, '00000000-0000-0000-0000-000000000000', 'superadmin@sditfajar.sch.id', crypt('Password123!', gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}'::jsonb, '{"name":"Super Admin SDIT Fajar"}'::jsonb, 'authenticated', 'authenticated', false, false, now(), now()),
-    (v_admin_id,      '00000000-0000-0000-0000-000000000000', 'admin@sditfajar.sch.id',      crypt('Password123!', gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}'::jsonb, '{"name":"Admin Sekolah"}'::jsonb,       'authenticated', 'authenticated', false, false, now(), now()),
-    (v_kepsek_id,     '00000000-0000-0000-0000-000000000000', 'kepsek@sditfajar.sch.id',     crypt('Password123!', gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}'::jsonb, '{"name":"Kepala Sekolah SDIT Fajar"}'::jsonb, 'authenticated', 'authenticated', false, false, now(), now()),
-    (v_ustahmad_id,   '00000000-0000-0000-0000-000000000000', 'ustahmad@sditfajar.sch.id',   crypt('Password123!', gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}'::jsonb, '{"name":"Ustadz Ahmad Fauzi"}'::jsonb,  'authenticated', 'authenticated', false, false, now(), now()),
-    (v_ustsiti_id,    '00000000-0000-0000-0000-000000000000', 'ustsiti@sditfajar.sch.id',    crypt('Password123!', gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}'::jsonb, '{"name":"Ustadzah Siti Aminah"}'::jsonb, 'authenticated', 'authenticated', false, false, now(), now()),
-    (v_student_id,    '00000000-0000-0000-0000-000000000000', 'ahmad.fajar@sditfajar.sch.id',crypt('Password123!', gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}'::jsonb, '{"name":"Ahmad Fajar"}'::jsonb,          'authenticated', 'authenticated', false, false, now(), now()),
-    (v_parent_id,     '00000000-0000-0000-0000-000000000000', 'wali@sditfajar.sch.id',       crypt('Password123!', gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}'::jsonb, '{"name":"Bapak Hendra Gunawan"}'::jsonb, 'authenticated', 'authenticated', false, false, now(), now())
+    (v_superadmin_id, '00000000-0000-0000-0000-000000000000', 'superadmin@sditfajar.sch.id', crypt('Password123!', gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}'::jsonb, '{"name":"Super Admin SDIT Fajar"}'::jsonb, 'authenticated', 'authenticated', null,           false, false, now(), now()),
+    (v_admin_id,      '00000000-0000-0000-0000-000000000000', 'admin@sditfajar.sch.id',      crypt('Password123!', gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}'::jsonb, '{"name":"Admin Sekolah"}'::jsonb,       'authenticated', 'authenticated', null,           false, false, now(), now()),
+    (v_kepsek_id,     '00000000-0000-0000-0000-000000000000', 'kepsek@sditfajar.sch.id',     crypt('Password123!', gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}'::jsonb, '{"name":"Kepala Sekolah SDIT Fajar"}'::jsonb, 'authenticated', 'authenticated', null,           false, false, now(), now()),
+    (v_ustahmad_id,   '00000000-0000-0000-0000-000000000000', 'ustahmad@sditfajar.sch.id',   crypt('Password123!', gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}'::jsonb, '{"name":"Ustadz Ahmad Fauzi"}'::jsonb,  'authenticated', 'authenticated', null,           false, false, now(), now()),
+    (v_ustsiti_id,    '00000000-0000-0000-0000-000000000000', 'ustsiti@sditfajar.sch.id',    crypt('Password123!', gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}'::jsonb, '{"name":"Ustadzah Siti Aminah"}'::jsonb, 'authenticated', 'authenticated', null,           false, false, now(), now()),
+    (v_student_id,    '00000000-0000-0000-0000-000000000000', 'ahmad.fajar@sditfajar.sch.id',crypt('Password123!', gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}'::jsonb, '{"name":"Ahmad Fajar"}'::jsonb,          'authenticated', 'authenticated', null,           false, false, now(), now()),
+    (v_parent_id,     '00000000-0000-0000-0000-000000000000', 'wali@sditfajar.sch.id',       crypt('Password123!', gen_salt('bf', 10)), now(), '{"provider":"email","providers":["email"]}'::jsonb, '{"name":"Bapak Hendra Gunawan"}'::jsonb, 'authenticated', 'authenticated', '081234567890', false, false, now(), now())
   on conflict (id) do update set
     email = excluded.email,
     encrypted_password = excluded.encrypted_password,
@@ -173,12 +177,12 @@ begin
     raw_user_meta_data = excluded.raw_user_meta_data,
     role = 'authenticated',
     aud = 'authenticated',
+    phone = excluded.phone,
     confirmation_token = '',
     recovery_token = '',
     email_change = '',
     email_change_token_new = '',
     email_change_token_current = '',
-    phone = '',
     phone_change = '',
     phone_change_token = '',
     reauthentication_token = '',

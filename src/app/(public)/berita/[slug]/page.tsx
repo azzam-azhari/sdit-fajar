@@ -8,8 +8,9 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/common/status-badge";
+import { createClient } from "@/lib/supabase/server";
 
-const ARTICLE_DB: Record<
+const STATIC_ARTICLES: Record<
   string,
   {
     title: string;
@@ -49,118 +50,138 @@ const ARTICLE_DB: Record<
   },
 };
 
-// Fallback generic article if slug not found in static dictionary
-function getArticleData(slug: string) {
-  if (ARTICLE_DB[slug]) return ARTICLE_DB[slug];
-  return {
-    title: "Kabar Agenda & Aktivitas Pembelajaran Murid SDIT Fajar",
-    category: "Kegiatan" as const,
-    date: "10 Oktober 2026",
-    author: "Tim Humas & Kesiswaan",
-    tags: ["Sekolah", "Akademik", "Murid"],
-    content: [
-      "SDIT Fajar terus berikhtiar menghadirkan atmosfer pembelajaran yang menyenangkan, menantang nalar kritis, dan berakar pada nilai-nilai ketakwaan kepada Allah SWT.",
-      "Melalui berbagai aktivitas terprogram di kelas maupun di luar ruangan, setiap murid mendapatkan ruang untuk mengaktualisasikan minat dan bakat terbaiknya secara optimal.",
-      "Terima kasih atas kepercayaan dan dukungan yang tak terhingga dari seluruh wali murid dan mitra sekolah yang senantiasa membersamai langkah kami mencetak generasi Qur'ani yang tangguh.",
-    ],
-  };
-}
-
-export function generateStaticParams() {
-  return Object.keys(ARTICLE_DB).map((slug) => ({
-    slug,
-  }));
-}
-
 export default async function DetailBeritaPage({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const article = getArticleData(slug);
+  const supabase = await createClient();
+
+  // Cek apakah ada di database
+  const { data: dbPost } = await supabase
+    .from("news_posts")
+    .select(`
+      id,
+      title,
+      slug,
+      content,
+      published_at,
+      profiles (
+        name
+      )
+    `)
+    .eq("slug", slug)
+    .eq("status", "published")
+    .maybeSingle();
+
+  let articleData: {
+    title: string;
+    category: "Prestasi" | "Kegiatan" | "Pengumuman" | "Akademik";
+    date: string;
+    author: string;
+    content: string[];
+    tags: string[];
+  };
+
+  if (dbPost) {
+    const profileData = dbPost.profiles as unknown;
+    const authorName = Array.isArray(profileData)
+      ? (profileData[0] as { name?: string })?.name
+      : (profileData as { name?: string })?.name;
+
+    articleData = {
+      title: dbPost.title,
+      category: "Kegiatan",
+      date: dbPost.published_at
+        ? new Date(dbPost.published_at).toLocaleDateString("id-ID", { dateStyle: "full" })
+        : "Terbaru",
+      author: authorName || "Humas SDIT Fajar",
+      content: dbPost.content.split(/\n\n+/),
+      tags: ["SDIT Fajar", "Warta Resmi", "Pendidikan"],
+    };
+  } else if (STATIC_ARTICLES[slug]) {
+    articleData = STATIC_ARTICLES[slug];
+  } else {
+    articleData = {
+      title: "Warta Resmi Kegiatan Pembelajaran SDIT Fajar",
+      category: "Kegiatan",
+      date: "26 Oktober 2026",
+      author: "Humas SDIT Fajar",
+      content: [
+        "SDIT Fajar terus berikhtiar menyelenggarakan pendidikan dasar Islam terpadu yang memadukan keunggulan adab, kelancaran tahfidz Al-Qur'an, dan literasi sains modern.",
+        "Informasi detail seputar warta ini dapat diperoleh melalui kantor tata usaha atau kontak layanan resmi sekolah.",
+      ],
+      tags: ["Sekolah", "Akademik", "SDIT Fajar"],
+    };
+  }
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8 space-y-8">
-
-      {/* Back Button */}
       <div>
         <Button asChild variant="ghost" size="sm" className="text-xs -ml-2 text-muted-foreground hover:text-foreground">
           <Link href="/berita" className="flex items-center gap-1.5">
             <ArrowLeft className="h-3.5 w-3.5" />
-            <span>Kembali ke Semua Berita</span>
+            <span>Kembali ke Indeks Berita</span>
           </Link>
         </Button>
       </div>
 
-      {/* Article Header */}
-      <header className="space-y-4 border-b border-border/80 pb-6">
-        <div className="flex flex-wrap items-center gap-2">
-          <StatusBadge
-            status={article.category}
-            variant={article.category === "Prestasi" ? "success" : "info"}
-          />
-          <span className="text-xs text-muted-foreground font-mono flex items-center gap-1">
-            <Calendar className="h-3.5 w-3.5" /> {article.date}
-          </span>
-          <span className="text-muted-foreground text-xs">•</span>
-          <span className="text-xs text-muted-foreground flex items-center gap-1">
-            <User className="h-3.5 w-3.5" /> {article.author}
-          </span>
-        </div>
-
-        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-foreground leading-tight">
-          {article.title}
-        </h1>
-      </header>
-
-      {/* Article Body Content */}
-      <article className="space-y-4 text-xs sm:text-sm md:text-base text-foreground/90 leading-relaxed">
-        {article.content.map((paragraph, idx) => (
-          <p key={idx} className="leading-relaxed">
-            {paragraph}
-          </p>
-        ))}
-      </article>
-
-      {/* Tags & Share */}
-      <footer className="pt-6 border-t border-border/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div className="flex flex-wrap items-center gap-1.5">
-          <span className="text-xs text-muted-foreground font-medium mr-1">Tags:</span>
-          {article.tags.map((tag, idx) => (
-            <span
-              key={idx}
-              className="text-[11px] font-mono px-2 py-0.5 rounded bg-muted/60 text-muted-foreground border border-border/60"
-            >
-              #{tag}
+      <article className="space-y-6">
+        <header className="space-y-4 pb-6 border-b border-border/80">
+          <div className="flex flex-wrap items-center gap-3">
+            <StatusBadge status={articleData.category} variant="info" />
+            <span className="text-xs font-mono text-muted-foreground flex items-center gap-1.5">
+              <Calendar className="h-3.5 w-3.5" />
+              {articleData.date}
             </span>
+            <span className="text-xs font-medium text-foreground flex items-center gap-1.5">
+              <User className="h-3.5 w-3.5 text-muted-foreground" />
+              {articleData.author}
+            </span>
+          </div>
+
+          <h1 className="text-2xl sm:text-4xl font-bold tracking-tight text-foreground leading-tight">
+            {articleData.title}
+          </h1>
+        </header>
+
+        <div className="prose prose-sm dark:prose-invert max-w-none space-y-4 text-foreground/90 leading-relaxed text-sm">
+          {articleData.content.map((paragraph, idx) => (
+            <p key={idx}>{paragraph}</p>
           ))}
         </div>
 
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" className="text-xs h-8">
-            <Share2 className="h-3.5 w-3.5 mr-1" /> Bagikan
-          </Button>
-        </div>
-      </footer>
+        <footer className="pt-6 border-t border-border/80 space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-xs text-muted-foreground">Topik:</span>
+              {articleData.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="inline-flex items-center rounded-md border border-border px-2.5 py-0.5 text-xs text-muted-foreground font-mono"
+                >
+                  #{tag}
+                </span>
+              ))}
+            </div>
 
-      {/* Next Article Suggestion */}
-      <div className="rounded-xl border border-border/80 bg-card p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div>
-          <span className="text-xs text-muted-foreground font-semibold uppercase tracking-wider">
-            Berita Lainnya
-          </span>
-          <h4 className="text-sm font-bold text-foreground mt-0.5">
-            Market Day Edukasi: Menumbuhkan Jiwa Wirausaha Islami
-          </h4>
-        </div>
-        <Button asChild size="sm" className="shrink-0 text-xs bg-primary text-primary-foreground">
-          <Link href="/berita/market-day-edukasi-wirausaha-islami">
-            Baca Berita Ini
-          </Link>
-        </Button>
-      </div>
-
+            <Button
+              variant="outline"
+              size="sm"
+              className="text-xs flex items-center gap-1.5"
+              onClick={() => {
+                if (typeof window !== "undefined") {
+                  navigator.clipboard.writeText(window.location.href);
+                }
+              }}
+            >
+              <Share2 className="h-3.5 w-3.5" />
+              <span>Salin Tautan</span>
+            </Button>
+          </div>
+        </footer>
+      </article>
     </div>
   );
 }

@@ -32,7 +32,7 @@ export async function middleware(request: NextRequest) {
   let mustChangePassword = false;
 
   if (supabase) {
-    const { data: profile } = await supabase
+    const { data: profile, error: profileError } = await supabase
       .from('profiles')
       .select('role, is_active, must_change_password')
       .eq('id', user.id)
@@ -42,6 +42,24 @@ export async function middleware(request: NextRequest) {
       role = profile.role as UserRole;
       isActive = profile.is_active;
       mustChangePassword = profile.must_change_password;
+    } else {
+      if (profileError) {
+        console.error('[Middleware] Gagal mengambil profil user:', {
+          userId: user.id,
+          code: profileError.code,
+          message: profileError.message,
+        });
+      }
+
+      if (isDashboardRoute || isChangePasswordRoute) {
+        // Sesi auth aktif tetapi tidak memiliki biodata profil di database
+        if (supabase) {
+          await supabase.auth.signOut();
+        }
+        const loginUrl = new URL('/login', request.url);
+        loginUrl.searchParams.set('error', 'no_profile');
+        return NextResponse.redirect(loginUrl);
+      }
     }
   }
 

@@ -1,4 +1,4 @@
-﻿import * as React from "react";
+import * as React from "react";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -25,76 +25,86 @@ export const metadata = {
 
 export default function HomePage() {
   return (
-    <div className="flex flex-col gap-16 md:gap-24 pb-20">
+    <div className="flex flex-col gap-10 sm:gap-16 md:gap-24 pb-16 sm:pb-20">
 
       {/* 1. HERO SECTION */}
-      <section className="relative overflow-hidden pt-12 md:pt-20 pb-8 border-b border-border/60 bg-gradient-to-b from-primary/5 via-transparent to-transparent">
+      <section className="relative overflow-hidden pt-8 sm:pt-14 md:pt-20 pb-8 sm:pb-12 md:pb-14 border-b border-border/60 bg-gradient-to-b from-primary/5 via-transparent to-transparent">
+        {/* Subtle Ambient Glow */}
+        <div
+          className="pointer-events-none absolute inset-x-0 -top-24 -z-10 flex transform-gpu justify-center overflow-hidden blur-3xl"
+          aria-hidden="true"
+        >
+          <div className="aspect-[1108/632] w-[36rem] sm:w-[64rem] flex-none bg-gradient-to-tr from-primary/15 via-primary/5 to-transparent opacity-60 dark:opacity-25" />
+        </div>
+
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col items-center text-center max-w-3xl mx-auto space-y-6">
+          <div className="flex flex-col items-center text-center max-w-3xl mx-auto space-y-4 sm:space-y-6">
 
             {/* PPDB Alert Pill */}
             <Link
               href="/pendaftaran"
-              className="group inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3.5 py-1 text-xs font-semibold text-primary transition-all hover:bg-primary/15"
+              className="group inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 sm:px-3.5 sm:py-1 text-[11px] sm:text-xs font-semibold text-primary transition-all hover:bg-primary/15 max-w-full"
             >
-              <span className="flex h-2 w-2 rounded-full bg-primary animate-pulse" />
-              <span>PPDB TP 2026/2027 Telah Dibuka</span>
-              <span className="text-muted-foreground">•</span>
-              <span className="text-foreground/80 group-hover:text-foreground">
+              <span className="flex h-2 w-2 shrink-0 rounded-full bg-primary animate-pulse" />
+              <span className="truncate">PPDB TP 2026/2027 Telah Dibuka</span>
+              <span className="hidden sm:inline text-muted-foreground">•</span>
+              <span className="hidden sm:inline text-foreground/80 group-hover:text-foreground">
                 Kuota Terbatas 100 Murid
               </span>
-              <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+              <ArrowRight className="h-3.5 w-3.5 shrink-0 transition-transform group-hover:translate-x-0.5" />
             </Link>
 
             {/* Main Title */}
-            <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-6xl leading-[1.15]">
+            <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-foreground leading-[1.2] sm:leading-[1.15] text-balance">
               Mendidik Generasi{" "}
-              <span className="text-primary underline decoration-primary/30 underline-offset-8">
+              <span className="text-primary underline decoration-primary/40 underline-offset-4 sm:underline-offset-8">
                 Qur’ani
               </span>
               , Cerdas & Berakhlak Mulia
             </h1>
 
             {/* Subtitle */}
-            <p className="text-sm sm:text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl">
+            <p className="text-xs sm:text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl text-balance px-1 sm:px-0">
               Sekolah dasar Islam terpadu yang memadukan keunggulan akademik
               Kurikulum Nasional dengan pembinaan tahfidz Al-Qur’an terstruktur dan penanaman adab islami sejak dini.
             </p>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row items-center gap-3 pt-2 w-full sm:w-auto">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-2.5 sm:gap-3.5 pt-1 sm:pt-2 w-full max-w-xs sm:max-w-none sm:w-auto">
               <Button
                 asChild
                 size="lg"
-                className="w-full sm:w-auto h-11 px-6 text-sm font-semibold bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm"
+                className="w-full sm:w-auto h-11 px-6 text-sm font-semibold bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm active:scale-[0.99] transition-transform"
               >
-                <Link href="/pendaftaran" className="flex items-center gap-2">
+                <Link href="/pendaftaran" className="flex items-center justify-center gap-2">
                   <span>Daftar PPDB Online</span>
-                  <ArrowRight className="h-4 w-4" />
+                  <ArrowRight className="h-4 w-4 shrink-0" />
                 </Link>
               </Button>
               <Button
                 asChild
                 variant="outline"
                 size="lg"
-                className="w-full sm:w-auto h-11 px-6 text-sm font-medium border-border hover:bg-muted"
+                className="w-full sm:w-auto h-11 px-6 text-sm font-medium border-border hover:bg-muted active:scale-[0.99] transition-transform"
               >
-                <Link href="/kurikulum">Pelajari Kurikulum Kami</Link>
+                <Link href="/kurikulum" className="flex items-center justify-center">
+                  Pelajari Kurikulum Kami
+                </Link>
               </Button>
             </div>
 
             {/* Trust Badges */}
-            <div className="pt-8 grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs text-muted-foreground border-t border-border/80 w-full max-w-xl">
-              <div className="flex items-center justify-center gap-1.5 font-medium">
-                <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+            <div className="pt-6 sm:pt-8 flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-xs text-muted-foreground border-t border-border/70 w-full max-w-xl">
+              <div className="inline-flex items-center gap-1.5 rounded-full border border-border/70 bg-muted/30 px-3 py-1 text-[11px] sm:text-xs font-medium text-foreground/85">
+                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
                 <span>Terakreditasi A (Unggul)</span>
               </div>
-              <div className="flex items-center justify-center gap-1.5 font-medium">
-                <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+              <div className="inline-flex items-center gap-1.5 rounded-full border border-border/70 bg-muted/30 px-3 py-1 text-[11px] sm:text-xs font-medium text-foreground/85">
+                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
                 <span>Target Min. 3 Juz</span>
               </div>
-              <div className="col-span-2 sm:col-span-1 flex items-center justify-center gap-1.5 font-medium">
-                <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+              <div className="inline-flex items-center gap-1.5 rounded-full border border-border/70 bg-muted/30 px-3 py-1 text-[11px] sm:text-xs font-medium text-foreground/85">
+                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
                 <span>Rasio Guru 1:15</span>
               </div>
             </div>

@@ -1,76 +1,45 @@
-"use client";
-
 import * as React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
-import {
-  Menu,
-  X,
-  ChevronDown,
-  ArrowRight,
-  LogIn,
-} from "lucide-react";
+import { ArrowRight, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/common/theme-toggle";
-import { cn } from "@/lib/utils";
+import { PublicNavDesktop } from "@/components/common/public-nav-desktop";
+import { PublicNavMobile } from "@/components/common/public-nav-mobile";
 
-interface NavLinkItem {
-  href: string;
-  label: string;
-  children?: { href: string; label: string; desc?: string }[];
+function PublicNavbarSkeleton() {
+  return (
+    <header className="sticky top-0 z-50 h-16 w-full border-b border-border/80 bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/80 shadow-xs">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center gap-2.5">
+          <div className="h-10 w-10 rounded-lg bg-muted animate-pulse" />
+          <div className="space-y-1 hidden sm:block">
+            <div className="h-4 w-28 bg-muted animate-pulse rounded" />
+            <div className="h-3 w-40 bg-muted/60 animate-pulse rounded" />
+          </div>
+        </div>
+        <div className="hidden lg:flex items-center gap-4">
+          <div className="h-4 w-16 bg-muted animate-pulse rounded" />
+          <div className="h-4 w-16 bg-muted animate-pulse rounded" />
+          <div className="h-4 w-16 bg-muted animate-pulse rounded" />
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="h-8 w-8 bg-muted animate-pulse rounded-md" />
+          <div className="h-8 w-24 bg-muted animate-pulse rounded-md hidden sm:block" />
+        </div>
+      </div>
+    </header>
+  );
 }
 
-const NAV_LINKS: NavLinkItem[] = [
-  { href: "/", label: "Beranda" },
-  {
-    href: "/profil",
-    label: "Profil",
-    children: [
-      {
-        href: "/profil",
-        label: "Tentang Sekolah",
-        desc: "Visi, misi, dan falsafah pendidikan Islam",
-      },
-      {
-        href: "/profil/sejarah",
-        label: "Sejarah",
-        desc: "Perjalanan pendirian dan milestone SDIT Fajar",
-      },
-      {
-        href: "/profil/manajemen",
-        label: "Manajemen Sekolah",
-        desc: "Dewan pembina, pimpinan, dan Dewan Guru",
-      },
-    ],
-  },
-  { href: "/kurikulum", label: "Kurikulum" },
-  { href: "/ekstrakurikuler", label: "Ekstrakurikuler" },
-  { href: "/berita", label: "Berita" },
-  { href: "/marketplace", label: "Marketplace" },
-  { href: "/kontak", label: "Kontak" },
-];
-
 function PublicNavbarContent() {
-  const pathname = usePathname();
-  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
-  const [profilDropdownOpen, setProfilDropdownOpen] = React.useState(false);
-
-  const closeMenus = () => {
-    setMobileMenuOpen(false);
-    setProfilDropdownOpen(false);
-  };
-
-  const isProfilActive = pathname.startsWith("/profil");
-
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-border/80 bg-background/95 backdrop-blur-md supports-backdrop-filter:bg-background/80 transition-colors">
+    <header className="sticky top-0 z-50 h-16 w-full border-b border-border/80 bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/80 transition-colors shadow-xs">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-
         {/* Brand Logo & Name */}
         <Link
           href="/"
-          className="flex items-center gap-2.5 transition-opacity hover:opacity-90"
+          className="flex items-center gap-2.5 transition-opacity hover:opacity-90 shrink-0"
         >
           <div className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg">
             <Image
@@ -82,7 +51,8 @@ function PublicNavbarContent() {
               priority
             />
           </div>
-          <div className="flex flex-col">
+          {/* Teks nama sekolah disembunyikan di lg agar tidak overflow dan tampil penuh di xl */}
+          <div className="hidden sm:flex lg:hidden xl:flex flex-col">
             <span className="text-base font-bold tracking-tight text-foreground leading-none">
               SDIT FAJAR
             </span>
@@ -92,228 +62,41 @@ function PublicNavbarContent() {
           </div>
         </Link>
 
-        {/* Desktop Navigation Links */}
-        <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
-          {NAV_LINKS.map((link) => {
-            if (link.children) {
-              return (
-                <div
-                  key={link.href}
-                  className="relative"
-                  onMouseEnter={() => setProfilDropdownOpen(true)}
-                  onMouseLeave={() => setProfilDropdownOpen(false)}
-                >
-                  <button
-                    onClick={() => setProfilDropdownOpen((v) => !v)}
-                    className={cn(
-                      "flex items-center gap-1 px-3 py-1.5 text-xs font-medium rounded-md transition-colors",
-                      isProfilActive
-                        ? "text-primary bg-primary/10 font-semibold"
-                        : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
-                    )}
-                  >
-                    <span>{link.label}</span>
-                    <ChevronDown
-                      className={cn(
-                        "h-3.5 w-3.5 transition-transform duration-200",
-                        profilDropdownOpen && "rotate-180"
-                      )}
-                    />
-                  </button>
+        {/* Desktop Navigation Links (Client Component) */}
+        <PublicNavDesktop />
 
-                  {/* Dropdown Menu */}
-                  {profilDropdownOpen && (
-                    <div className="absolute top-full left-0 w-64 pt-2 z-50">
-                      <div className="rounded-xl border border-border/80 bg-card p-2 shadow-md">
-                        {link.children.map((child) => (
-                          <Link
-                            key={child.href}
-                            href={child.href}
-                            onClick={closeMenus}
-                            className={cn(
-                              "block rounded-lg p-2.5 text-xs transition-colors hover:bg-muted/70",
-                              pathname === child.href && "bg-muted font-semibold text-primary"
-                            )}
-                          >
-                            <div className="font-medium text-foreground">
-                              {child.label}
-                            </div>
-                            {child.desc && (
-                              <div className="text-[11px] text-muted-foreground mt-0.5 leading-snug">
-                                {child.desc}
-                              </div>
-                            )}
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              );
-            }
-
-            const isActive = pathname === link.href;
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  "px-3 py-1.5 text-xs font-medium rounded-md transition-colors",
-                  isActive
-                    ? "text-primary bg-primary/10 font-semibold"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
-                )}
-              >
-                {link.label}
-              </Link>
-            );
-          })}
-        </nav>
-
-        {/* Right Actions */}
-        <div className="hidden sm:flex items-center gap-2">
+        {/* Right Actions: Theme Toggle, Auth / PPDB CTA & Mobile Trigger */}
+        <div className="flex items-center gap-2">
           <ThemeToggle />
 
-          <Button
-            asChild
-            variant="ghost"
-            size="sm"
-            className="text-xs font-medium h-9 px-3 text-muted-foreground hover:text-foreground"
-          >
-            <Link href="/login" className="flex items-center gap-1.5">
-              <LogIn className="h-3.5 w-3.5" />
-              <span>Masuk</span>
-            </Link>
-          </Button>
-
-          <Button
-            asChild
-            size="sm"
-            className="text-xs font-semibold h-9 px-4 bg-primary text-primary-foreground hover:bg-primary/90 shadow-xs"
-          >
-            <Link href="/pendaftaran" className="flex items-center gap-1.5">
-              <span>Daftar PPDB</span>
-              <ArrowRight className="h-3.5 w-3.5" />
-            </Link>
-          </Button>
-        </div>
-
-        {/* Mobile Hamburger & Theme Toggle */}
-        <div className="flex items-center gap-1 lg:hidden">
-          <ThemeToggle />
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-9 w-9 text-foreground"
-            onClick={() => setMobileMenuOpen((v) => !v)}
-            aria-label="Toggle navigation menu"
-          >
-            {mobileMenuOpen ? (
-              <X className="h-5 w-5" />
-            ) : (
-              <Menu className="h-5 w-5" />
-            )}
-          </Button>
-        </div>
-
-      </div>
-
-      {/* Mobile Drawer Navigation */}
-      {mobileMenuOpen && (
-        <div className="lg:hidden border-b border-border bg-background px-4 py-4 space-y-3">
-          <nav className="flex flex-col space-y-1">
-            {NAV_LINKS.map((link) => {
-              if (link.children) {
-                return (
-                  <div key={link.href} className="space-y-1">
-                    <div className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                      {link.label}
-                    </div>
-                    {link.children.map((child) => (
-                      <Link
-                        key={child.href}
-                        href={child.href}
-                        onClick={closeMenus}
-                        className={cn(
-                          "block pl-6 pr-3 py-2 text-xs font-medium rounded-md transition-colors",
-                          pathname === child.href
-                            ? "text-primary bg-primary/10 font-semibold"
-                            : "text-foreground hover:bg-muted"
-                        )}
-                      >
-                        {child.label}
-                      </Link>
-                    ))}
-                  </div>
-                );
-              }
-
-              const isActive = pathname === link.href;
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={closeMenus}
-                  className={cn(
-                    "block px-3 py-2 text-xs font-medium rounded-md transition-colors",
-                    isActive
-                      ? "text-primary bg-primary/10 font-semibold"
-                      : "text-foreground hover:bg-muted"
-                  )}
-                >
-                  {link.label}
-                </Link>
-              );
-            })}
-          </nav>
-
-          <div className="pt-3 border-t border-border flex flex-col gap-2">
+          {/* Desktop & Tablet Action Buttons */}
+          <div className="hidden sm:flex items-center gap-2">
             <Button
               asChild
+              variant="ghost"
               size="sm"
-              className="w-full text-xs font-semibold bg-primary text-primary-foreground justify-center"
-            >
-              <Link href="/pendaftaran" className="flex items-center gap-1.5">
-                <span>Daftar PPDB Online</span>
-                <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
-            </Button>
-            <Button
-              asChild
-              variant="outline"
-              size="sm"
-              className="w-full text-xs font-medium justify-center"
+              className="text-xs font-medium h-9 px-3 text-muted-foreground hover:text-foreground"
             >
               <Link href="/login" className="flex items-center gap-1.5">
                 <LogIn className="h-3.5 w-3.5" />
-                <span>Masuk Sistem (Siswa / Guru / Wali)</span>
+                <span>Masuk</span>
+              </Link>
+            </Button>
+
+            <Button
+              asChild
+              size="sm"
+              className="text-xs font-semibold h-9 px-3.5 xl:px-4 bg-primary text-primary-foreground hover:bg-primary/90 shadow-xs"
+            >
+              <Link href="/pendaftaran" className="flex items-center gap-1.5">
+                <span>Daftar PPDB</span>
+                <ArrowRight className="h-3.5 w-3.5" />
               </Link>
             </Button>
           </div>
-        </div>
-      )}
-    </header>
-  );
-}
 
-function PublicNavbarSkeleton() {
-  return (
-    <header className="sticky top-0 z-40 w-full border-b border-border/80 bg-background/95 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center gap-2.5">
-          <div className="h-10 w-10 rounded-lg bg-muted animate-pulse" />
-          <div className="space-y-1 hidden sm:block">
-            <div className="h-4 w-28 bg-muted animate-pulse rounded" />
-            <div className="h-3 w-40 bg-muted/60 animate-pulse rounded" />
-          </div>
-        </div>
-        <div className="hidden lg:flex items-center gap-6">
-          <div className="h-4 w-16 bg-muted animate-pulse rounded" />
-          <div className="h-4 w-16 bg-muted animate-pulse rounded" />
-          <div className="h-4 w-16 bg-muted animate-pulse rounded" />
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="h-8 w-24 bg-muted animate-pulse rounded-md" />
+          {/* Mobile Navigation Sheet (Client Component) */}
+          <PublicNavMobile />
         </div>
       </div>
     </header>
