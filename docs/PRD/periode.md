@@ -137,3 +137,16 @@ Periode akademik dapat dikelola melalui operasi CRUD di dashboard oleh `super_ad
   - `draft`: Periode yang sedang dipersiapkan untuk masa depan.
   - `active`: Periode yang sedang berjalan saat ini.
   - `archived` / `closed`: Periode masa lalu yang terkunci permanen sebagai data arsip historis.
+
+---
+
+## 7. Integrasi Periode dengan Gelombang PPDB (`admission_waves`)
+
+1. **Keterikatan Gelombang ke Periode**:
+   - Gelombang pendaftaran (Gelombang 1, 2, dan 3) terikat langsung ke `academic_year_id` (tahun ajaran target siswa mulai masuk) dan `semester_id` (semester operasional dibukanya pendaftaran).
+   - Pengaturan kuota (default 100 murid) dan tanggal buka/tutup dikelola per gelombang.
+2. **Auto-Count Pendaftar per Semester**:
+   - Setiap formulir PPDB yang disubmit otomatis terhubung ke semester dan gelombang terkait.
+   - Pendaftar seketika dihitung ke dalam metrik *Pendaftar Terdaftar* dan mengurangi *Sisa Kuota* real-time.
+3. **Integritas Relasi (RESTRICT on Delete)**:
+   - Tahun ajaran atau semester yang memiliki data `admission_waves` atau pendaftar `student_registration_applications` dilarang keras untuk dihapus.

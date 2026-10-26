@@ -80,12 +80,15 @@ Target pengumuman:
 - kelas tertentu;
 - murid/wali murid tertentu.
 
-## Alur Pendaftaran dan Import
-1. Pendaftaran publik membuat `student_registration_applications` tanpa membuka data internal.
-2. Setiap unggahan disimpan ke Storage dan URL/path dicatat di `student_registration_documents`.
-3. Super admin menyetujui pendaftaran dan membuat profile/relasi akademik.
-4. Super admin mengimpor data memakai template CSV.
-5. Sistem menyimpan file sumber dan ringkasan hasil di `import_batches`.
+## Alur Gelombang PPDB, Pendaftaran dan Import
+1. Admin / Super Admin membuat entitas `admission_waves` (Gelombang 1, 2, atau 3) yang terikat ke `academic_years` dan `semesters` dengan kuota target (default 100 murid).
+2. Pendaftaran publik membuat record di `student_registration_applications` dengan relasi `admission_wave_id`.
+3. Submit otomatis terhitung (*auto-count*) ke data gelombang & semester tersebut dan mengurangi sisa kuota secara real-time.
+4. Setiap unggahan dokumen disimpan ke private Supabase Storage `registration-files` dan dicatat di `student_registration_documents`.
+5. Admin/Super admin memverifikasi kelengkapan berkas via Signed URL, memberi catatan koreksi atau menandai sah.
+6. Admin memasukkan nilai observasi/kematangan siswa dan memperbarui status pendaftaran (`approved` / `rejected`).
+7. Calon siswa disetujui dipromosikan ke tabel `students`, `parents`, dan `parent_students` saat pembukaan tahun ajaran baru.
+8. Super admin dapat mengimpor data siswa massal memakai template CSV yang tercatat di `import_batches`.
 
 ## Alur Absensi
 1. `school_period_settings` menentukan bulan, tahun, dan weekend attendance.

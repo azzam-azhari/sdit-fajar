@@ -1,10 +1,10 @@
 # Tech Stack & System Architecture — SDIT Fajar
 
 ## 1. Core Framework & Runtime
-- **Framework:** Next.js 16.2.7 (App Router dengan struktur folder `src/`)
+- **Framework:** Next.js 16.4.3 (App Router dengan struktur folder `src/`)
 - **UI Library:** React 19.2.4 & React DOM 19.2.4
 - **Language:** TypeScript 5.x (Strict Mode aktif, zero `any`)
-- **Node Runtime:** Node.js 20+ LTS
+- **Node Runtime:** Node.js 22 LTS
 
 ---
 

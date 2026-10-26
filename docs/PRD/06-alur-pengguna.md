@@ -61,12 +61,16 @@
 8. Sistem membuat receipt berisi snapshot pembayaran.
 9. Wali murid membuka receipt di tab baru atau mengunduhnya.
 
-## Alur Pendaftaran Murid Baru
-1. Calon wali murid membuka `/pendaftaran` tanpa login.
-2. Mengisi formulir dan mengunggah dokumen yang diminta.
-3. Sistem menyimpan URL/path setiap dokumen ke tabel pendaftaran.
-4. Admin memeriksa data; super admin menyetujui dan membuat akun murid/wali murid.
-5. Sistem membuat identifier login dan password awal murid, lalu mewajibkan ganti password.
+## Alur Pendaftaran Murid Baru (PPDB Online)
+1. Calon wali murid membuka `/pendaftaran` tanpa login, melihat banner gelombang aktif (informasi tanggal pembukaan/penutupan, target kuota 100 murid, dan kuota tersisa real-time).
+2. Memilih gelombang pendaftaran yang sedang dibuka (Gelombang 1, 2, atau 3).
+3. Mengisi biodata calon siswa, biodata orang tua (ayah/ibu/wali), dan mengunggah 7 berkas persyaratan (Pas Foto, Akta Kelahiran, KK, KTP Ortu, SKL TK, Surat Keterangan Sehat, Piagam Prestasi).
+4. Melakukan submit formulir. Server Action menyimpan berkas ke private storage `registration-files` dan mencatat data ke `student_registration_applications`. Data pendaftar seketika terhitung (*auto-count*) ke data gelombang dan semester tersebut.
+5. Sistem menampilkan modal popup sukses dengan nomor registrasi dan tombol langsung ke WhatsApp panitia PPDB (`62 877-3786-0657`) dengan pesan baku: *"Saya sudah mendaftar online, bagaimana informasi pembayarannya?"*.
+6. Admin & Super Admin memverifikasi berkas via Signed URL di dashboard `/dashboard/admin/ppdb/pendaftar`.
+7. Calon siswa mengikuti tes/observasi pemetaan kematangan dan bacaan Al-Qur'an.
+8. Admin menetapkan status kelulusan (`approved` / `rejected`).
+9. Calon siswa yang disetujui (`approved`) dipromosikan ke tabel `students`, dibuatkan NIS, akun wali murid, serta akun login murid dengan password awal `tempatddmmyyyy`.
 
 ## Alur Absensi
 1. Admin menetapkan bulan dan tahun aktif.

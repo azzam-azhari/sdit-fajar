@@ -224,6 +224,39 @@ Field:
 - cover, judul, ringkasan, harga, dan status;
 - link file digital hanya setelah pembayaran terverifikasi.
 
+### `AdmissionWaveCard`
+- kartu informasi gelombang PPDB (Gelombang 1, 2, 3);
+- tanggal pembukaan dan penutupan pendaftaran;
+- metrik kuota: target kuota 100 murid, pendaftar terdaftar (*auto-count*), sisa kuota;
+- progress bar keterisian kuota;
+- jadwal tes/observasi pemetaan dan tanggal pengumuman;
+- badge status gelombang (`open`, `closed`, `draft`).
+
+### `RegistrationStepperForm`
+- formulir pendaftaran interaktif multi-step dengan react-hook-form + zod;
+- step 1: pemilihan gelombang aktif;
+- step 2: data diri calon siswa (NIK, NISN, lahir, asal TK, kebutuhan khusus);
+- step 3: data orang tua / wali (nama, NIK, pekerjaan, nomor WhatsApp);
+- step 4: upload berkas persyaratan;
+- step 5: konfirmasi data dan persetujuan tata tertib.
+
+### `RegistrationDocumentUploader`
+- dropzone upload 7 berkas persyaratan (Pas Foto, Akta, KK, KTP Ortu, SKL TK, Surat Sehat, Piagam);
+- validasi client-side: format file (JPG/PNG/PDF), batas ukuran (max 5MB, foto max 2MB);
+- indikator progres upload dan preview berkas.
+
+### `RegistrationSuccessModal`
+- popup dialog konfirmasi sukses pendaftaran yang muncul seketika setelah submit;
+- menampilkan nomor registrasi resmi (contoh: `PPDB-2026-G1-0024`) dan nama calon siswa;
+- tombol utama (CTA WhatsApp): langsung menuju `https://wa.me/6287737860657` dengan template pesan: *"Saya sudah mendaftar online, bagaimana informasi pembayarannya?"*;
+- tombol sekunder: cetak bukti pendaftaran `@media print`.
+
+### `RegistrationVerificationDrawer`
+- drawer sisi kanan di dashboard admin untuk meninjau formulir pendaftar;
+- pratinjau seluruh berkas persyaratan menggunakan Supabase Signed URL;
+- tombol validasi per dokumen (*Sah* / *Perlu Revisi* dengan catatan feedback);
+- form input nilai observasi kematangan dan ubah status (`approved` / `rejected`).
+
 ## Feedback Component
 Semua aksi mutasi harus memberi feedback:
 - toast success;

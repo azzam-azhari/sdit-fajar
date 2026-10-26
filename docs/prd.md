@@ -32,7 +32,7 @@ Bukan role terpisah di database, melainkan atribusi jabatan dinamis yang membuka
 ### A. Portal Publik & Informasi Sekolah
 - **Landing Page Profil**: Beranda sekolah, visi misi, fasilitas, keunggulan kurikulum terpadu (Kemenag + Diknas + Tahfidz).
 - **Berita & Pengumuman**: Artikel kegiatan, agenda sekolah, majalah dinding digital.
-- **PPDB Online (Penerimaan Peserta Didik Baru)**: Formulir pendaftaran calon siswa masuk ke tabel staging `student_registration_applications`. Data baru dimigrasikan ke tabel `students` dan dibuatkan akun login setelah diverifikasi dan diterima admin.
+- **PPDB Online (Penerimaan Peserta Didik Baru)**: Sistem pendaftaran bergelombang (CRUD Gelombang 1, 2, dan 3 di setiap semester), kuota target default 100 murid, auto-count pendaftar real-time, dan kalkulasi sisa kuota. Formulir publik mencakup 7 berkas persyaratan yang tersimpan aman di Supabase Storage privat. Setelah submit, muncul modal popup sukses dengan direct button ke WhatsApp panitia (`62 877-3786-0657`) untuk konfirmasi pembayaran formulir. Data pendaftaran masuk ke tabel staging `student_registration_applications` dan hanya dipromosikan ke `students` setelah diverifikasi dan disetujui (`approved`) oleh admin/super admin.
 - **Peta Lokasi & Kontak**: Peta interaktif MapLibre GL dan formulir narahubung resmi.
 
 ### B. Otentikasi & Manajemen Pengguna

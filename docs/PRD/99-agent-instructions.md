@@ -124,9 +124,10 @@ Task selesai jika:
 # Tech Stack
 
 ## Core
-- **Framework:** Next.js 16.2.7 (pastikan ada folder `/src`)
+- **Framework:** Next.js 16.4.3 (pastikan ada folder `/src`)
 - **UI Library:** React 19.2.4 & React DOM 19.2.4
 - **Language:** TypeScript (untuk type safety)
+- **Node Runtime:** Node.js 22 LTS
 
 ## Styling & UI Components
 - **Styling:** Tailwind CSS 4

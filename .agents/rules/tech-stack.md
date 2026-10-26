@@ -11,10 +11,10 @@ Dokumen ini adalah aturan konstitusi teknis mengenai platform, framework, runtim
 
 ## 1. Core Runtime & Package Manager
 
-- **Framework**: Next.js 16.2.7 (App Router dengan struktur folder `src/`)
+- **Framework**: Next.js 16.4.3 (App Router dengan struktur folder `src/`)
 - **UI Library**: React 19.2.4 & React DOM 19.2.4
 - **Language**: TypeScript 5.x (Strict mode aktif, larangan keras menggunakan `any`)
-- **Runtime**: Node.js 20+ LTS
+- **Runtime**: Node.js 22 LTS
 - **Package Manager**: **`npm`** (Wajib digunakan, jangan gunakan pnpm atau bun).
 
 > [!CAUTION]

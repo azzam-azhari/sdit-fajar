@@ -32,6 +32,8 @@ create type payment_type as enum (
   'lainnya'
 );
 create type registration_status as enum ('draft', 'submitted', 'under_review', 'approved', 'rejected');
+create type admission_wave_status as enum ('draft', 'open', 'closed', 'archived');
+create type document_verification_status as enum ('pending', 'valid', 'invalid');
 create type attendance_status as enum ('present', 'late', 'absent', 'excused');
 create type order_status as enum ('draft', 'pending_payment', 'paid', 'cancelled', 'fulfilled');
 create type tahfidz_predicate as enum ('mumtaz', 'jayyid_jiddan', 'jayyid', 'maqbul');
@@ -124,39 +126,81 @@ Relasi wali murid ke siswa.
 | `is_primary` | boolean | default false |
 | `created_at` | timestamptz |  |
 
-## `student_registration_applications`
-Pendaftaran murid baru dari halaman publik. Data sensitif hanya dapat dibaca role yang berwenang.
+## `admission_waves`
+Gelombang Penerimaan Peserta Didik Baru (PPDB) per semester/tahun ajaran.
 
 | Kolom | Tipe | Catatan |
 |---|---|---|
 | `id` | uuid | PK |
-| `student_name` | text | nama calon murid |
+| `academic_year_id` | uuid | references `academic_years.id` on delete restrict |
+| `semester_id` | uuid | references `semesters.id` on delete set null |
+| `wave_number` | int | 1, 2, atau 3 (unique per academic year) |
+| `title` | text | nama gelombang (contoh: 'Gelombang 1 - Jalur Prestasi') |
+| `description` | text | keterangan/deskripsi jalur |
+| `start_date` | date | tanggal pembukaan gelombang |
+| `end_date` | date | tanggal penutupan gelombang |
+| `quota` | int | default 100 murid (target penerimaan) |
+| `registration_fee` | numeric | biaya formulir (default 0) |
+| `observation_date` | date | jadwal tes observasi & pemetaan Al-Qur'an |
+| `announcement_date` | date | tanggal pengumuman hasil seleksi |
+| `status` | admission_wave_status | default 'draft' ('draft', 'open', 'closed', 'archived') |
+| `is_active` | boolean | default false |
+| `created_at` | timestamptz |  |
+| `updated_at` | timestamptz |  |
+
+## `student_registration_applications`
+Pendaftaran murid baru dari halaman publik. Terikat pada gelombang PPDB aktif dan terhitung otomatis (*auto-count*). Data sensitif hanya dapat dibaca role yang berwenang.
+
+| Kolom | Tipe | Catatan |
+|---|---|---|
+| `id` | uuid | PK |
+| `admission_wave_id` | uuid | references `admission_waves.id` on delete restrict |
+| `registration_number` | text | unique; nomor pendaftaran resmi (contoh: PPDB-2026-G1-0001) |
+| `student_name` | text | nama lengkap calon murid |
+| `nik` | text | NIK calon siswa |
+| `nisn` | text | NISN (jika sudah ada dari TK) |
+| `gender` | text | jenis kelamin ('L' / 'P') |
 | `birth_place` | text | tempat lahir |
 | `birth_date` | date | tanggal lahir |
-| `gender` | text | jenis kelamin |
-| `parent_name` | text | nama wali pendaftar |
-| `parent_phone` | text | nomor kontak |
+| `child_number` | int | anak ke- |
+| `total_siblings` | int | jumlah saudara kandung |
+| `special_needs` | text | riwayat alergi / penyakit / kebutuhan khusus |
+| `previous_school` | text | nama asal TK / RA |
+| `parent_name` | text | nama wali pendaftar utama |
+| `father_name` | text | nama ayah kandung |
+| `father_nik` | text | NIK ayah |
+| `father_occupation` | text | pekerjaan ayah |
+| `father_phone` | text | no HP/WA ayah |
+| `mother_name` | text | nama ibu kandung |
+| `mother_nik` | text | NIK ibu |
+| `mother_occupation` | text | pekerjaan ibu |
+| `mother_phone` | text | no HP/WA ibu |
+| `parent_phone` | text | nomor kontak WhatsApp aktif untuk notifikasi |
 | `parent_email` | text | email kontak |
-| `address` | text | alamat |
-| `status` | registration_status | default submitted |
+| `address` | text | alamat domisili lengkap |
+| `status` | registration_status | default 'submitted' ('submitted', 'under_review', 'approved', 'rejected') |
+| `observation_score` | numeric | nilai hasil observasi / pemetaan kematangan |
+| `admin_notes` | text | catatan verifikasi panitia PPDB |
 | `reviewed_by` | uuid | references `profiles.id`, nullable |
 | `reviewed_at` | timestamptz | nullable |
 | `created_at` | timestamptz |  |
 | `updated_at` | timestamptz |  |
 
 ## `student_registration_documents`
-Setiap dokumen unggahan pendaftaran wajib disimpan sebagai URL/path yang terkait ke application.
+Setiap berkas unggahan pendaftaran (Pas Foto, Akta, KK, KTP Ortu, SKL TK, Surat Sehat, Sertifikat) wajib disimpan sebagai URL/path di bucket privat `registration-files`.
 
 | Kolom | Tipe | Catatan |
 |---|---|---|
 | `id` | uuid | PK |
-| `application_id` | uuid | references `student_registration_applications.id` |
-| `document_type` | text | contoh kartu keluarga/akta |
+| `application_id` | uuid | references `student_registration_applications.id` on delete cascade |
+| `document_type` | text | jenis berkas (`pas_foto`, `akta_kelahiran`, `kartu_keluarga`, `ktp_ortu`, `ijazah_tk`, `surat_sehat`, `sertifikat_prestasi`) |
 | `file_url` | text | URL atau signed URL reference |
-| `file_path` | text | path Supabase Storage |
+| `file_path` | text | path Supabase Storage (`registration-files/{app_id}/{file}`) |
 | `original_filename` | text | nama asli |
-| `mime_type` | text | tipe file |
-| `file_size` | bigint | ukuran byte |
+| `mime_type` | text | tipe file (image/jpeg, application/pdf, dll.) |
+| `file_size` | bigint | ukuran byte (max 5MB) |
+| `verification_status` | document_verification_status | default 'pending' ('pending', 'valid', 'invalid') |
+| `admin_feedback` | text | catatan jika berkas ditolak/perlu revisi |
 | `created_at` | timestamptz |  |
 
 ## `teachers`

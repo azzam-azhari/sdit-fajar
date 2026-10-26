@@ -21,7 +21,9 @@
 | `/berita` | Daftar Berita | wajib |
 | `/berita/[slug]` | Detail Berita | wajib |
 | `/kontak` | Kontak & Peta Lokasi | wajib |
-| `/pendaftaran` | Pendaftaran murid baru (PPDB Online) | wajib |
+| `/pendaftaran` | Pendaftaran murid baru (PPDB Online bergelombang, kuota 100 murid, sisa kursi, unggah berkas, popup WhatsApp panitia) | wajib |
+| `/pendaftaran/status` | Cek status pendaftaran mandiri calon siswa (No. Registrasi & Tanggal Lahir) | wajib |
+| `/pendaftaran/sukses/[registrationNumber]` | Bukti pendaftaran resmi & cetak formulir print-friendly | wajib |
 | `/marketplace` | Marketplace buku & konten pembelajaran | wajib |
 
 ## Auth Pages
@@ -63,7 +65,10 @@
 |---|---|
 | `/dashboard/admin` | Ringkasan administrasi |
 | `/dashboard/admin/users` | User sekolah |
-| `/dashboard/admin/pendaftaran` | Verifikasi & persetujuan formulir pendaftaran PPDB |
+| `/dashboard/admin/ppdb` | Dashboard analitik PPDB (KPI kuota 100, sisa kursi, statistik pendaftar) |
+| `/dashboard/admin/ppdb/gelombang` | CRUD Gelombang 1, 2, dan 3 per semester (Atur kuota, tanggal buka/tutup, jadwal tes) |
+| `/dashboard/admin/ppdb/pendaftar` | Verifikasi formulir pendaftaran PPDB, filter gelombang & tabel zebra cross |
+| `/dashboard/admin/ppdb/pendaftar/[id]` | Detail pendaftar, pratinjau berkas via Signed URL, catatan verifikator & kelulusan |
 | `/dashboard/admin/siswa` | Data pokok siswa |
 | `/dashboard/admin/wali-murid` | Data wali murid & penautan anak |
 | `/dashboard/admin/guru` | Data guru & jabatan |

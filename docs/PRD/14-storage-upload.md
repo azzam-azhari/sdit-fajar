@@ -47,6 +47,16 @@ marketplace-files/{productId}/
 - Format: `.pdf`, `.doc`, `.docx`, `.jpg`, `.jpeg`, `.png`, `.webp`.
 - Max size default: 10 MB.
 
+### Berkas Pendaftaran PPDB (`registration-files`)
+- Pas Foto Calon Siswa: `.jpg`, `.jpeg`, `.png`, Max 2 MB.
+- Akta Kelahiran: `.pdf`, `.jpg`, `.jpeg`, `.png`, Max 5 MB.
+- Kartu Keluarga (KK): `.pdf`, `.jpg`, `.jpeg`, `.png`, Max 5 MB.
+- KTP Kedua Orang Tua / Wali: `.pdf`, `.jpg`, `.jpeg`, `.png`, Max 5 MB.
+- Ijazah / SKL TK: `.pdf`, `.jpg`, `.jpeg`, `.png`, Max 5 MB.
+- Surat Keterangan Sehat & Imunisasi: `.pdf`, `.jpg`, `.jpeg`, `.png`, Max 5 MB.
+- Sertifikat Prestasi (opsional): `.pdf`, `.jpg`, `.jpeg`, `.png`, Max 5 MB.
+- Akses: Seluruh berkas pendaftaran bersifat privat dan hanya boleh diakses melalui secure Signed URL oleh role `admin` dan `super_admin`.
+
 ## Larangan File
 Tolak file:
 - `.exe`

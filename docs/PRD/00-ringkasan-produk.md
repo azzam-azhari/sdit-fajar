@@ -17,7 +17,7 @@ LMS SDIT Fajar dibuat untuk membantu sekolah mengelola:
 - tugas dan pengumpulan tugas;
 - nilai dan progres akademik siswa;
 - pengumuman sekolah dan pengumuman per kelas, yang muncul di dashboard murid dan wali murid;
-- pendaftaran murid baru;
+- pendaftaran murid baru (PPDB Online bergelombang 1, 2, 3 dengan kuota 100 murid, sisa kuota, unggah berkas lengkap ke Supabase, dan popup konfirmasi WhatsApp panitia untuk informasi pembayaran);
 - absensi guru dan siswa sesuai jadwal sekolah;
 - pembayaran SPP, iuran, pendaftaran semester, dan produk pembelajaran via Midtrans;
 - marketplace konten pembelajaran;

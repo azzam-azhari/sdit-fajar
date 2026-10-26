@@ -132,3 +132,45 @@ export async function createStudentAction(input: StudentInput): Promise<ActionRe
   3. Cek flag `must_change_password`:
      - Jika `true`: Arahkan langsung ke halaman `/ganti-password` untuk penggantian password wajib sebelum membuka dashboard.
      - Jika `false`: Arahkan ke `/dashboard/murid`.
+
+---
+
+## 5. Kontrak Server Actions PPDB & Alur WhatsApp
+
+### A. Manajemen Gelombang PPDB (`src/actions/admission.actions.ts`)
+- **`getPublicAdmissionWavesAction()`**:
+  - Publik dapat mengambil gelombang aktif (`is_active = true`, `status = 'open'`).
+  - Mengembalikan target kuota (default 100), pendaftar terdaftar (*auto-count*), sisa kuota, tanggal pembukaan/penutupan, dan jadwal tes observasi.
+- **`createAdmissionWaveAction(payload: AdmissionWaveInput)`**:
+  - Akses: `admin`, `super_admin`.
+  - Validasi Zod: `wave_number` (1, 2, atau 3), `title`, `quota` (default 100), `start_date`, `end_date`, `academic_year_id`.
+- **`updateAdmissionWaveAction(id: string, payload: Partial<AdmissionWaveInput>)`**:
+  - Akses: `admin`, `super_admin`.
+  - Memperbarui kuota, rentang tanggal pendaftaran, jadwal tes observasi, atau status.
+- **`deleteAdmissionWaveAction(id: string)`**:
+  - Akses: `admin`, `super_admin`.
+  - Aturan: `RESTRICT` jika sudah memiliki pendaftar terdaftar (`student_registration_applications` > 0).
+
+### B. Formulir Pendaftaran & Berkas (`src/actions/registration.actions.ts`)
+- **`submitRegistrationAction(formData: FormData)`**:
+  - Akses: Publik guest (tanpa login).
+  - Alur:
+    1. Validasi data calon siswa dan orang tua dengan `registrationSchema`.
+    2. Cek apakah gelombang tujuan berstatus `open` dan tanggal masih dalam rentang valid.
+    3. Simpan 7 dokumen persyaratan ke Supabase Storage privat: `registration-files/{appId}/{docType}_{filename}`.
+    4. Simpan ke `student_registration_applications` dan `student_registration_documents`.
+    5. Data otomatis terhitung (*auto-count*) ke dalam data yang sudah daftar di semester tersebut dan mengurangi sisa kuota.
+    6. Generate WhatsApp URL panitia:
+       ```typescript
+       const waUrl = `https://wa.me/6287737860657?text=${encodeURIComponent(
+         `Saya sudah mendaftar online dengan No. Pendaftaran: ${regNumber} atas nama ${studentName}, bagaimana informasi pembayarannya?`
+       )}`;
+       ```
+    7. Kembalikan data `{ registrationNumber, studentName, waUrl }` ke frontend untuk memicu modal popup sukses WhatsApp.
+- **`verifyRegistrationDocumentAction(docId: string, status: 'valid' | 'invalid', feedback?: string)`**:
+  - Akses: `admin`, `super_admin`.
+- **`updateRegistrationStatusAction(appId: string, status: 'under_review' | 'approved' | 'rejected', notes?: string)`**:
+  - Akses: `admin`, `super_admin`.
+- **`promoteApplicantToStudentAction(appId: string, classroomId: string)`**:
+  - Akses: `admin`, `super_admin`.
+  - Memindahkan calon siswa `approved` ke tabel siswa aktif `students` dan membuat akun login wali murid & murid saat tahun ajaran baru dimulai.

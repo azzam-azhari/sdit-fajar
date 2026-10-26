@@ -41,6 +41,8 @@ create type payment_type as enum (
   'lainnya'
 );
 create type registration_status as enum ('draft', 'submitted', 'under_review', 'approved', 'rejected');
+create type admission_wave_status as enum ('draft', 'open', 'closed', 'archived');
+create type document_verification_status as enum ('pending', 'valid', 'invalid');
 create type attendance_status as enum ('present', 'late', 'absent', 'excused');
 create type order_status as enum ('draft', 'pending_payment', 'paid', 'cancelled', 'fulfilled');
 create type tahfidz_predicate as enum ('mumtaz', 'jayyid_jiddan', 'jayyid', 'maqbul');
@@ -70,11 +72,14 @@ create type tahfidz_predicate as enum ('mumtaz', 'jayyid_jiddan', 'jayyid', 'maq
   - Kolom: `id (uuid PK)`, `academic_year_id (uuid FK academic_years.id)`, `semester_id (uuid FK semesters.id)`, `active_month (int 1-12)`, `active_year (int)`, `teacher_weekend_attendance_enabled (boolean default false)`.
 
 ### C. Siswa, Wali Murid & PPDB
+- **`admission_waves`**: Gelombang PPDB per semester/tahun ajaran (Gelombang 1, 2, 3) yang dapat di-CRUD oleh Admin & Super Admin.
+  - Kolom: `id (uuid PK)`, `academic_year_id (uuid FK academic_years.id)`, `semester_id (uuid FK semesters.id)`, `wave_number (int 1-5)`, `title (text)`, `description (text)`, `start_date (date)`, `end_date (date)`, `quota (int default 100)`, `registration_fee (numeric default 0)`, `observation_date (date)`, `announcement_date (date)`, `status (admission_wave_status default 'draft')`, `is_active (boolean default false)`.
+  - Pendaftar yang submit otomatis terhitung (*auto-count*) dan kuota tersisa dikalkulasi *real-time*.
 - **`student_registration_applications`**: Staging pendaftaran calon siswa baru (PPDB Online tanpa akun Auth).
-  - Kolom: `id (uuid PK)`, `registration_number (text unique)`, `student_name (text)`, `gender (text)`, `birth_place (text)`, `birth_date (date)`, `parent_name (text)`, `parent_phone (text)`, `parent_email (text)`, `address (text)`, `status (registration_status default 'submitted')`, `admin_notes (text)`.
-  - Alur: Dipromosikan ke `students` & dibuatkan akun `profiles` hanya saat status `approved` oleh Admin/Super Admin.
-- **`student_registration_documents`**: Berkas lampiran calon siswa (Akte, KK, dll.).
-  - Kolom: `id (uuid PK)`, `application_id (uuid FK)`, `document_type (text)`, `file_url (text)`, `file_path (text)`.
+  - Kolom: `id (uuid PK)`, `admission_wave_id (uuid FK admission_waves.id)`, `registration_number (text unique)`, `student_name (text)`, `nik (text)`, `nisn (text)`, `gender (text)`, `birth_place (text)`, `birth_date (date)`, `child_number (int)`, `total_siblings (int)`, `special_needs (text)`, `previous_school (text)`, `parent_name (text)`, `father_name (text)`, `father_nik (text)`, `father_occupation (text)`, `father_phone (text)`, `mother_name (text)`, `mother_nik (text)`, `mother_occupation (text)`, `mother_phone (text)`, `parent_phone (text)`, `parent_email (text)`, `address (text)`, `status (registration_status default 'submitted')`, `observation_score (numeric)`, `admin_notes (text)`.
+  - Alur: Pasca-submit memunculkan modal sukses dengan tautan WhatsApp panitia (`62 877-3786-0657`) untuk konfirmasi pembayaran formulir. Data hanya dipromosikan ke `students` & dibuatkan akun `profiles` saat status `approved` oleh Admin/Super Admin.
+- **`student_registration_documents`**: Berkas lampiran calon siswa (Pas Foto, Akta, KK, KTP Ortu, SKL TK, Surat Sehat, Sertifikat) yang tersimpan di private bucket `registration-files`.
+  - Kolom: `id (uuid PK)`, `application_id (uuid FK student_registration_applications.id)`, `document_type (text)`, `file_url (text)`, `file_path (text)`, `original_filename (text)`, `mime_type (text)`, `file_size (bigint)`, `verification_status (document_verification_status default 'pending')`, `admin_feedback (text)`.
 - **`students`**: Data pokok siswa aktif.
   - Kolom: `id (uuid PK)`, `profile_id (uuid FK profiles.id)`, `nis (text unique)`, `nisn (text unique)`, `gender (text)`, `birth_place (text)`, `birth_date (date)`, `address (text)`, `is_active (boolean)`.
 - **`parents`**: Data profil orang tua / wali murid.

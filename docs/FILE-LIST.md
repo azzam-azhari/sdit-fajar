@@ -42,6 +42,7 @@ Seluruh berkas dokumentasi telah dikonsolidasikan ke dalam folder `docs/` sebaga
 - `docs/PRD/20-env-deployment.md` — Manajemen environment variable
 - `docs/PRD/21-standar-kode.md` — Pedoman penulisan kode TypeScript & styling
 - `docs/PRD/22-roadmap.md` — Rencana tahapan pengerjaan sprint
+- `docs/PRD/23-ppdb-gelombang-pendaftaran.md` — Spesifikasi Lengkap PPDB: CRUD Gelombang 1-3, Kuota 100 Murid, Auto-Count, Unggah Berkas & Popup WhatsApp
 - `docs/PRD/99-agent-instructions.md` — Instruksi keras dan batasan coding agent
 - `docs/PRD/periode.md` — Kalender akademik sekolah dan siklus semester
 - `docs/PRD/eksekusi.md` — Action plan eksekusi dan checklist gatekeeper

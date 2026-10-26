@@ -104,10 +104,18 @@ Konten:
 - social media.
 
 ## Pendaftaran `/pendaftaran`
-- Form pendaftaran murid baru.
-- Upload dokumen dengan validasi server.
-- Setiap file disimpan sebagai URL/path pada tabel pendaftaran.
-- Halaman dapat diisi tanpa login; review dilakukan internal.
+- Banner informasi Gelombang aktif (Gelombang 1, 2, atau 3 per semester): tanggal pembukaan/penutupan, target kuota 100 murid, jumlah yang sudah daftar (auto-count), kuota tersisa, dan jadwal tes observasi.
+- Form pendaftaran murid baru multi-step (*stepper*):
+  - Step 1: Pilihan Gelombang aktif.
+  - Step 2: Biodata Calon Murid (NIK, NISN, nama, tempat/tanggal lahir, jenis kelamin, anak ke-, jumlah saudara, kebutuhan khusus, asal TK).
+  - Step 3: Biodata Orang Tua / Wali (Nama Ayah/Ibu, NIK, pekerjaan, nomor WhatsApp aktif).
+  - Step 4: Unggah 7 berkas persyaratan (Pas Foto 3x4, Akta Kelahiran, KK, KTP Ortu, Ijazah/SKL TK, Surat Keterangan Sehat, Piagam Prestasi) ke Supabase Storage bucket privat `registration-files`.
+  - Step 5: Pernyataan keabsahan data & submit.
+- Popup Modal Pasca-Submit:
+  - Muncul seketika setelah formulir berhasil disimpan dengan menampilkan nomor registrasi resmi (contoh: `PPDB-2026-G1-0024`).
+  - Tombol CTA langsung menuju WhatsApp Panitia PPDB: `https://wa.me/6287737860657?text=...` dengan template pesan: *"Saya sudah mendaftar online, bagaimana informasi pembayarannya?"*.
+  - Opsi cetak bukti pendaftaran online (`@media print`).
+- Halaman dapat diisi publik tanpa login; proses review dan seleksi dilakukan oleh Admin dan Super Admin di dashboard.
 
 ## Marketplace `/marketplace`
 - Katalog buku/konten pembelajaran yang dikelola sekolah.

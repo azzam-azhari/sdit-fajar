@@ -5,7 +5,7 @@ description: Instruksi Utama & Pedoman Anti-Halusinasi AI Agent — SDIT Fajar
 
 # Instruksi Utama & Pedoman Anti-Halusinasi — SDIT Fajar
 
-Dokumen ini adalah aturan tertinggi (*Highest Authority*) untuk AI Agent (Antigravity, Cursor, Windsurf, Claude Code) saat menganalisis, merancang, atau menulis kode di repositori SDIT Fajar. Tujuannya adalah memastikan agent bekerja secara presisi tanpa berhalusinasi atau menyimpang dari arsitektur yang telah ditetapkan.
+Dokumen ini adalah aturan tertinggi (*Highest Authority*) untuk AI Agent (Antigravity) saat menganalisis, merancang, atau menulis kode di repositori SDIT Fajar. Tujuannya adalah memastikan agent bekerja secara presisi tanpa berhalusinasi atau menyimpang dari arsitektur yang telah ditetapkan.
 
 ---
 

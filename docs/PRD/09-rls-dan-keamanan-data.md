@@ -74,12 +74,19 @@ Admin dan super admin boleh mengelola data siswa.
 - Guru jabatan `wali_kelas` melihat nilai kelas binaan.
 - Guru jabatan `kepala_sekolah` melihat laporan semua kelas.
 
-## Policy Pendaftaran dan Import
-- Pendaftar publik hanya dapat membuat application dan upload dokumen melalui endpoint terbatas.
-- Admin dapat membaca/review application sesuai permission.
-- Super admin menyetujui application dan menjalankan import CSV.
-- Hanya super admin yang dapat membaca `import_batches` dan template source file.
-- Semua file pendaftaran private dan diakses signed URL setelah guard relasi.
+## Policy Gelombang PPDB & Pendaftaran
+- **Gelombang PPDB (`admission_waves`)**:
+  - Publik (`anon` & `authenticated`) hanya dapat membaca gelombang yang berstatus `open` dan `is_active = true`.
+  - Admin dan super admin memiliki hak penuh (CRUD) untuk membuat, mengedit tanggal/kuota 100 murid, menutup, atau menghapus gelombang kosong.
+- **Pendaftaran (`student_registration_applications`)**:
+  - Pendaftar publik dapat membuat data pendaftaran (`INSERT`) hanya pada gelombang yang sedang berstatus `open` dan tanggalnya valid.
+  - Pendaftar yang berhasil submit otomatis masuk ke hitungan pendaftar (*auto-count*) dan mengurangi kuota tersisa.
+  - Pendaftar publik tidak memiliki akses SELECT langsung ke database; pengecekan status mandiri dilayani melalui Server Action dengan pencocokan nomor registrasi dan tanggal lahir.
+  - Admin dan super admin dapat membaca dan mereview seluruh formulir pendaftaran.
+- **Dokumen Persyaratan (`student_registration_documents`)**:
+  - Seluruh dokumen (Akta, KK, KTP Ortu, Foto, SKL TK, dll.) tersimpan di private bucket `registration-files`.
+  - Akses dokumen hanya diizinkan untuk admin dan super admin melalui secure *Signed URL* Supabase dengan masa kedaluwarsa terbatas.
+  - Guru, murid, dan wali murid non-pendaftar dilarang keras mengakses berkas pendaftaran calon siswa lain.
 
 ## Policy Absensi
 - Guru dapat membuat/update absensi dirinya sendiri pada sesi yang sedang terbuka.

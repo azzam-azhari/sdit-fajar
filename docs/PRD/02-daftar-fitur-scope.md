@@ -3,7 +3,7 @@
 ## Fase 1 - Frontend dan Website Publik
 - Landing page sekolah dan seluruh halaman publik tanpa login.
 - Profil, sejarah, manajemen, kurikulum, ekstrakurikuler, kontak, dan berita.
-- Form pendaftaran murid baru.
+- Form pendaftaran murid baru (PPDB Online bergelombang, kuota default 100 murid, auto-count pendaftar real-time, kalkulasi kuota tersisa, upload berkas lengkap, dan popup konfirmasi WhatsApp ke panitia 62 877-3786-0657 untuk informasi pembayaran).
 - Dukungan Bahasa Inggris untuk konten publik terpilih; Bahasa Indonesia tetap default.
 - Login dashboard dan komponen loading, empty, error, toast, serta validasi.
 
@@ -19,6 +19,7 @@
 - Migration, enum, index, tabel, relasi, dan RLS sesuai skema.
 - Manajemen tahun ajaran, semester, bulan, dan tahun aktif operasional.
 - Manajemen kelas, rombel, mata pelajaran, siswa, guru, dan wali murid.
+- Manajemen PPDB: CRUD Gelombang 1, 2, dan 3 per semester, penetapan kuota 100 murid, verifikasi berkas privat (Signed URL), seleksi kelulusan, dan promosi calon siswa disetujui ke data siswa aktif.
 - Relasi siswa-kelas, wali murid-siswa, dan guru-mapel-kelas.
 - Dashboard per role dan pengelolaan konten publik.
 

@@ -176,15 +176,72 @@ Rules:
 - Guru jabatan `wali_kelas` hanya bisa target kelas binaan.
 - Admin dan guru jabatan `kepala_sekolah` bisa target semua.
 
-## Pendaftaran dan Import
+## PPDB (Gelombang Pendaftaran & Berkas)
+
+### `getPublicAdmissionWavesAction`
+Role: public guest / all roles.
+
+Rules:
+- mengambil daftar gelombang aktif (`is_active = true`, `status = 'open'`);
+- menyertakan informasi tanggal pembukaan, tanggal penutupan, kuota (default 100 murid), jumlah terdaftar (*auto-count*), sisa kuota, dan jadwal observasi.
+
+### `createAdmissionWaveAction`
+Role: `admin`, `super_admin`.
+
+Rules:
+- validasi input dengan Zod (`academic_year_id`, `wave_number` 1-3, `title`, `start_date`, `end_date`, `quota` default 100);
+- nomor gelombang unik per tahun ajaran;
+- mencatat log audit pembuatan gelombang.
+
+### `updateAdmissionWaveAction`
+Role: `admin`, `super_admin`.
+
+Rules:
+- memperbarui informasi gelombang, kuota murid, rentang tanggal, jadwal tes observasi, atau status (`draft`, `open`, `closed`, `archived`);
+- jika gelombang ditutup, form publik tidak menerima pendaftaran baru.
+
+### `deleteAdmissionWaveAction`
+Role: `admin`, `super_admin`.
+
+Rules:
+- RESTRICT: dilarang menghapus gelombang yang sudah memiliki pendaftar terdaftar (`student_registration_applications` > 0);
+- jika sudah ada pendaftar, hanya boleh diubah statusnya menjadi `closed` atau `archived`.
 
 ### `submitRegistrationAction`
 Role: public guest.
 
 Rules:
-- validasi data pendaftar dan dokumen;
-- setiap file disimpan ke Storage dan URL/path dicatat;
-- tidak membuat akun sebelum review.
+- memvalidasi data calon siswa, data orang tua, dan kelengkapan 7 berkas persyaratan via Zod;
+- memastikan gelombang tujuan berstatus `open` dan tanggal masih dalam rentang `start_date` s.d. `end_date`;
+- mengunggah file ke Supabase Storage bucket privat `registration-files/{application_id}/`;
+- menyimpan rekaman ke `student_registration_applications` dan `student_registration_documents`;
+- pendaftar otomatis masuk ke hitungan pendaftar gelombang (*auto-count*) dan mengurangi sisa kuota;
+- mengembalikan payload nomor registrasi resmi (contoh: `PPDB-2026-G1-0024`), nama siswa, dan URL WhatsApp panitia (`https://wa.me/6287737860657?text=...`) untuk memunculkan popup konfirmasi informasi pembayaran di frontend.
+
+### `verifyRegistrationDocumentAction`
+Role: `admin`, `super_admin`.
+
+Rules:
+- memverifikasi keabsahan dokumen per file (`valid` atau `invalid`);
+- memberikan catatan revisi (`admin_feedback`) jika dokumen buram atau salah format.
+
+### `updateRegistrationApplicationStatusAction`
+Role: `admin`, `super_admin`.
+
+Rules:
+- mengubah status formulir pendaftar (`under_review`, `approved`, `rejected`);
+- mencatat nilai observasi/tes pemetaan dan catatan admin (`admin_notes`);
+- calon siswa `approved` siap dipromosikan ke data siswa aktif saat tahun ajaran baru.
+
+### `promoteApplicantToStudentAction`
+Role: `admin`, `super_admin`.
+
+Rules:
+- hanya untuk pendaftar berstatus `approved`;
+- membuat data `students`, data `parents`, menautkan di `parent_students`;
+- men-generate NIS dan akun profil auth dengan default password `tempatddmmyyyy`.
+
+## Import Data Massal
 
 ### `importCsvAction`
 Role: `super_admin` only.

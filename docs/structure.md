@@ -41,7 +41,8 @@ sdit-fajar/
 │   │   ├── student.actions.ts         # Mutasi siswa & rombel
 │   │   ├── attendance.actions.ts      # Presensi guru & presensi siswa
 │   │   ├── tahfidz.actions.ts         # Mutabaah setoran ayat tahfidz
-│   │   ├── registration.actions.ts    # Form PPDB online & verifikasi admin
+│   │   ├── admission.actions.ts       # CRUD Gelombang PPDB (Gelombang 1-3) & status
+│   │   ├── registration.actions.ts    # Form PPDB online, upload berkas, auto-count & verifikasi admin
 │   │   ├── marketplace.actions.ts     # Order produk marketplace
 │   │   └── payment.actions.ts         # Inisiasi Snap token Midtrans & receipt
 │   ├── app/                           # Next.js App Router
@@ -56,7 +57,10 @@ sdit-fajar/
 │   │   │   ├── berita/                # Daftar & Detail Berita/Artikel
 │   │   │   │   ├── page.tsx
 │   │   │   │   └── [slug]/page.tsx
-│   │   │   ├── pendaftaran/page.tsx   # Pendaftaran Murid Baru (PPDB Online)
+│   │   │   ├── pendaftaran/           # Pendaftaran Murid Baru (PPDB Online)
+│   │   │   │   ├── page.tsx           # Stepper Form, Info Kuota 100, Upload Berkas & WhatsApp Modal
+│   │   │   │   ├── status/page.tsx    # Cek Status Pendaftaran Mandiri
+│   │   │   │   └── sukses/[registrationNumber]/page.tsx # Cetak Bukti Pendaftaran
 │   │   │   ├── marketplace/page.tsx   # Katalog Buku & Konten Sekolah
 │   │   │   └── kontak/page.tsx        # Kontak & Peta Lokasi MapLibre
 │   │   ├── (auth)/                    # Route Group Autentikasi
@@ -68,6 +72,15 @@ sdit-fajar/
 │   │   │   ├── layout.tsx             # Shell Dashboard (Sidebar + Header + Breadcrumb)
 │   │   │   ├── super-admin/           # Dashboard Super Admin (Settings, Audit, Payment Key)
 │   │   │   ├── admin/                 # Dashboard Admin (Master Data, PPDB, Invoices)
+│   │   │   │   ├── ppdb/              # Modul PPDB Admin
+│   │   │   │   │   ├── page.tsx       # Ringkasan Analitik Kuota & Pendaftar
+│   │   │   │   │   ├── gelombang/page.tsx # CRUD Gelombang 1, 2, 3
+│   │   │   │   │   └── pendaftar/     # Verifikasi Berkas Zebra Cross
+│   │   │   │   │       ├── page.tsx
+│   │   │   │   │       └── [id]/page.tsx
+│   │   │   │   ├── siswa/page.tsx
+│   │   │   │   ├── wali-murid/page.tsx
+│   │   │   │   └── guru/page.tsx
 │   │   │   ├── guru/                  # Dashboard Guru (LMS, Absensi, Nilai, Tahfidz)
 │   │   │   ├── murid/                 # Dashboard Murid (Jadwal, Materi, Nilai, Tahfidz)
 │   │   │   └── wali-murid/            # Dashboard Wali Murid (Anak, Bayar SPP, Receipt)
@@ -99,7 +112,7 @@ sdit-fajar/
 │   │   ├── action.types.ts            # ActionResult<T>
 │   │   ├── database.types.ts          # Supabase generated types
 │   │   └── domain.types.ts            # Domain entity types
-│   └── validations/                   # Zod schemas (student.schema.ts, invoice.schema.ts, dll.)
+│   └── validations/                   # Zod schemas (admission.schema.ts, registration.schema.ts, student.schema.ts, dll.)
 ├── middleware.ts                      # Proteksi rute & verifikasi sesi cookie Supabase
 ├── package.json
 └── tsconfig.json
