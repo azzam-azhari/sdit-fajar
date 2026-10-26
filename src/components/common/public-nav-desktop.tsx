@@ -62,26 +62,35 @@ export function PublicNavDesktop({
               <DropdownMenuContent
                 align="start"
                 sideOffset={8}
-                className="w-64 p-1.5 rounded-xl border border-border/80 bg-popover shadow-md"
+                className="w-64 p-1 rounded-lg border border-border/80 bg-popover shadow-md"
               >
                 {item.children.map((child) => {
                   const isChildActive = isLinkActive(child.href);
                   return (
-                    <DropdownMenuItem key={child.href} asChild>
+                    <DropdownMenuItem
+                      key={child.href}
+                      asChild
+                      className={cn(
+                        "cursor-pointer focus:bg-accent focus:text-accent-foreground p-0",
+                        isChildActive && "bg-muted/70"
+                      )}
+                    >
                       <Link
                         href={child.href}
-                        className={cn(
-                          "flex flex-col gap-0.5 rounded-lg p-2.5 text-left text-xs transition-colors cursor-pointer",
-                          isChildActive
-                            ? "bg-muted font-semibold text-primary"
-                            : "text-foreground hover:bg-muted/70"
-                        )}
+                        className="flex flex-col gap-0.5 rounded-md p-2 text-left text-xs transition-colors w-full"
                       >
-                        <span className="font-medium text-foreground">
+                        <span
+                          className={cn(
+                            "font-medium leading-none",
+                            isChildActive
+                              ? "text-primary font-semibold"
+                              : "text-foreground"
+                          )}
+                        >
                           {child.label}
                         </span>
                         {child.desc && (
-                          <span className="text-[11px] text-muted-foreground leading-snug">
+                          <span className="text-[11px] text-muted-foreground leading-snug mt-0.5">
                             {child.desc}
                           </span>
                         )}

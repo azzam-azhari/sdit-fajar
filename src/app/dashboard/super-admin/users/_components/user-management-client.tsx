@@ -21,13 +21,21 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { toast } from 'sonner';
 import {
   toggleUserActiveStatusAction,
   resetUserPasswordAction,
   createStaffUserAction,
 } from '@/actions/super-admin.actions';
-import { Search, UserPlus, KeyRound, CheckCircle2, XCircle } from 'lucide-react';
+import { Search, UserPlus, KeyRound, CheckCircle2, XCircle, MoreHorizontal } from 'lucide-react';
 
 interface UserProfileItem {
   id: string;
@@ -202,31 +210,48 @@ export function UserManagementClient({
         const isSuperAdmin = item.role === 'super_admin';
 
         return (
-          <div className="flex items-center justify-end gap-1.5">
-            <Button
-              variant="outline"
-              size="sm"
-              className="h-7 text-[11px] px-2"
-              disabled={isPending || isSuperAdmin}
-              onClick={() => handleResetPassword(item)}
-              title="Reset password aman"
-            >
-              <KeyRound className="size-3 mr-1" />
-              Reset Pass
-            </Button>
-
-            <Button
-              variant={item.is_active ? 'outline' : 'default'}
-              size="sm"
-              className={`h-7 text-[11px] px-2 ${
-                item.is_active ? 'text-rose-600 hover:text-rose-700 hover:bg-rose-50' : ''
-              }`}
-              disabled={isPending || isSuperAdmin}
-              onClick={() => handleToggleStatus(item)}
-            >
-              {item.is_active ? 'Nonaktifkan' : 'Aktifkan'}
-            </Button>
-          </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="size-7 p-0 text-muted-foreground hover:text-foreground"
+                disabled={isPending || isSuperAdmin}
+                aria-label="Buka menu aksi akun"
+              >
+                <MoreHorizontal className="size-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuLabel>Aksi Akun Pengguna</DropdownMenuLabel>
+              <DropdownMenuItem
+                disabled={isPending || isSuperAdmin}
+                onClick={() => handleResetPassword(item)}
+                className="cursor-pointer"
+              >
+                <KeyRound className="size-3.5 mr-2" />
+                Reset Password
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                disabled={isPending || isSuperAdmin}
+                onClick={() => handleToggleStatus(item)}
+                className="cursor-pointer"
+              >
+                {item.is_active ? (
+                  <>
+                    <XCircle className="size-3.5 mr-2 text-rose-600" />
+                    Nonaktifkan Akun
+                  </>
+                ) : (
+                  <>
+                    <CheckCircle2 className="size-3.5 mr-2 text-emerald-600" />
+                    Aktifkan Akun
+                  </>
+                )}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         );
       },
     },

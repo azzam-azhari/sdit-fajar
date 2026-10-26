@@ -6,7 +6,6 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import {
-  Users,
   School,
   UserCheck,
   CalendarDays,

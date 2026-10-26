@@ -14,9 +14,16 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { toast } from 'sonner';
 import { createSubjectAction, toggleSubjectStatusAction } from '@/actions/academic.actions';
-import { BookOpen, Plus, CheckCircle2, XCircle, Search } from 'lucide-react';
+import { BookOpen, Plus, CheckCircle2, XCircle, Search, MoreHorizontal } from 'lucide-react';
 
 interface SubjectItem {
   id: string;
@@ -128,15 +135,38 @@ export function MapelClient({ initialSubjects }: { initialSubjects: SubjectItem[
       header: 'Aksi',
       align: 'right',
       cell: (item) => (
-        <Button
-          variant="outline"
-          size="sm"
-          className="h-7 text-[11px] px-2"
-          disabled={isPending}
-          onClick={() => handleToggle(item)}
-        >
-          {item.is_active ? 'Nonaktifkan' : 'Aktifkan'}
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="size-7 p-0 text-muted-foreground hover:text-foreground"
+              aria-label="Buka menu aksi"
+            >
+              <MoreHorizontal className="size-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-44">
+            <DropdownMenuLabel>Aksi Mata Pelajaran</DropdownMenuLabel>
+            <DropdownMenuItem
+              disabled={isPending}
+              onClick={() => handleToggle(item)}
+              className="cursor-pointer"
+            >
+              {item.is_active ? (
+                <>
+                  <XCircle className="size-3.5 mr-2 text-rose-600" />
+                  Nonaktifkan Mapel
+                </>
+              ) : (
+                <>
+                  <CheckCircle2 className="size-3.5 mr-2 text-emerald-600" />
+                  Aktifkan Mapel
+                </>
+              )}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       ),
     },
   ];

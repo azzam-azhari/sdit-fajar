@@ -1,19 +1,20 @@
-﻿"use client";
+"use client";
 
 import * as React from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import {
   Printer,
-  CheckCircle2,
   GraduationCap,
   ArrowLeft,
+  Calendar,
+  FileCheck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function PendaftaranSuksesPage() {
   const params = useParams();
-  const regNumber = (params?.registrationNumber as string) || "REG-2026-1001";
+  const regNumber = (params?.registrationNumber as string) || "PPDB-2026-0000";
 
   const handlePrint = () => {
     if (typeof window !== "undefined") {
@@ -29,7 +30,7 @@ export default function PendaftaranSuksesPage() {
         <Button asChild variant="ghost" size="sm" className="text-xs text-muted-foreground hover:text-foreground">
           <Link href="/pendaftaran" className="flex items-center gap-1.5">
             <ArrowLeft className="h-3.5 w-3.5" />
-            <span>Kembali ke Beranda PPDB</span>
+            <span>Kembali ke Halaman PPDB</span>
           </Link>
         </Button>
 
@@ -45,16 +46,16 @@ export default function PendaftaranSuksesPage() {
       </div>
 
       {/* Printable Sheet Container */}
-      <div className="rounded-2xl border border-border/80 bg-card p-8 sm:p-12 space-y-8 shadow-xs print:border-none print:shadow-none print:p-0">
+      <div className="rounded-2xl border border-border/80 bg-card p-6 sm:p-10 space-y-6 shadow-xs print:border-none print:shadow-none print:p-0">
 
         {/* Letterhead (Kop Dokumen) */}
         <div className="flex items-center justify-between border-b-2 border-foreground/80 pb-6">
           <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-primary-foreground">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-primary-foreground shrink-0">
               <GraduationCap className="h-7 w-7" />
             </div>
             <div>
-              <h2 className="text-xl font-bold tracking-tight text-foreground leading-none">
+              <h2 className="text-lg sm:text-xl font-bold tracking-tight text-foreground leading-none">
                 SDIT FAJAR CILODONG
               </h2>
               <p className="text-xs text-muted-foreground mt-1">
@@ -67,7 +68,7 @@ export default function PendaftaranSuksesPage() {
           </div>
           <div className="hidden sm:block text-right">
             <div className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">
-              Dokumen Resmi PPDB
+              Tanda Terima PPDB
             </div>
             <div className="text-xs font-bold text-emerald-600 font-mono mt-0.5">
               TERVERIFIKASI
@@ -76,108 +77,76 @@ export default function PendaftaranSuksesPage() {
         </div>
 
         {/* Title & Registration Code */}
-        <div className="text-center space-y-2 py-2">
-          <span className="text-xs font-semibold uppercase tracking-wider text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
-            Bukti Tanda Terima Pendaftaran Murid Baru
+        <div className="text-center space-y-3 py-4">
+          <span className="text-xs font-semibold uppercase tracking-wider text-primary bg-primary/10 px-3.5 py-1 rounded-full border border-primary/20 inline-block">
+            Bukti Tanda Terima Pendaftaran Daring
           </span>
-          <h1 className="text-xl sm:text-2xl font-extrabold text-foreground tracking-tight pt-2">
+          <h1 className="text-xl sm:text-2xl font-extrabold text-foreground tracking-tight">
             TAHUN PELAJARAN 2026 / 2027
           </h1>
-          <div className="inline-block rounded-xl border border-border bg-muted/30 px-6 py-2 mt-2">
-            <span className="text-[11px] text-muted-foreground block">
-              NOMOR REGISTRASI RESMI:
+          <div className="inline-block rounded-xl border border-border bg-muted/40 px-6 py-3 mt-2">
+            <span className="text-[11px] text-muted-foreground uppercase tracking-wider block font-semibold">
+              NOMOR REGISTRASI PENDAFTARAN:
             </span>
-            <span className="text-xl sm:text-2xl font-bold font-mono text-foreground tracking-widest">
+            <span className="text-2xl sm:text-3xl font-bold font-mono text-primary tracking-widest block mt-1">
               {regNumber}
             </span>
           </div>
+          <p className="text-xs text-muted-foreground max-w-md mx-auto leading-relaxed">
+            Simpan nomor registrasi di atas dengan baik. Nomor ini digunakan untuk konfirmasi administrasi dan pengecekan status seleksi berkas.
+          </p>
         </div>
 
-        {/* Data Calon Murid Table */}
-        <div className="space-y-4">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-foreground border-b border-border/60 pb-1">
-            A. Data Calon Murid
-          </h3>
-          <table className="w-full text-xs border-collapse">
-            <tbody className="divide-y divide-border/60">
-              <tr>
-                <td className="py-2 text-muted-foreground w-1/3">Nama Lengkap</td>
-                <td className="py-2 font-bold text-foreground">Ahmad Azzam Fauzi</td>
-              </tr>
-              <tr>
-                <td className="py-2 text-muted-foreground">Nomor Induk Kependudukan (NIK)</td>
-                <td className="py-2 font-mono text-foreground">3276011405190002</td>
-              </tr>
-              <tr>
-                <td className="py-2 text-muted-foreground">Tempat, Tanggal Lahir</td>
-                <td className="py-2 text-foreground">Depok, 14 Mei 2020</td>
-              </tr>
-              <tr>
-                <td className="py-2 text-muted-foreground">Jenis Kelamin</td>
-                <td className="py-2 text-foreground">Laki-laki (Ikhwan)</td>
-              </tr>
-              <tr>
-                <td className="py-2 text-muted-foreground">Gelombang Pendaftaran</td>
-                <td className="py-2 font-semibold text-primary">Gelombang 2 (Reguler)</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        {/* Data Orang Tua Table */}
-        <div className="space-y-4">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-foreground border-b border-border/60 pb-1">
-            B. Data Orang Tua / Wali
-          </h3>
-          <table className="w-full text-xs border-collapse">
-            <tbody className="divide-y divide-border/60">
-              <tr>
-                <td className="py-2 text-muted-foreground w-1/3">Nama Ayah Kandung</td>
-                <td className="py-2 font-semibold text-foreground">Bpk. Rahmat Fauzi, S.T.</td>
-              </tr>
-              <tr>
-                <td className="py-2 text-muted-foreground">Nomor WhatsApp Ayah</td>
-                <td className="py-2 font-mono text-foreground">0812-9876-5432</td>
-              </tr>
-              <tr>
-                <td className="py-2 text-muted-foreground">Nama Ibu Kandung</td>
-                <td className="py-2 font-semibold text-foreground">Ibu Kurniawati, S.Pd.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        {/* Panduan Langkah Selanjutnya */}
-        <div className="rounded-xl border border-border/80 bg-muted/20 p-5 space-y-2.5 text-xs text-muted-foreground leading-relaxed">
-          <div className="font-bold text-foreground flex items-center gap-1.5">
-            <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-            <span>Petunjuk Pelaksanaan Observasi:</span>
+        {/* Panduan Langkah Selanjutnya (Next Steps) */}
+        <div className="rounded-xl border border-border/80 bg-muted/20 p-5 space-y-4 text-xs text-muted-foreground leading-relaxed">
+          <div className="font-bold text-foreground text-sm flex items-center gap-2">
+            <FileCheck className="h-4 w-4 text-primary" />
+            <span>Langkah Selanjutnya Pasca Pendaftaran:</span>
           </div>
-          <ol className="list-decimal pl-5 space-y-1">
-            <li>Cetak lembar bukti pendaftaran ini sebanyak 1 lembar.</li>
-            <li>Hadir ke kampus SDIT Fajar sesuai jadwal observasi (Sabtu, 06 Desember 2026, pukul 08.30 WIB).</li>
-            <li>Bawa fotokopi Akta Kelahiran (2 lembar), fotokopi Kartu Keluarga (2 lembar), dan pas foto 3x4 berwarna (3 lembar).</li>
-            <li>Wawancara kesiapan orang tua dilaksanakan bersamaan dengan observasi murid.</li>
+
+          <ol className="list-decimal pl-5 space-y-2">
+            <li>
+              <strong className="text-foreground">Cetak Lembar Tanda Terima:</strong> Cetak bukti tanda terima ini atau simpan sebagai dokumen PDF untuk ditunjukkan saat verifikasi fisik.
+            </li>
+            <li>
+              <strong className="text-foreground">Konfirmasi via WhatsApp:</strong> Panitia PPDB akan menghubungi nomor WhatsApp terdaftar untuk mengonfirmasi jadwal observasi talaqqi dan wawancara pemetaan kesiapan belajar.
+            </li>
+            <li>
+              <strong className="text-foreground">Kelengkapan Berkas Fisik:</strong> Siapkan fotokopi Akta Kelahiran (2 lembar), fotokopi Kartu Keluarga (2 lembar), dan pas foto berwarna calon murid ukuran 3x4 (3 lembar) saat hadir ke sekolah.
+            </li>
+            <li>
+              <strong className="text-foreground">Cek Status Berkala:</strong> Anda dapat memantau status verifikasi dan hasil observasi secara berkala melalui menu <em>Cek Status Pendaftaran</em> dengan memasukkan nomor registrasi dan nomor WhatsApp.
+            </li>
           </ol>
         </div>
 
-        {/* Tanda Tangan & Cap */}
-        <div className="pt-6 flex justify-between items-end text-xs text-center">
+        {/* Informasi Kontak Panitia */}
+        <div className="rounded-xl border border-border/70 p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs bg-card">
+          <div className="flex items-center gap-2 text-foreground font-medium">
+            <Calendar className="h-4 w-4 text-primary shrink-0" />
+            <span>Jadwal Observasi & Wawancara: Menunggu Konfirmasi Panitia</span>
+          </div>
+          <div className="text-muted-foreground font-mono">
+            Bantuan: <span className="text-primary font-semibold">0812-3456-7890 (Panitia PPDB)</span>
+          </div>
+        </div>
+
+        {/* Lembar Pengesahan */}
+        <div className="pt-6 flex justify-between items-end text-xs text-center border-t border-border/60">
           <div>
             <p className="text-muted-foreground">Orang Tua / Wali Murid,</p>
-            <div className="h-16" />
+            <div className="h-14" />
             <p className="font-semibold text-foreground underline">( ............................................ )</p>
           </div>
 
           <div>
-            <p className="text-muted-foreground">Depok, 26 Oktober 2026</p>
-            <p className="text-muted-foreground font-semibold">Panitia PPDB SDIT Fajar,</p>
-            <div className="h-16 flex items-center justify-center">
-              <span className="font-mono text-[10px] text-emerald-600 border border-emerald-500/30 px-2 py-0.5 rounded">
-                CAP DIGITAL RESMI
+            <p className="text-muted-foreground">Depok, Panitia PPDB SDIT Fajar</p>
+            <div className="h-14 flex items-center justify-center">
+              <span className="font-mono text-[10px] text-emerald-600 border border-emerald-500/30 px-2 py-0.5 rounded bg-emerald-500/5">
+                TERVERIFIKASI RESMI
               </span>
             </div>
-            <p className="font-semibold text-foreground underline">Ustadz Ahmad Fauzan, S.Sos.I.</p>
+            <p className="font-semibold text-foreground underline">Panitia Penerimaan Murid Baru</p>
           </div>
         </div>
 

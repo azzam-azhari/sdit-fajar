@@ -1,4 +1,4 @@
-﻿import * as React from "react";
+import * as React from "react";
 import {
   MapPin,
   Phone,
@@ -9,6 +9,13 @@ import {
   Navigation,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { PageHeader } from "@/components/common/page-header";
 
 export const metadata = {
@@ -83,12 +90,17 @@ export default function KontakPage() {
                 <label className="text-xs font-semibold text-foreground">
                   Kategori Kepentingan
                 </label>
-                <select className="w-full h-9 rounded-md border border-input bg-background px-3 text-xs shadow-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring">
-                  <option value="ppdb">Informasi Pendaftaran (PPDB)</option>
-                  <option value="akademik">Konsultasi Kurikulum & Tahfidz</option>
-                  <option value="kunjungan">Rencana Kunjungan Sekolah</option>
-                  <option value="umum">Informasi Umum Lainnya</option>
-                </select>
+                <Select defaultValue="ppdb">
+                  <SelectTrigger className="w-full h-9 text-xs">
+                    <SelectValue placeholder="Pilih Kategori" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="ppdb">Informasi Pendaftaran (PPDB)</SelectItem>
+                    <SelectItem value="akademik">Konsultasi Kurikulum &amp; Tahfidz</SelectItem>
+                    <SelectItem value="kunjungan">Rencana Kunjungan Sekolah</SelectItem>
+                    <SelectItem value="umum">Informasi Umum Lainnya</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
 

@@ -5,6 +5,7 @@ import { getCurrentProfile } from '@/lib/supabase/auth-helpers';
 import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/app-sidebar';
 import { SiteHeader } from '@/components/site-header';
+import { SidebarAutoClose } from '@/components/sidebar-auto-close';
 
 export const instant = false;
 
@@ -32,6 +33,7 @@ export default async function DashboardLayout({
 
   return (
     <SidebarProvider>
+      <SidebarAutoClose />
       <AppSidebar variant="inset" user={user} />
       <SidebarInset>
         <SiteHeader />

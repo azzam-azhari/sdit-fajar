@@ -21,9 +21,16 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { toast } from 'sonner';
 import { createClassroomAction, updateClassroomAction } from '@/actions/academic.actions';
-import { School, Plus, CheckCircle2, XCircle } from 'lucide-react';
+import { School, Plus, CheckCircle2, XCircle, MoreHorizontal } from 'lucide-react';
 
 export interface ClassroomItem {
   id: string;
@@ -172,15 +179,38 @@ export function RombelClient({
       header: 'Aksi',
       align: 'right',
       cell: (item) => (
-        <Button
-          variant="outline"
-          size="sm"
-          className="h-7 text-[11px] px-2"
-          disabled={isPending}
-          onClick={() => handleToggleActive(item)}
-        >
-          {item.is_active ? 'Nonaktifkan' : 'Aktifkan'}
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="size-7 p-0 text-muted-foreground hover:text-foreground"
+              aria-label="Buka menu aksi"
+            >
+              <MoreHorizontal className="size-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-44">
+            <DropdownMenuLabel>Aksi Rombel</DropdownMenuLabel>
+            <DropdownMenuItem
+              disabled={isPending}
+              onClick={() => handleToggleActive(item)}
+              className="cursor-pointer"
+            >
+              {item.is_active ? (
+                <>
+                  <XCircle className="size-3.5 mr-2 text-rose-600" />
+                  Nonaktifkan Kelas
+                </>
+              ) : (
+                <>
+                  <CheckCircle2 className="size-3.5 mr-2 text-emerald-600" />
+                  Aktifkan Kelas
+                </>
+              )}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       ),
     },
   ];

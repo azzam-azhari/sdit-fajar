@@ -20,9 +20,16 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { toast } from 'sonner';
 import { createTeachingAssignmentAction, deleteTeachingAssignmentAction } from '@/actions/academic.actions';
-import { ShieldCheck, Plus, Trash2 } from 'lucide-react';
+import { ShieldCheck, Plus, Trash2, MoreHorizontal } from 'lucide-react';
 
 export interface AssignmentItem {
   id: string;
@@ -158,16 +165,30 @@ export function PenugasanClient({
       header: 'Aksi',
       align: 'right',
       cell: (item) => (
-        <Button
-          variant="ghost"
-          size="sm"
-          className="h-7 text-rose-600 hover:text-rose-700 hover:bg-rose-50 px-2"
-          disabled={isPending}
-          onClick={() => handleDelete(item.id)}
-        >
-          <Trash2 className="size-3 mr-1" />
-          Hapus
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="size-7 p-0 text-muted-foreground hover:text-foreground"
+              aria-label="Buka menu aksi"
+            >
+              <MoreHorizontal className="size-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-44">
+            <DropdownMenuLabel>Aksi Penugasan</DropdownMenuLabel>
+            <DropdownMenuItem
+              variant="destructive"
+              disabled={isPending}
+              onClick={() => handleDelete(item.id)}
+              className="cursor-pointer"
+            >
+              <Trash2 className="size-3.5 mr-2" />
+              Hapus Penugasan
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       ),
     },
   ];

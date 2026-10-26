@@ -78,7 +78,7 @@ export function NavUser({
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
-            className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+            className="w-60 min-w-56 rounded-lg"
             side={isMobile ? "bottom" : "right"}
             align="end"
             sideOffset={4}
@@ -116,9 +116,10 @@ export function NavUser({
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem
+              variant="destructive"
               onClick={handleLogout}
               disabled={isPending}
-              className="cursor-pointer text-destructive focus:text-destructive"
+              className="cursor-pointer"
             >
               <LogOutIcon className="size-4" />
               {isPending ? "Keluar..." : "Keluar (Logout)"}

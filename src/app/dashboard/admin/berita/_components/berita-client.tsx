@@ -21,9 +21,17 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { toast } from 'sonner';
 import { createNewsAction, updateNewsAction, deleteNewsAction } from '@/actions/news.actions';
-import { Newspaper, Plus, Edit, Trash2, Globe } from 'lucide-react';
+import { Newspaper, Plus, Edit, Trash2, Globe, MoreHorizontal } from 'lucide-react';
 import Link from 'next/link';
 
 export interface NewsItem {
@@ -195,36 +203,43 @@ export function BeritaClient({ initialPosts }: { initialPosts: NewsItem[] }) {
       header: 'Aksi',
       align: 'right',
       cell: (item) => (
-        <div className="flex items-center justify-end gap-1.5">
-          {item.status === 'published' && (
-            <Button asChild variant="ghost" size="sm" className="h-7 text-[11px] px-2 text-primary">
-              <Link href={`/berita/${item.slug}`} target="_blank">
-                <Globe className="size-3 mr-1" />
-                Lihat
-              </Link>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="size-7 p-0 text-muted-foreground hover:text-foreground"
+              aria-label="Buka menu aksi"
+            >
+              <MoreHorizontal className="size-4" />
             </Button>
-          )}
-
-          <Button
-            variant="outline"
-            size="sm"
-            className="h-7 text-[11px] px-2"
-            onClick={() => openEditModal(item)}
-          >
-            <Edit className="size-3 mr-1" />
-            Edit
-          </Button>
-
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-7 text-[11px] px-2 text-rose-600 hover:text-rose-700 hover:bg-rose-50"
-            disabled={isPending}
-            onClick={() => handleDelete(item.id)}
-          >
-            <Trash2 className="size-3" />
-          </Button>
-        </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-40">
+            <DropdownMenuLabel>Aksi Berita</DropdownMenuLabel>
+            {item.status === 'published' && (
+              <DropdownMenuItem asChild>
+                <Link href={`/berita/${item.slug}`} target="_blank" className="cursor-pointer">
+                  <Globe className="size-3.5 mr-2 text-primary" />
+                  Lihat Publikasi
+                </Link>
+              </DropdownMenuItem>
+            )}
+            <DropdownMenuItem onClick={() => openEditModal(item)} className="cursor-pointer">
+              <Edit className="size-3.5 mr-2" />
+              Edit Artikel
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              variant="destructive"
+              disabled={isPending}
+              onClick={() => handleDelete(item.id)}
+              className="cursor-pointer"
+            >
+              <Trash2 className="size-3.5 mr-2" />
+              Hapus Berita
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       ),
     },
   ];

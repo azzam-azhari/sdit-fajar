@@ -1,5 +1,6 @@
 import * as React from "react";
 import Link from "next/link";
+import { connection } from "next/server";
 import { Calendar, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/common/page-header";
@@ -70,6 +71,7 @@ const DEFAULT_ARTICLES: ArticleItem[] = [
 ];
 
 export default async function BeritaPage() {
+  await connection();
   const supabase = await createClient();
   const { data: dbPosts } = await supabase
     .from("news_posts")

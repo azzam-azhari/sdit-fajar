@@ -45,6 +45,23 @@ interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
   }
 }
 
+function getPortalLabel(role: string): string {
+  switch (role) {
+    case "super_admin":
+      return "Super Admin Portal"
+    case "admin":
+      return "Admin Akademik"
+    case "guru":
+      return "Portal Guru"
+    case "murid":
+      return "Portal Murid"
+    case "wali_murid":
+      return "Portal Wali Murid"
+    default:
+      return "Portal Akademik"
+  }
+}
+
 export function AppSidebar({ user, ...props }: AppSidebarProps) {
   const pathname = usePathname()
 
@@ -217,21 +234,22 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
 
   return (
     <Sidebar collapsible="offcanvas" {...props}>
-      <SidebarHeader>
+      <SidebarHeader className="border-b border-sidebar-border/70 p-2 pb-2.5">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
+              size="lg"
               asChild
-              className="data-[slot=sidebar-menu-button]:p-1.5!"
+              className="hover:bg-sidebar-accent/80 hover:text-sidebar-accent-foreground transition-all duration-150"
             >
               <Link href={homeUrl}>
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                <div className="flex aspect-square size-8 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-xs">
                   <SchoolLogoIcon className="size-4" />
                 </div>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold tracking-tight">SDIT Fajar</span>
-                  <span className="truncate text-[11px] text-muted-foreground font-mono">
-                    {isSuperAdmin ? "Super Admin Portal" : isTeacher ? "Portal Guru" : isStudent ? "Portal Murid" : isParent ? "Portal Wali Murid" : "Admin Akademik"}
+                <div className="grid flex-1 text-left text-sm leading-tight min-w-0">
+                  <span className="truncate font-semibold tracking-tight text-sidebar-foreground">SDIT Fajar</span>
+                  <span className="truncate text-[11px] text-muted-foreground font-normal">
+                    {getPortalLabel(currentUser.role)}
                   </span>
                 </div>
               </Link>

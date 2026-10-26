@@ -1,5 +1,6 @@
 import * as React from "react";
 import Link from "next/link";
+import { connection } from "next/server";
 import {
   Calendar,
   User,
@@ -55,6 +56,7 @@ export default async function DetailBeritaPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
+  await connection();
   const { slug } = await params;
   const supabase = await createClient();
 

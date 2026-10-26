@@ -18,7 +18,9 @@ export type ActionError = {
     | 'SERVER_ERROR'
     | 'ROLE_MISMATCH'
     | 'WRONG_PASSWORD'
-    | 'ACCOUNT_INACTIVE';
+    | 'ACCOUNT_INACTIVE'
+    | 'DUPLICATE_ENTRY'
+    | 'STORAGE_ERROR';
 };
 
 export type ActionResult<T> = ActionSuccess<T> | ActionError;

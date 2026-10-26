@@ -22,9 +22,16 @@ import {
 } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { toast } from 'sonner';
 import { updateStudentBiodataAction } from '@/actions/academic.actions';
-import { Search, Edit, CheckCircle2, XCircle } from 'lucide-react';
+import { Search, Edit, CheckCircle2, XCircle, MoreHorizontal } from 'lucide-react';
 
 export interface StudentItem {
   id: string;
@@ -199,15 +206,25 @@ export function SiswaClient({ initialStudents, classrooms }: SiswaClientProps) {
       header: 'Aksi',
       align: 'right',
       cell: (item) => (
-        <Button
-          variant="outline"
-          size="sm"
-          className="h-7 text-[11px] px-2.5"
-          onClick={() => openEditModal(item)}
-        >
-          <Edit className="size-3 mr-1" />
-          Edit Biodata
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="size-7 p-0 text-muted-foreground hover:text-foreground"
+              aria-label="Buka menu aksi"
+            >
+              <MoreHorizontal className="size-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-40">
+            <DropdownMenuLabel>Aksi Murid</DropdownMenuLabel>
+            <DropdownMenuItem onClick={() => openEditModal(item)} className="cursor-pointer">
+              <Edit className="size-3.5 mr-2" />
+              Edit Biodata
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       ),
     },
   ];
