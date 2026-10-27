@@ -11,11 +11,23 @@ import {
   AlertCircle,
   Upload,
   FileText,
+  ChevronDown,
+  Check,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Label } from "@/components/ui/label";
 import { StatusBadge } from "@/components/common/status-badge";
 import { DatePicker } from "@/components/common/date-picker";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 import {
   publicRegistrationSchema,
   PublicRegistrationInput,
@@ -79,6 +91,7 @@ export function RegistrationFormClient({ waves }: RegistrationFormClientProps) {
 
   const selectedWaveId = watch("admission_wave_id");
   const selectedBirthDate = watch("birth_date");
+  const selectedGender = watch("gender");
 
   // Step 1 -> Step 2 validation
   const handleNextToStep2 = async () => {
@@ -440,16 +453,52 @@ export function RegistrationFormClient({ waves }: RegistrationFormClientProps) {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-foreground">
+                  <Label className="text-xs font-semibold text-foreground">
                     Jenis Kelamin *
-                  </label>
-                  <select
-                    {...register("gender")}
-                    className="w-full h-9 rounded-md border border-input bg-background px-3 text-xs shadow-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-                  >
-                    <option value="L">Laki-laki (Ikhwan)</option>
-                    <option value="P">Perempuan (Akhwat)</option>
-                  </select>
+                  </Label>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="w-full h-9 justify-between px-3 text-xs font-normal bg-background hover:bg-background border-input shadow-xs"
+                      >
+                        <span className={selectedGender ? "text-foreground font-medium" : "text-muted-foreground"}>
+                          {selectedGender === "L"
+                            ? "Laki-laki (Ikhwan)"
+                            : selectedGender === "P"
+                            ? "Perempuan (Akhwat)"
+                            : "Pilih Jenis Kelamin"}
+                        </span>
+                        <ChevronDown className="size-3.5 opacity-50 shrink-0" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-(--radix-dropdown-menu-trigger-width) min-w-[220px]" align="start">
+                      <DropdownMenuGroup>
+                        <DropdownMenuLabel>Pilihan Jenis Kelamin</DropdownMenuLabel>
+                        <DropdownMenuItem
+                          onClick={() => setValue("gender", "L", { shouldValidate: true })}
+                          className={cn(
+                            "cursor-pointer justify-between",
+                            selectedGender === "L" && "bg-accent font-semibold text-primary"
+                          )}
+                        >
+                          <span>Laki-laki (Ikhwan)</span>
+                          {selectedGender === "L" && <Check className="size-3.5 text-primary" />}
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => setValue("gender", "P", { shouldValidate: true })}
+                          className={cn(
+                            "cursor-pointer justify-between",
+                            selectedGender === "P" && "bg-accent font-semibold text-primary"
+                          )}
+                        >
+                          <span>Perempuan (Akhwat)</span>
+                          {selectedGender === "P" && <Check className="size-3.5 text-primary" />}
+                        </DropdownMenuItem>
+                      </DropdownMenuGroup>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                   {errors.gender && (
                     <p className="text-xs text-destructive">{errors.gender.message}</p>
                   )}
@@ -475,17 +524,17 @@ export function RegistrationFormClient({ waves }: RegistrationFormClientProps) {
 
                 <div className="space-y-1.5">
                   <DatePicker
-                    label="Tanggal Lahir *"
+                    label="Tanggal Lahir"
                     value={selectedBirthDate}
                     onChange={(val) => {
                       setValue("birth_date", val, { shouldValidate: true });
                     }}
                     helperText="Format: tanggal/bulan/tahun (sesuai Akta)"
+                    error={errors.birth_date?.message}
                     required
+                    startYear={2012}
+                    endYear={new Date().getFullYear()}
                   />
-                  {errors.birth_date && (
-                    <p className="text-xs text-destructive">{errors.birth_date.message}</p>
-                  )}
                 </div>
               </div>
 
