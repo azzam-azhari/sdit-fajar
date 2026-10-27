@@ -3,6 +3,8 @@ import { requireUser } from '@/lib/supabase/auth-helpers';
 import { ROLE_DASHBOARD_PATH } from '@/constants/auth';
 import { redirect } from 'next/navigation';
 
+export const instant = false;
+
 export default async function DashboardRootPage() {
   await connection();
   const { profile } = await requireUser();

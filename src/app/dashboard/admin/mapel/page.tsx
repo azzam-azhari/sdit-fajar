@@ -2,6 +2,8 @@ import { requireRole } from '@/lib/supabase/auth-helpers';
 import { createClient } from '@/lib/supabase/server';
 import { MapelClient } from './_components/mapel-client';
 
+export const instant = false;
+
 export default async function AdminMapelPage() {
   await requireRole(['admin', 'super_admin']);
   const supabase = await createClient();

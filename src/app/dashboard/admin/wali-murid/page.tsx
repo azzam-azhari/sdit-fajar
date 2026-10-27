@@ -25,6 +25,8 @@ interface ParentItem {
   }[];
 }
 
+export const instant = false;
+
 export default async function AdminWaliMuridPage() {
   await requireRole(['admin', 'super_admin']);
   const supabase = await createClient();

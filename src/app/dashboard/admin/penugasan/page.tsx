@@ -2,6 +2,8 @@ import { requireRole } from '@/lib/supabase/auth-helpers';
 import { createClient } from '@/lib/supabase/server';
 import { PenugasanClient, AssignmentItem } from './_components/penugasan-client';
 
+export const instant = false;
+
 export default async function AdminPenugasanPage() {
   await requireRole(['admin', 'super_admin']);
   const supabase = await createClient();

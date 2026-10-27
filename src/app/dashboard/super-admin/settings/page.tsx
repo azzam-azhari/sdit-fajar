@@ -2,6 +2,8 @@ import { requireRole } from '@/lib/supabase/auth-helpers';
 import { createClient } from '@/lib/supabase/server';
 import { SchoolSettingsForm } from './_components/school-settings-form';
 
+export const instant = false;
+
 export default async function SuperAdminSettingsPage() {
   await requireRole(['super_admin']);
   const supabase = await createClient();

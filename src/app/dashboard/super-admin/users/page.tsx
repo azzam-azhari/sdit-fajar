@@ -2,6 +2,8 @@ import { requireRole } from '@/lib/supabase/auth-helpers';
 import { createClient } from '@/lib/supabase/server';
 import { UserManagementClient } from './_components/user-management-client';
 
+export const instant = false;
+
 export default async function SuperAdminUsersPage() {
   await requireRole(['super_admin']);
   const supabase = await createClient();

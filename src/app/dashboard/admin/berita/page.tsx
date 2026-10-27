@@ -2,6 +2,8 @@ import { requireRole } from '@/lib/supabase/auth-helpers';
 import { createClient } from '@/lib/supabase/server';
 import { BeritaClient, NewsItem } from './_components/berita-client';
 
+export const instant = false;
+
 export default async function AdminBeritaPage() {
   await requireRole(['admin', 'super_admin']);
   const supabase = await createClient();

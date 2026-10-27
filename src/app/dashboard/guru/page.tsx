@@ -4,6 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { BookOpenCheck, CalendarCheck, Award } from 'lucide-react';
 
+export const instant = false;
+
 export default async function GuruDashboardPage() {
   const { profile } = await requireRole(['guru']);
 

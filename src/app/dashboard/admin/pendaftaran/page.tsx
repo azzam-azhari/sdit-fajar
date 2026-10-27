@@ -1,6 +1,7 @@
 import { connection } from 'next/server';
 import { requireRole } from '@/lib/supabase/auth-helpers';
 import { createClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/admin';
 import { PpdbVerificationClient, ApplicationItem } from './_components/ppdb-verification-client';
 
 export const instant = false;
@@ -59,7 +60,10 @@ export default async function AdminPpdbVerificationPage(props: PageProps) {
         id,
         document_type,
         file_path,
-        original_filename
+        original_filename,
+        mime_type,
+        file_size,
+        file_url
       )
     `, { count: 'exact' });
 
@@ -93,6 +97,41 @@ export default async function AdminPpdbVerificationPage(props: PageProps) {
     supabase.from('classrooms').select('id, name').eq('is_active', true),
   ]);
 
+  // Batch generate signed URL untuk private bucket 'registration-files'
+  const adminClient = createAdminClient();
+  const rawApplications = (applications || []) as unknown as ApplicationItem[];
+  const allDocPaths = rawApplications
+    .flatMap((app) => (app.student_registration_documents || []).map((d) => d.file_path))
+    .filter(Boolean);
+
+  let signedUrlMap: Record<string, string> = {};
+  if (allDocPaths.length > 0) {
+    try {
+      const { data: signedResults, error: signError } = await adminClient.storage
+        .from('registration-files')
+        .createSignedUrls(allDocPaths, 3600); // Masa aktif 1 jam
+
+      if (!signError && signedResults) {
+        signedUrlMap = signedResults.reduce((acc, item) => {
+          if (item.path && item.signedUrl) {
+            acc[item.path] = item.signedUrl;
+          }
+          return acc;
+        }, {} as Record<string, string>);
+      }
+    } catch (err) {
+      console.error('Gagal generate batch signed url berkas pendaftaran:', err);
+    }
+  }
+
+  const enrichedApplications = rawApplications.map((app) => ({
+    ...app,
+    student_registration_documents: (app.student_registration_documents || []).map((doc) => ({
+      ...doc,
+      file_url: signedUrlMap[doc.file_path] || doc.file_url || null,
+    })),
+  }));
+
   return (
     <div className="space-y-6">
       <div>
@@ -105,7 +144,7 @@ export default async function AdminPpdbVerificationPage(props: PageProps) {
       </div>
 
       <PpdbVerificationClient
-        applications={(applications as unknown as ApplicationItem[]) || []}
+        applications={enrichedApplications}
         waves={waves || []}
         classrooms={classrooms || []}
         totalCount={count || 0}

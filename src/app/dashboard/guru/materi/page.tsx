@@ -4,6 +4,7 @@ import { PageHeader } from '@/components/common/page-header';
 import { ZebraDataTable } from '@/components/common/zebra-data-table';
 
 type MaterialRow = { id: string; title: string; status: string; created_at: string };
+export const instant = false;
 export default async function GuruMateriPage() {
   const { user } = await requireRole(['guru']); const supabase = await createClient();
   const { data: teacher } = await supabase.from('teachers').select('id').eq('profile_id', user.id).single();

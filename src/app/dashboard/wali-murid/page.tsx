@@ -4,6 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { CreditCard, HeartHandshake, BookOpen } from 'lucide-react';
 
+export const instant = false;
+
 export default async function WaliMuridDashboardPage() {
   const { profile } = await requireRole(['wali_murid']);
 

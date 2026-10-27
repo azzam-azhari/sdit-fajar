@@ -2,6 +2,8 @@ import { requireRole } from '@/lib/supabase/auth-helpers';
 import { createClient } from '@/lib/supabase/server';
 import { SiswaClient, StudentItem } from './_components/siswa-client';
 
+export const instant = false;
+
 export default async function AdminSiswaPage() {
   await requireRole(['admin', 'super_admin']);
   const supabase = await createClient();

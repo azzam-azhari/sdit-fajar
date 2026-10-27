@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Suspense } from "react";
 import Link from "next/link";
-import { connection } from "next/server";
 import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/common/page-header";
@@ -15,7 +14,6 @@ export const metadata = {
 };
 
 async function RegistrationSection() {
-  await connection();
   const waves = await getPublicAdmissionWaves();
   return <RegistrationFormClient waves={waves} />;
 }

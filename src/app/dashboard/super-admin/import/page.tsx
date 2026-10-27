@@ -2,6 +2,8 @@ import { requireRole } from '@/lib/supabase/auth-helpers';
 import { createClient } from '@/lib/supabase/server';
 import { ImportCsvClient, BatchHistoryItem } from './_components/import-csv-client';
 
+export const instant = false;
+
 export default async function SuperAdminImportPage() {
   await requireRole(['super_admin']);
   const supabase = await createClient();

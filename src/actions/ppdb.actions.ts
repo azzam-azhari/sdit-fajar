@@ -3,11 +3,12 @@
 import 'server-only';
 
 import { createClient } from '@/lib/supabase/server';
+import { createPublicClient } from '@/lib/supabase/public';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { requireRole } from '@/lib/supabase/auth-helpers';
 import { ActionResult } from '@/types/action.types';
 import { revalidatePath } from 'next/cache';
-import { createSignedUrl } from '@/lib/supabase/storage';
+import { createSignedUrl, createAdminSignedUrl } from '@/lib/supabase/storage';
 import {
   publicRegistrationSchema,
   updateRegistrationStatusSchema,
@@ -73,7 +74,7 @@ export async function getPublicAdmissionWaves(): Promise<{
   start_date: string;
   end_date: string;
 }[]> {
-  const supabase = await createClient();
+  const supabase = createPublicClient();
   const { data } = await supabase
     .from('admission_waves')
     .select('id, title, wave_number, registration_fee, quota, description, start_date, end_date')
@@ -425,7 +426,7 @@ export async function getRegistrationDocumentSignedUrlAction(
   await requireRole(['admin', 'super_admin']);
 
   try {
-    const signedUrl = await createSignedUrl('registration-files', filePath, 300);
+    const signedUrl = await createAdminSignedUrl('registration-files', filePath, 3600);
     return { success: true, data: { signedUrl } };
   } catch (err: unknown) {
     const errorMsg = err instanceof Error ? err.message : 'Gagal memuat dokumen pendaftaran.';

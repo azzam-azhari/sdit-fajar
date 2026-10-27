@@ -2,6 +2,8 @@ import { requireRole } from '@/lib/supabase/auth-helpers';
 import { createClient } from '@/lib/supabase/server';
 import { TeacherPositionsClient, TeacherPositionItem } from './_components/teacher-positions-client';
 
+export const instant = false;
+
 export default async function SuperAdminRolesPage() {
   await requireRole(['super_admin']);
   const supabase = await createClient();

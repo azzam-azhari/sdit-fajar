@@ -47,6 +47,7 @@ import {
   ShieldCheck,
   Download,
   Loader2,
+  ImageIcon,
 } from 'lucide-react';
 
 export interface ApplicationDocumentItem {
@@ -54,6 +55,9 @@ export interface ApplicationDocumentItem {
   document_type: string;
   file_path: string;
   original_filename: string | null;
+  file_url?: string | null;
+  mime_type?: string | null;
+  file_size?: number | null;
 }
 
 export interface ApplicationItem {
@@ -111,6 +115,26 @@ interface PpdbVerificationClientProps {
   totalCount: number;
   currentPage: number;
   pageSize: number;
+}
+
+/**
+ * Deteksi apakah berkas merupakan format gambar
+ */
+function isImageFile(filename?: string | null, mime?: string | null): boolean {
+  if (mime && mime.toLowerCase().startsWith('image/')) return true;
+  if (!filename) return false;
+  const ext = filename.toLowerCase().split('.').pop();
+  return ['jpg', 'jpeg', 'png', 'webp', 'gif'].includes(ext || '');
+}
+
+/**
+ * Format ukuran berkas (bytes -> KB/MB)
+ */
+function formatFileSize(bytes?: number | null): string {
+  if (!bytes || bytes <= 0) return '';
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
 /**
@@ -176,7 +200,7 @@ export function PpdbVerificationClient({
   const [promoteClassroomId, setPromoteClassroomId] = React.useState<string>(classrooms[0]?.id || '');
   const [customNis, setCustomNis] = React.useState('');
   const [adminNotes, setAdminNotes] = React.useState('');
-  const [documentLoading, setDocumentLoading] = React.useState(false);
+  const [loadingDocId, setLoadingDocId] = React.useState<string | null>(null);
 
   // Hitung total halaman
   const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
@@ -236,20 +260,28 @@ export function PpdbVerificationClient({
     });
   };
 
-  // Handler Unduh / Lihat Berkas Signed URL
-  const handleViewDocument = async (filePath: string) => {
-    setDocumentLoading(true);
+  // Handler Buka Berkas di Tab Baru (Fallback dengan Anti-Popup Blocker)
+  const handleViewDocument = async (docId: string, filePath: string) => {
+    setLoadingDocId(docId);
+    // Buka window terlebih dahulu di awal interaksi pengguna agar tidak diblokir popup blocker
+    const newWindow = window.open('about:blank', '_blank');
     try {
       const res = await getRegistrationDocumentSignedUrlAction(filePath);
-      if (res.success) {
-        window.open(res.data.signedUrl, '_blank', 'noopener,noreferrer');
+      if (res.success && res.data.signedUrl) {
+        if (newWindow) {
+          newWindow.location.href = res.data.signedUrl;
+        } else {
+          window.open(res.data.signedUrl, '_blank', 'noopener,noreferrer');
+        }
       } else {
+        if (newWindow) newWindow.close();
         toast.error((res as { error?: string }).error || 'Gagal memuat tautan berkas.');
       }
     } catch {
+      if (newWindow) newWindow.close();
       toast.error('Gagal mengakses penyimpanan berkas.');
     } finally {
-      setDocumentLoading(false);
+      setLoadingDocId(null);
     }
   };
 
@@ -642,7 +674,7 @@ export function PpdbVerificationClient({
               </div>
 
               {/* Berkas Lampiran Persyaratan */}
-              <div className="rounded-xl border border-border/80 p-3.5 space-y-2.5 bg-card shadow-2xs">
+              <div className="rounded-xl border border-border/80 p-3.5 space-y-3 bg-card shadow-2xs">
                 <div className="flex items-center justify-between border-b border-border/60 pb-2">
                   <h4 className="font-semibold text-foreground text-xs uppercase tracking-wider flex items-center gap-1.5">
                     <FileText className="size-3.5 text-primary" />
@@ -652,43 +684,113 @@ export function PpdbVerificationClient({
                 </div>
 
                 {selectedApp.student_registration_documents && selectedApp.student_registration_documents.length > 0 ? (
-                  <div className="space-y-2 pt-1">
-                    {selectedApp.student_registration_documents.map((doc) => (
-                      <div
-                        key={doc.id}
-                        className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 p-2.5 rounded-lg border border-border/60 bg-muted/20"
-                      >
-                        <div className="flex items-center gap-2 min-w-0">
-                          <div className="p-1.5 rounded bg-primary/10 text-primary shrink-0">
-                            <FileText className="size-3.5" />
+                  <div className="space-y-3 pt-1">
+                    {selectedApp.student_registration_documents.map((doc) => {
+                      const isImg = isImageFile(doc.original_filename, doc.mime_type);
+                      const fileSizeStr = formatFileSize(doc.file_size);
+                      const previewUrl = doc.file_url;
+
+                      return (
+                        <div
+                          key={doc.id}
+                          className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-xl border border-border/70 bg-muted/20 hover:bg-muted/30 transition-colors"
+                        >
+                          <div className="flex items-center gap-3 min-w-0">
+                            {/* Visual Preview / Thumbnail */}
+                            {isImg && previewUrl ? (
+                              <a
+                                href={previewUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                title="Klik untuk membuka preview gambar di tab baru"
+                                className="group relative size-16 shrink-0 rounded-lg overflow-hidden border border-border/80 bg-background/80 shadow-2xs focus:outline-none focus:ring-2 focus:ring-primary/50"
+                              >
+                                <img
+                                  src={previewUrl}
+                                  alt={doc.original_filename || 'Dokumen Persyaratan'}
+                                  className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105"
+                                  loading="lazy"
+                                />
+                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
+                                  <ExternalLink className="size-4 drop-shadow" />
+                                </div>
+                              </a>
+                            ) : (
+                              <div
+                                className={`size-12 shrink-0 rounded-lg flex items-center justify-center border ${
+                                  isImg
+                                    ? 'border-blue-500/30 bg-blue-500/10 text-blue-600'
+                                    : 'border-rose-500/30 bg-rose-500/10 text-rose-600'
+                                }`}
+                              >
+                                {isImg ? <ImageIcon className="size-5" /> : <FileText className="size-5" />}
+                              </div>
+                            )}
+
+                            {/* Info Dokumen */}
+                            <div className="min-w-0 space-y-0.5">
+                              <span
+                                className="text-xs font-semibold text-foreground truncate block"
+                                title={doc.original_filename || ''}
+                              >
+                                {doc.original_filename || 'Dokumen Persyaratan'}
+                              </span>
+                              <div className="flex items-center gap-1.5 flex-wrap">
+                                <span className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium">
+                                  {doc.document_type.replace(/_/g, ' ')}
+                                </span>
+                                {fileSizeStr && (
+                                  <>
+                                    <span className="text-muted-foreground/50">•</span>
+                                    <span className="text-[10px] font-mono text-muted-foreground">
+                                      {fileSizeStr}
+                                    </span>
+                                  </>
+                                )}
+                              </div>
+                            </div>
                           </div>
-                          <div className="min-w-0">
-                            <span className="text-xs font-medium text-foreground truncate block">
-                              {doc.original_filename || 'Dokumen Persyaratan'}
-                            </span>
-                            <span className="text-[10px] text-muted-foreground uppercase">
-                              {doc.document_type.replace(/_/g, ' ')}
-                            </span>
+
+                          {/* Tombol Aksi: Buka di Tab Baru */}
+                          <div className="shrink-0 flex items-center gap-2">
+                            {previewUrl ? (
+                              <Button
+                                asChild
+                                variant="outline"
+                                size="sm"
+                                className="h-8 text-xs font-medium gap-1.5 w-full sm:w-auto text-primary border-primary/30 hover:bg-primary/5 hover:border-primary/50"
+                              >
+                                <a
+                                  href={previewUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  title="Buka preview berkas di tab baru"
+                                >
+                                  <ExternalLink className="size-3.5" />
+                                  <span>{isImg ? 'Preview Gambar' : 'Buka Dokumen'}</span>
+                                </a>
+                              </Button>
+                            ) : (
+                              <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                disabled={loadingDocId === doc.id}
+                                onClick={() => handleViewDocument(doc.id, doc.file_path)}
+                                className="h-8 text-xs font-medium gap-1.5 w-full sm:w-auto"
+                              >
+                                {loadingDocId === doc.id ? (
+                                  <Loader2 className="size-3.5 animate-spin" />
+                                ) : (
+                                  <ExternalLink className="size-3.5" />
+                                )}
+                                <span>{isImg ? 'Preview Gambar' : 'Buka Berkas'}</span>
+                              </Button>
+                            )}
                           </div>
                         </div>
-
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="sm"
-                          disabled={documentLoading}
-                          onClick={() => handleViewDocument(doc.file_path)}
-                          className="h-7 text-[11px] gap-1.5 w-full sm:w-auto shrink-0"
-                        >
-                          {documentLoading ? (
-                            <Loader2 className="size-3 animate-spin" />
-                          ) : (
-                            <Download className="size-3" />
-                          )}
-                          <span>Buka Berkas</span>
-                        </Button>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 ) : (
                   <p className="text-[11px] text-muted-foreground py-1 italic">

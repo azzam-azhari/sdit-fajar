@@ -2,6 +2,8 @@ import { requireRole } from '@/lib/supabase/auth-helpers';
 import { createClient } from '@/lib/supabase/server';
 import { TahunAjaranClient, SemesterItem } from './_components/tahun-ajaran-client';
 
+export const instant = false;
+
 export default async function AdminTahunAjaranPage() {
   await requireRole(['admin', 'super_admin']);
   const supabase = await createClient();

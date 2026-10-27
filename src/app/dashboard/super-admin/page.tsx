@@ -17,6 +17,8 @@ interface AuditLogItem {
   actor_name?: string;
 }
 
+export const instant = false;
+
 export default async function SuperAdminDashboardPage() {
   const { profile } = await requireRole(['super_admin']);
   const supabase = await createClient();

@@ -2,6 +2,8 @@ import { requireRole } from '@/lib/supabase/auth-helpers';
 import { createClient } from '@/lib/supabase/server';
 import { AuditLogsClient, AuditLogItem } from './_components/audit-logs-client';
 
+export const instant = false;
+
 export default async function SuperAdminAuditLogsPage() {
   await requireRole(['super_admin']);
   const supabase = await createClient();

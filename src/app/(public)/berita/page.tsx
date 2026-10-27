@@ -1,11 +1,10 @@
 import * as React from "react";
 import Link from "next/link";
-import { connection } from "next/server";
 import { Calendar, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/common/page-header";
 import { StatusBadge } from "@/components/common/status-badge";
-import { createClient } from "@/lib/supabase/server";
+import { getPublicNewsList } from "@/lib/data/news";
 
 export const metadata = {
   title: "Berita & Pengumuman — SDIT Fajar",
@@ -13,111 +12,8 @@ export const metadata = {
     "Kabar terkini seputar kegiatan murid, prestasi akademik, agenda sekolah, dan pengumuman resmi SDIT Fajar.",
 };
 
-interface ArticleItem {
-  slug: string;
-  title: string;
-  category: "Prestasi" | "Kegiatan" | "Pengumuman" | "Akademik";
-  date: string;
-  author: string;
-  excerpt: string;
-}
-
-const DEFAULT_ARTICLES: ArticleItem[] = [
-  {
-    slug: "murid-raih-juara-1-mhq-depok",
-    title: "Murid SDIT Fajar Raih Juara 1 MHQ Tingkat Kota Depok",
-    category: "Prestasi",
-    date: "24 Oktober 2026",
-    author: "Humas SDIT Fajar",
-    excerpt:
-      "Ananda Rayyan Al-Ghifari murid kelas 5 berhasil menyabet medali emas pada ajang Musabaqah Hifdzil Qur'an kategori 2 Juz antar SD/MI tingkat Kota Depok.",
-  },
-  {
-    slug: "market-day-edukasi-wirausaha-islami",
-    title: "Market Day Edukasi: Menumbuhkan Jiwa Wirausaha Islami",
-    category: "Kegiatan",
-    date: "18 Oktober 2026",
-    author: "Tim Kesiswaan",
-    excerpt:
-      "Murid kelas 4 dan 5 mempraktikkan muamalah jual beli syar'i secara langsung dalam kegiatan Market Day sekolah yang berlangsung meriah di lapangan utama.",
-  },
-  {
-    slug: "sosialisasi-program-adab-ibadah",
-    title: "Sosialisasi Program Pembiasaan Adab & Shalat Dhuha",
-    category: "Pengumuman",
-    date: "10 Oktober 2026",
-    author: "Kurikulum Diniyah",
-    excerpt:
-      "Pertemuan komite sekolah dan wali murid menyepakati penguatan mutabaah ibadah harian murid di rumah dan integrasi pencatatan digital.",
-  },
-  {
-    slug: "pelatihan-robotik-dasar-murid-inovatif",
-    title: "Pelatihan Robotik Dasar: Mengasah Nalar Teknologi Generasi Muda",
-    category: "Akademik",
-    date: "28 September 2026",
-    author: "Laboratorium Sains",
-    excerpt:
-      "Eksplorasi pembuatan sensor otomatis dan perakitan robot mini sederhana oleh tim ekstrakurikuler robotic binaan Ustadz Dedi Kurniawan.",
-  },
-  {
-    slug: "wisuda-tasmi-juz-30-angkatan-viii",
-    title: "Pelepasan & Ujian Tasmi' Juz 30 Bil-Ghoib Angkatan VIII",
-    category: "Prestasi",
-    date: "15 September 2026",
-    author: "Koordinator Tahfidz",
-    excerpt:
-      "Sebanyak 42 murid kelas 2 dan 3 sukses menyelesaikan ujian tasmi' sekali duduk satu juz penuh disaksikan orang tua dan guru penguji.",
-  },
-];
-
 export default async function BeritaPage() {
-  await connection();
-  const supabase = await createClient();
-  const { data: dbPosts } = await supabase
-    .from("news_posts")
-    .select(`
-      id,
-      title,
-      slug,
-      excerpt,
-      status,
-      published_at,
-      profiles (
-        name
-      )
-    `)
-    .eq("status", "published")
-    .order("published_at", { ascending: false });
-
-  let displayArticles: ArticleItem[] = [...DEFAULT_ARTICLES];
-
-  if (dbPosts && dbPosts.length > 0) {
-    const formattedDb: ArticleItem[] = dbPosts.map((post) => {
-      const profObj = post.profiles as unknown;
-      const authorName = Array.isArray(profObj)
-        ? (profObj[0] as { name?: string })?.name
-        : (profObj as { name?: string })?.name;
-
-      return {
-        slug: post.slug,
-        title: post.title,
-        category: "Kegiatan",
-        date: post.published_at
-          ? new Date(post.published_at).toLocaleDateString("id-ID", { dateStyle: "medium" })
-          : "Terbaru",
-        author: authorName || "Humas SDIT Fajar",
-        excerpt: post.excerpt || "Warta terbaru dari publikasi resmi SDIT Fajar.",
-      };
-    });
-
-    // Gabungkan dengan prioritas postingan database
-    const existingSlugs = new Set(formattedDb.map((p) => p.slug));
-    displayArticles = [
-      ...formattedDb,
-      ...DEFAULT_ARTICLES.filter((a) => !existingSlugs.has(a.slug)),
-    ];
-  }
-
+  const displayArticles = await getPublicNewsList();
   const featured = displayArticles[0];
   const regular = displayArticles.slice(1);
 

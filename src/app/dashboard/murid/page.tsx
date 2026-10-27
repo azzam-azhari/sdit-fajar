@@ -4,6 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { BookMarked, Calendar, Award } from 'lucide-react';
 
+export const instant = false;
+
 export default async function MuridDashboardPage() {
   const { profile } = await requireRole(['murid']);
 

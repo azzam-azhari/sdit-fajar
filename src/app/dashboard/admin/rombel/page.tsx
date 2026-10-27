@@ -2,6 +2,8 @@ import { requireRole } from '@/lib/supabase/auth-helpers';
 import { createClient } from '@/lib/supabase/server';
 import { RombelClient, ClassroomItem } from './_components/rombel-client';
 
+export const instant = false;
+
 export default async function AdminRombelPage() {
   await requireRole(['admin', 'super_admin']);
   const supabase = await createClient();

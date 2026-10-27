@@ -3,7 +3,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { requireRole } from '@/lib/supabase/auth-helpers';
 import { ActionResult } from '@/types/action.types';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import { newsPostSchema, NewsPostInput } from '@/validations/news.schema';
 
 export async function createNewsAction(
@@ -57,6 +57,7 @@ export async function createNewsAction(
     metadata: { title: parsed.data.title, status: parsed.data.status },
   });
 
+  revalidateTag('news', 'max');
   revalidatePath('/dashboard/admin/berita');
   revalidatePath('/berita');
   return { success: true, data: { id: data.id }, message: 'Artikel berita berhasil disimpan.' };
@@ -108,6 +109,8 @@ export async function updateNewsAction(
     metadata: { title: parsed.data.title, status: parsed.data.status },
   });
 
+  revalidateTag('news', 'max');
+  revalidateTag(`news:${parsed.data.slug}`, 'max');
   revalidatePath('/dashboard/admin/berita');
   revalidatePath('/berita');
   revalidatePath(`/berita/${parsed.data.slug}`);
@@ -130,6 +133,7 @@ export async function deleteNewsAction(id: string): Promise<ActionResult<void>> 
     entity_id: id,
   });
 
+  revalidateTag('news', 'max');
   revalidatePath('/dashboard/admin/berita');
   revalidatePath('/berita');
   return { success: true, data: undefined, message: 'Artikel berita berhasil dihapus.' };

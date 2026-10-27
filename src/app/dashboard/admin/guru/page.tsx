@@ -22,6 +22,8 @@ interface TeacherItem {
   }[];
 }
 
+export const instant = false;
+
 export default async function AdminGuruPage() {
   await requireRole(['admin', 'super_admin']);
   const supabase = await createClient();

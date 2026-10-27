@@ -14,6 +14,8 @@ import {
   ArrowRight,
 } from 'lucide-react';
 
+export const instant = false;
+
 export default async function AdminDashboardPage() {
   const { profile } = await requireRole(['admin', 'super_admin']);
   const supabase = await createClient();
